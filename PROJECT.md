@@ -26,8 +26,8 @@ O RemuneData é uma plataforma de transparência para consulta de remuneração 
 - **Testes**: Mínimo de 80% de cobertura em componentes compartilhados e lógica de core.
 
 ## Status Atual
-- **Etapa 1: Fundação** concluída.
-- **Etapa 2: Qualidade** concluída. ESLint, Prettier e Vitest Coverage configurados.
+- **Etapa 2: Qualidade** concluída.
+- **Etapa 3: Integração HTTP** concluída. Axios, contratos de API e serviços base estabelecidos.
 
 ## Sugestão de Commit
-`chore: setup lint, format and test coverage`
+`feat: api integration, contracts and summary service`
