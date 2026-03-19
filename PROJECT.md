@@ -26,8 +26,8 @@ O RemuneData é uma plataforma de transparência para consulta de remuneração 
 - **Testes**: Mínimo de 80% de cobertura em componentes compartilhados e lógica de core.
 
 ## Status Atual
-- **Etapa 6: Consulta de Remuneração** concluída.
-- **Etapa 7: Detalhes do Servidor** concluída. Gráfico de evolução e histórico individual.
+- **Etapa 7: Detalhes do Servidor** concluída.
+- **Etapa 8: Histórico de Execuções** concluída. Transparência e auditoria de cargas.
 
 ## Sugestão de Commit
-`feat: server details view with salary evolution chart and history`
+`feat: execution history with status badges and record processing metrics`
