@@ -22,10 +22,12 @@ O RemuneData é uma plataforma de transparência para consulta de remuneração 
 ## Convenções
 - **Conventional Commits**: Seguir padrão (feat, fix, docs, style, refactor, test, chore).
 - **TDD**: Ciclo Red-Green-Refactor como padrão obrigatório.
-- **Clean Architecture**: Baixo acoplamento entre camadas.
+- **Componentes**: Usar `clsx` e `tailwind-merge` para gestão de classes. Preferir Composition API.
+- **Testes**: Mínimo de 80% de cobertura em componentes compartilhados e lógica de core.
 
 ## Status Atual
-- **Etapa 1: Fundação** concluída com sucesso. Base técnica estabelecida, testes configurados e estrutura de pastas modular pronta.
+- **Etapa 1: Fundação** concluída.
+- **Etapa 2: Qualidade** concluída. ESLint, Prettier e Vitest Coverage configurados.
 
 ## Sugestão de Commit
-`chore: foundation and tech stack setup`
+`chore: setup lint, format and test coverage`
