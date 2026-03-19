@@ -18,6 +18,11 @@ const router = createRouter({
       component: () => import('@/modules/remuneration/views/RemunerationView.vue'),
     },
     {
+      path: '/remuneration/:id',
+      name: 'remuneration-detail',
+      component: () => import('@/modules/remuneration/views/RemunerationDetailView.vue'),
+    },
+    {
       path: '/executions',
       name: 'executions',
       component: () => import('@/modules/executions/views/ExecutionsView.vue'),

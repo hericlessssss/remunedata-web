@@ -113,6 +113,15 @@ const meses = [
 
     <!-- Tabela -->
     <BaseTable :headers="tableHeaders" :items="data?.items || []" :loading="isLoading">
+      <template #cell-nome_servidor="{ item }">
+        <RouterLink
+          :to="{ name: 'remuneration-detail', params: { id: item.id } }"
+          class="font-bold text-slate-900 hover:text-slate-600 hover:underline decoration-slate-300 underline-offset-4"
+        >
+          {{ item.nome_servidor }}
+        </RouterLink>
+      </template>
+
       <template #cell-referencia="{ item }">
         <span class="font-mono text-xs bg-slate-100 px-2 py-1 rounded text-slate-600">
           {{ formatCompetence(item.mes_referencia, item.ano_exercicio) }}
