@@ -1,33 +1,89 @@
-# RemuneData - Contexto do Projeto
+# RemuneData - Frontend Web
 
-## Visão Geral
-O RemuneData é uma plataforma de transparência para consulta de remuneração de servidores públicos do DF.
+Portal de transparência e análise remuneratória dos servidores públicos do Distrito Federal.
 
-## Decisões Técnicas
-- **Stack**: Vue 3 (Composition API), TypeScript, Vite, Tailwind CSS 4, Pinia, Vue Router, Vitest.
-- **Arquitetura**: Modular por domínio funcional (`src/modules`) com separação de camadas (`core`, `shared`, `app`).
-- **CSS**: Tailwind CSS 4 com plugin oficial para Vite (`@tailwindcss/vite`).
-- **Testes**: Vitest + JSDOM.
+## 🚀 Visão do Projeto
+O RemuneData é uma plataforma analítica que consome a API de remunerações para fornecer uma visão clara, rápida e acessível sobre os gastos com pessoal. O foco é transformar dados brutos em insights visuais e permitir a exploração detalhada por servidor.
 
-## Estrutura de Pastas
-- `src/app`: Configurações globais (router, layouts, providers).
-- `src/core`: Lógica de infraestrutura e utilitários globais.
-- `src/shared`: Componentes e lógica reutilizável entre módulos.
-- `src/modules`: Domínios funcionais da aplicação.
+## 🛠️ Stack Tecnológico
+- **Core**: Vue 3 (Composition API) + TypeScript + Vite.
+- **Estilização**: Tailwind CSS v4 (Design System Utility-first).
+- **Estado & Cache**: Vue Query (TanStack) para gestão de estado assíncrono e Pinia para estado global.
+- **Navegação**: Vue Router com sincronização de Query Params.
+- **Gráficos**: ECharts + Vue-ECharts (Visualizações dinâmicas).
+- **Qualidade**: Vitest (Unit/Integration), ESLint 9+ e Prettier.
+- **Icons**: Lucide Vue Next.
 
-## Hurdles & Fixes
-- **Vite & Directory Not Empty**: `create-vite` exige diretório vazio. Resolvido com inicialização em pasta temporária (`temp_init`) e movimentação dos arquivos via `xcopy`.
-- **Tailwind 4 Setup**: Configurado via plugin `@tailwindcss/vite` e importação direta no CSS.
+## 📂 Estrutura de Pastas
+```text
+src/
+├── app/            # Configurações globais (Router, Layouts, Styles)
+├── core/           # Lógica central (HTTP Client, Formatters, Types)
+├── modules/        # Funcionalidades separadas por domínio
+│   ├── dashboard/  # Visão geral e KPIs
+│   ├── remuneration/ # Busca e detalhamento de servidores
+│   └── executions/ # Histórico de sincronização (Auditoria)
+├── shared/         # Componentes UI e Utilitários reutilizáveis (Design System)
+```
 
-## Convenções
-- **Conventional Commits**: Seguir padrão (feat, fix, docs, style, refactor, test, chore).
-- **TDD**: Ciclo Red-Green-Refactor como padrão obrigatório.
-- **Componentes**: Usar `clsx` e `tailwind-merge` para gestão de classes. Preferir Composition API.
-- **Testes**: Mínimo de 80% de cobertura em componentes compartilhados e lógica de core.
+## 📈 Histórico de Desenvolvimento (Roadmap)
 
-## Status Atual
-- **Etapa 8: Histórico de Execuções** concluída.
-- **Etapa 9: Refinamentos e SEO** concluída. Projeto 100% entregue.
+### Etapa 1: Fundação do Projeto
+- Inicialização com Vite + Vue 3 + TS.
+- Configuração de Alias (`@/*`).
 
-## Sugestão de Commit Final
-`chore: project finalization, responsive design and seo polish`
+### Etapa 2: Qualidade e Padrões
+- Configuração de Linting e Formatting (ESLint/Prettier).
+- Setup do ambiente de testes com Vitest e TDD inicial.
+
+### Etapa 3: Integração HTTP e Services
+- Implementação do `httpClient` (Axios) com interceptores para a `VITE_API_URL`.
+- Definição de contratos de API no `core/types`.
+
+### Etapa 4: Layout e Visualização Analítica
+- Desenvolvimento do `MainLayout` (Estrutura de Sidebar e Header).
+- Criação do wrapper `BaseChart` para integração agnóstica de gráficos.
+
+### Etapa 5: Dashboard Dinâmico
+- Implementação de KPI Cards para visualização de métricas macro (Total servidores, Média salarial).
+- Gráfico "Top Órgãos" integrado via Vue Query com cache automático.
+
+### Etapa 6: Consulta e Exploração de Dados
+- Criação do motor de busca com filtros: Nome (Debounce), Cargo, Órgão e Período.
+- Desenvolvimento da `BaseTable` reutilizável.
+- **Inovação**: Sincronização automática dos filtros com os Parâmetros de URL (Query Params).
+
+### Etapa 7: Detalhamento e Evolução Salarial
+- Implementação da visão individualizada por servidor.
+- Gráfico de linha para série temporal de ganhos (Bruto vs Líquido).
+
+### Etapa 8: Histórico de Execuções e Auditoria
+- Log detalhado de cargas de dados com badges de status (Sucesso/Falha).
+
+### Etapa 9: Refinamentos e SEO
+- Implementação de SEO dinâmico por rota.
+- **Ajuste Crítico**: Sidebar responsiva (Drawer Mobile) para suporte em smartphones.
+- Tipografia Premium (Outfit & Inter) e acessibilidade (ARIA).
+
+## 💡 Desafios Técnicos e Soluções
+
+| Desafio | Solução |
+| :--- | :--- |
+| **Responsividade da Sidebar** | A sidebar inicial era fixa e prejudicava o mobile. Implementamos um sistema de `drawer` com overlay e animação de transição, controlado por estado reativo. |
+| **Sincronização de Filtros** | Manter a URL atualizada com os filtros sem causar loops de navegação. Usamos `watch` no composable `useRemunerationSearch` com tratamento de tipos seguro. |
+| **Performance de Busca** | Evitar requisições excessivas enquanto o usuário digita. Implementada estratégia de `debounce` no filtro de nome. |
+| **Consistência Visual** | Criado um Design System base em `shared/ui` que garante que cores, bordas e botões sejam idênticos em toda a plataforma. |
+
+## 🧪 Estratégia de Testes
+O projeto segue o princípio de **TDD** para lógica de negócio e componentes core.
+- **Unitários**: Validam formatadores, parsers de datas e lógica de composables.
+- **Componentes**: Testam interações de UI e renderização condicional (Loading/Empty states).
+- **Cobertura**: Foco em manter >80% de cobertura nas pastas `core`, `services` e `composables`.
+
+## 📌 Guia de Estilo (Convenções)
+- **Commits**: Seguem o padrão `Conventional Commits` (feat, fix, chore).
+- **Componentes**: Vue SFC com `<script setup>` e TypeScript.
+- **Estilos**: Tailwind CSS com camadas `@layer base` para customização premium.
+
+---
+*Este documento é atualizado ao final de cada etapa de desenvolvimento.*

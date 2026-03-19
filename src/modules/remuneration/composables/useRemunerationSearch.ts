@@ -43,6 +43,19 @@ export function useRemunerationSearch() {
     filters.value.page = page
   }
 
+  const clearFilters = () => {
+    filters.value = {
+      nome: '',
+      cpf: '',
+      ano: 2025,
+      mes: '01',
+      cargo: '',
+      orgao: '',
+      page: 1,
+      size: 25,
+    }
+  }
+
   return {
     filters,
     data,
@@ -50,6 +63,7 @@ export function useRemunerationSearch() {
     isError,
     error,
     setPage,
+    clearFilters,
     refetch,
   }
 }
