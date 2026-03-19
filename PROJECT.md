@@ -26,8 +26,8 @@ O RemuneData é uma plataforma de transparência para consulta de remuneração 
 - **Testes**: Mínimo de 80% de cobertura em componentes compartilhados e lógica de core.
 
 ## Status Atual
-- **Etapa 4: Layout e Gráficos** concluída.
-- **Etapa 5: Dashboard Dinâmico** concluída. Integração total com Vue Query e ECharts.
+- **Etapa 5: Dashboard Dinâmico** concluída.
+- **Etapa 6: Consulta de Remuneração** concluída. Filtros, busca paginada e sincronização de URL.
 
 ## Sugestão de Commit
-`feat: dynamic dashboard with vue-query and echarts integration`
+`feat: remuneration search with filters, pagination and url sync`
