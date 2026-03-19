@@ -9,6 +9,7 @@ interface Props {
   class?: ClassValue
   disabled?: boolean
   type?: 'button' | 'submit' | 'reset'
+  ariaLabel?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -49,7 +50,13 @@ const classes = computed(() => {
 </script>
 
 <template>
-  <button :type="type" :disabled="disabled" :class="classes" @click="$emit('click', $event)">
+  <button
+    :type="type"
+    :disabled="disabled"
+    :class="classes"
+    :aria-label="ariaLabel"
+    @click="$emit('click', $event)"
+  >
     <slot />
   </button>
 </template>

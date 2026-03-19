@@ -9,9 +9,10 @@ defineProps<Props>()
 </script>
 
 <template>
-  <div class="w-full overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
-    <table class="w-full text-left border-collapse">
-      <thead class="bg-slate-50 border-b border-slate-200">
+  <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse" aria-label="Tabela de dados">
+        <thead class="bg-slate-50/50 border-b border-slate-100">
         <tr>
           <th
             v-for="header in headers"
@@ -65,5 +66,6 @@ defineProps<Props>()
         </tr>
       </tbody>
     </table>
+  </div>
   </div>
 </template>
