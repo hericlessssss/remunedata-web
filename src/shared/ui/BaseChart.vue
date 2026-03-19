@@ -23,7 +23,7 @@ use([
 ])
 
 interface Props {
-  options: any
+  option: any
   height?: string | number
 }
 
@@ -34,7 +34,7 @@ withDefaults(defineProps<Props>(), {
 
 <template>
   <div :style="{ height: typeof height === 'number' ? `${height}px` : height }" class="w-full">
-    <VChart :option="options" autoresize class="chart" />
+    <VChart :option="option" autoresize class="chart" />
   </div>
 </template>
 

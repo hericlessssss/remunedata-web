@@ -18,6 +18,7 @@ const props = withDefaults(defineProps<Props>(), {
   class: '',
   disabled: false,
   type: 'button',
+  ariaLabel: '',
 })
 
 defineEmits<{

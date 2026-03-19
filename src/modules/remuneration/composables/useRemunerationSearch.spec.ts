@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { useRemunerationSearch } from './useRemunerationSearch'
-import { reactive } from 'vue'
 
 // Mocks
 vi.mock('vue-router', () => ({

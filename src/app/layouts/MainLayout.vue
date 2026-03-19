@@ -73,6 +73,9 @@ const toggleSidebar = () => {
         <p class="text-[10px] text-slate-400 font-mono text-center uppercase tracking-widest">
           v0.1.0 - Alpha
         </p>
+        <p class="text-[8px] text-slate-400/50 text-center mt-1 font-medium italic">
+          feito pelo macaquinho chico
+        </p>
       </div>
     </aside>
 

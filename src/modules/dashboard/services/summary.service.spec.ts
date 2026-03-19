@@ -19,7 +19,7 @@ describe('SummaryService', () => {
 
     const result = await SummaryService.getSummary()
 
-    expect(httpClient.get).toHaveBeenCalledWith('/remuneration/summary')
+    expect(httpClient.get).toHaveBeenCalledWith('remuneration/summary')
     expect(result).toEqual(mockData)
   })
 

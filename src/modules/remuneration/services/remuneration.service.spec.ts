@@ -20,7 +20,7 @@ describe('RemunerationService', () => {
 
     const result = await RemunerationService.search(filters)
 
-    expect(httpClient.get).toHaveBeenCalledWith('/remuneration/', {
+    expect(httpClient.get).toHaveBeenCalledWith('remuneration/', {
       params: filters,
     })
     expect(result).toEqual(mockData)
@@ -32,7 +32,7 @@ describe('RemunerationService', () => {
 
     const result = await RemunerationService.getById(123)
 
-    expect(httpClient.get).toHaveBeenCalledWith('/remuneration/123/')
+    expect(httpClient.get).toHaveBeenCalledWith('remuneration/123/')
     expect(result).toEqual(mockData)
   })
 
@@ -43,7 +43,7 @@ describe('RemunerationService', () => {
 
     const result = await RemunerationService.getHistory('12345678901')
 
-    expect(httpClient.get).toHaveBeenCalledWith('/remuneration/', {
+    expect(httpClient.get).toHaveBeenCalledWith('remuneration/', {
       params: { cpf: '12345678901', size: 100 },
     })
     expect(result).toEqual(mockItems)

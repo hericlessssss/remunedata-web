@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
+
 interface Props {
   title: string
   value: string | number
   description?: string
-  icon?: any
+  icon?: Component
 }
 
 defineProps<Props>()

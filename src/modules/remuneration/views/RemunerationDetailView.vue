@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuery } from '@tanstack/vue-query'
 import { ArrowLeft, User, Building2, Briefcase, TrendingUp } from 'lucide-vue-next'
@@ -125,7 +125,7 @@ const goBack = () => router.back()
       <div v-if="loadingHistory" class="h-[400px] flex items-center justify-center bg-slate-50 rounded-xl animate-pulse">
         <span class="text-slate-400 font-medium">Carregando série temporal...</span>
       </div>
-      <BaseChart v-else-if="history && history.length > 0" :options="chartOptions" class="h-[400px]" />
+      <BaseChart v-else-if="history && history.length > 0" :option="chartOptions" class="h-[400px]" />
       <div v-else class="h-[400px] flex items-center justify-center border-2 border-dashed border-slate-100 rounded-xl">
          <p class="text-slate-400">Histórico insuficiente para gerar gráfico.</p>
       </div>

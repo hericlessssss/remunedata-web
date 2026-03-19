@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { Search, Filter, ChevronLeft, ChevronRight, FileDown } from 'lucide-vue-next'
+import { Search, ChevronLeft, ChevronRight, FileDown } from 'lucide-vue-next'
 import { useRemunerationSearch } from '../composables/useRemunerationSearch'
 import { formatCurrency } from '@/core/formatters/currency'
 import { formatCompetence } from '@/core/formatters/date'
@@ -20,10 +20,10 @@ const tableHeaders = [
 
 // Debounce local para o nome
 const localNome = ref(filters.value.nome)
-let debounceTimeout: any
+let debounceTimer: number | undefined
 watch(localNome, (val) => {
-  clearTimeout(debounceTimeout)
-  debounceTimeout = setTimeout(() => {
+  if (debounceTimer) window.clearTimeout(debounceTimer)
+  debounceTimer = window.setTimeout(() => {
     filters.value.nome = val
     filters.value.page = 1
   }, 500)
@@ -129,7 +129,7 @@ const meses = [
       </template>
 
       <template #cell-orgao="{ item }">
-        <span class="truncate max-w-[200px] inline-block" :title="item.nome_orgao">
+        <span class="truncate max-w-[200px] inline-block" :title="item.nome_orgao || undefined">
           {{ item.nome_orgao }}
         </span>
       </template>

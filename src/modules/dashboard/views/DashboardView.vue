@@ -77,7 +77,7 @@ const chartOptions = computed(() => {
       >
         <span class="text-slate-400 font-medium">Carregando dados analíticos...</span>
       </div>
-      <BaseChart v-else-if="data" :options="chartOptions" />
+      <BaseChart v-else-if="data" :option="chartOptions" />
       <div
         v-else-if="isError"
         class="h-[350px] flex items-center justify-center border-2 border-dashed border-slate-100 rounded-lg"

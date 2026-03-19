@@ -5,6 +5,7 @@ import { ExecutionService } from './execution.service'
 vi.mock('@/core/http/client', () => ({
   default: {
     get: vi.fn(),
+    post: vi.fn(),
   },
 }))
 
@@ -25,9 +26,21 @@ describe('ExecutionService', () => {
 
     const result = await ExecutionService.getAll(1)
 
-    expect(httpClient.get).toHaveBeenCalledWith('/execution/', {
+    expect(httpClient.get).toHaveBeenCalledWith('executions/', {
       params: { page: 1, size: 20 },
     })
     expect(result).toEqual(mockData)
+  })
+
+  it('triggers a manual synchronization', async () => {
+    const mockExecution = { id: 123, status: 'running' }
+    vi.mocked(httpClient.post).mockResolvedValueOnce({ data: mockExecution })
+
+    const result = await ExecutionService.triggerSync(2025)
+
+    expect(httpClient.post).toHaveBeenCalledWith('executions/', null, {
+      params: { ano: 2025 },
+    })
+    expect(result).toEqual(mockExecution)
   })
 })

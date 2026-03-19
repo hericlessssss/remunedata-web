@@ -43,6 +43,9 @@ export interface Execution {
   id: number
   ano_exercicio: number
   status: 'pending' | 'running' | 'success' | 'partial_success' | 'error'
+  started_at: string
+  finished_at: string | null
   total_registros_coletados: number
-  monthly_executions: MonthlyExecution[]
+  error_message?: string | null
+  monthly_executions?: MonthlyExecution[]
 }

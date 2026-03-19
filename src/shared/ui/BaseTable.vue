@@ -51,8 +51,8 @@ defineEmits<{
 
         <!-- Data State -->
         <tr
-          v-else
           v-for="(item, index) in items"
+          v-else
           :key="index"
           class="hover:bg-slate-50 transition-colors group cursor-pointer"
           @click="$emit('row-click', item)"

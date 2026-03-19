@@ -1,4 +1,8 @@
-import axios from 'axios'
+import axios, {
+  type InternalAxiosRequestConfig,
+  type AxiosResponse,
+  type AxiosError,
+} from 'axios'
 import { ENV } from '@/core/config/env'
 
 const httpClient = axios.create({
@@ -8,17 +12,14 @@ const httpClient = axios.create({
   },
 })
 
-// Interceptadores para futura autenticação e logs em dev
-httpClient.interceptors.request.use((config) => {
-  if (ENV.IS_DEV) {
-    // console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`)
-  }
+// Interceptadores para logs em dev ou futura auth
+httpClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   return config
 })
 
 httpClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
+  (response: AxiosResponse) => response,
+  (error: AxiosError) => {
     // Tratamento global de erros pode ser expandido aqui conforme Fase 8 do Plano Formal
     return Promise.reject(error)
   },

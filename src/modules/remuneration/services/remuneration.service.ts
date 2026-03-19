@@ -14,19 +14,19 @@ export interface SearchFilters {
 
 export const RemunerationService = {
   async search(filters: SearchFilters): Promise<PaginationResponse<Remuneration>> {
-    const { data } = await httpClient.get<PaginationResponse<Remuneration>>('/remuneration/', {
+    const { data } = await httpClient.get<PaginationResponse<Remuneration>>('remuneration/', {
       params: filters,
     })
     return data
   },
 
   async getById(id: number): Promise<Remuneration> {
-    const { data } = await httpClient.get<Remuneration>(`/remuneration/${id}/`)
+    const { data } = await httpClient.get<Remuneration>(`remuneration/${id}/`)
     return data
   },
 
   async getHistory(cpf: string): Promise<Remuneration[]> {
-    const { data } = await httpClient.get<PaginationResponse<Remuneration>>('/remuneration/', {
+    const { data } = await httpClient.get<PaginationResponse<Remuneration>>('remuneration/', {
       params: { cpf, size: 100 },
     })
     return data.items

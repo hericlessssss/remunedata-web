@@ -27,4 +27,12 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+    },
+  },
 })

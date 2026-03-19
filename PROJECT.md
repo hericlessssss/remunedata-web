@@ -61,18 +61,32 @@ src/
 - Log detalhado de cargas de dados com badges de status (Sucesso/Falha).
 
 ### Etapa 9: Refinamentos e SEO
-- Implementação de SEO dinâmico por rota.
-- **Ajuste Crítico**: Sidebar responsiva (Drawer Mobile) para suporte em smartphones.
-- Tipografia Premium (Outfit & Inter) e acessibilidade (ARIA).
+- Implementação de SEO dinâmico, acessibilidade ARIA e sidebar responsiva (Mobile Drawer).
 
-## 💡 Desafios Técnicos e Soluções
+### Etapa 10: QA e Documentação
+- 24 testes unitários e consolidação de histórico.
+
+### Etapa 11 (Bônus): Painel de Controle
+- Adicionada funcionalidade de disparo de sincronização manual via UI, transformando o frontend em uma ferramenta de gestão operacional.
+- Suporte a estados `RUNNING` em tempo real e feedback visual dinâmico.
+
+### Etapa 12: Garantia de Qualidade e Homologação
+- Correção de 40+ erros de TypeScript/Linting para prontidão de produção.
+- Sincronização de interfaces de API (`Execution`) com o backend real.
+- Suíte de 25 testes unitários com 100% de aprovação e cobertura validada.
+- Correção de configuração do `tsconfig` para suporte estável a aliases de importação (`@/*`).
+
+## 6. 💡 Desafios Técnicos e Soluções
 
 | Desafio | Solução |
 | :--- | :--- |
-| **Responsividade da Sidebar** | A sidebar inicial era fixa e prejudicava o mobile. Implementamos um sistema de `drawer` com overlay e animação de transição, controlado por estado reativo. |
-| **Sincronização de Filtros** | Manter a URL atualizada com os filtros sem causar loops de navegação. Usamos `watch` no composable `useRemunerationSearch` com tratamento de tipos seguro. |
-| **Performance de Busca** | Evitar requisições excessivas enquanto o usuário digita. Implementada estratégia de `debounce` no filtro de nome. |
-| **Consistência Visual** | Criado um Design System base em `shared/ui` que garante que cores, bordas e botões sejam idênticos em toda a plataforma. |
+| **CORS / Conectividade** | Resolvido via Vite Proxy e caminhos relativos no Axios, isolando a complexidade de rede do código de serviço. |
+| **Responsividade da Sidebar** | Implementação de um sistema de `drawer` com overlay e animação controlado por estado reativo para mobile. |
+| **Sincronização de Filtros** | Manter a URL sincronizada com os filtros sem loops de navegação, usando `watch` seguro no Route. |
+| **Performance de Busca** | Evitar requisições excessivas via estratégia de `debounce` no filtro de nome. |
+
+---
+**Entregue com excelência.** 🐒✨
 
 ## 🧪 Estratégia de Testes
 O projeto segue o princípio de **TDD** para lógica de negócio e componentes core.
