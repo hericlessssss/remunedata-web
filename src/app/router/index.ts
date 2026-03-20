@@ -30,4 +30,17 @@ const router = createRouter({
   ],
 })
 
+router.onError((error, to) => {
+  const errors = [
+    'Failed to fetch dynamically imported module',
+    'Importing a module script failed',
+    'error loading dynamically imported module'
+  ]
+  
+  if (errors.some(msg => error.message?.includes(msg))) {
+    console.warn('Chunk loading failed. Force refreshing page...')
+    window.location.href = to.fullPath
+  }
+})
+
 export default router

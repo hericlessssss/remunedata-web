@@ -5,7 +5,7 @@ Este documento descreve a arquitetura, as decisões técnicas e o histórico de 
 ## 1. Visão Geral
 O projeto visa criar uma interface rápida, segura e transparente para consulta de dados de remuneração pública. A arquitetura é baseada em módulos funcionais e uma camada de UI compartilhada. O foco é transformar dados brutos em insights visuais e permitir a exploração detalhada por servidor.
 
-## ️ Stack Tecnológico
+## Stack Tecnológico
 - **Core**: Vue 3 (Composition API) + TypeScript + Vite.
 - **Estilização**: Tailwind CSS v4 (Design System Utility-first).
 - **Estado & Cache**: Vue Query (TanStack) para gestão de estado assíncrono e Pinia para estado global.
@@ -14,7 +14,7 @@ O projeto visa criar uma interface rápida, segura e transparente para consulta 
 - **Qualidade**: Vitest (Unit/Integration), ESLint 9+ e Prettier.
 - **Icons**: Lucide Vue Next.
 
-##  Estrutura de Pastas
+## Estrutura de Pastas
 ```text
 src/
 ├── app/            # Configurações globais (Router, Layouts, Styles)
@@ -26,7 +26,7 @@ src/
 ├── shared/         # Componentes UI e Utilitários reutilizáveis (Design System)
 ```
 
-##  Histórico de Desenvolvimento (Roadmap)
+## Histórico de Desenvolvimento (Roadmap)
 
 ### Etapa 1: Fundação do Projeto
 - Inicialização com Vite + Vue 3 + TS.
