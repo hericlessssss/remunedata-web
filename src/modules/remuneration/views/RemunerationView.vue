@@ -139,7 +139,16 @@ const meses = [
     <BaseTable :headers="tableHeaders" :items="data?.items || []" :is-loading="isLoading">
       <template #cell-nome_servidor="{ item }">
         <RouterLink
-          :to="{ name: 'remuneration-detail', params: { id: item.id } }"
+          :to="{
+            name: 'remuneration-detail',
+            params: { id: item.id },
+            query: {
+              nome: item.nome_servidor,
+              cpf: item.cpf_servidor,
+              ano: item.ano_exercicio,
+              mes: item.mes_referencia,
+            },
+          }"
           class="font-bold text-slate-900 hover:text-slate-600 hover:underline decoration-slate-300 underline-offset-4"
         >
           {{ item.nome_servidor }}

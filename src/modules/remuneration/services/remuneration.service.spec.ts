@@ -48,4 +48,16 @@ describe('RemunerationService', () => {
     })
     expect(result).toEqual(mockItems)
   })
+
+  it('fetches record by attributes', async () => {
+    const mockRecord = { id: 1, nome: 'Alice' }
+    vi.mocked(httpClient.get).mockResolvedValue({ data: { items: [mockRecord] } })
+
+    const result = await RemunerationService.getByAttributes({ nome: 'Alice' })
+
+    expect(httpClient.get).toHaveBeenCalledWith('remuneration/', {
+      params: { nome: 'Alice', size: 1 },
+    })
+    expect(result).toEqual(mockRecord)
+  })
 })

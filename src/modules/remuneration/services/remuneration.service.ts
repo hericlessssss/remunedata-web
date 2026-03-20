@@ -25,6 +25,14 @@ export const RemunerationService = {
     return data
   },
 
+  async getByAttributes(filters: Partial<SearchFilters>): Promise<Remuneration> {
+    const { data } = await httpClient.get<PaginationResponse<Remuneration>>('remuneration/', {
+      params: { ...filters, size: 1 },
+    })
+    if (data.items.length === 0) throw new Error('Registro não encontrado')
+    return data.items[0]
+  },
+
   async getHistory(cpf: string): Promise<Remuneration[]> {
     const { data } = await httpClient.get<PaginationResponse<Remuneration>>('remuneration/', {
       params: { cpf, size: 100 },
