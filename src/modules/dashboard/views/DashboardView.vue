@@ -12,8 +12,17 @@ const { data, isLoading, isError, error } = useDashboardSummary()
 const chartOptions = computed(() => {
   if (!data.value) return {}
 
-  const categories = data.value.top_orgaos.map((o) => o.nome_orgao.split(' ').slice(0, 2).join(' '))
-  const values = data.value.top_orgaos.map((o) => o.media_salarial)
+  const categories = data.value.top_orgaos.map((o) => {
+    // Se começar com "SECRETARIA DE", remover para encurtar
+    let name = o.nome_orgao.replace(/^SECRETARIA DE (ESTADO DE )?/i, '').trim()
+    if (name.length > 20) name = name.substring(0, 18) + '...'
+    return name
+  })
+  
+  const values = data.value.top_orgaos.map((o) => {
+    // Mapeamento resiliente para diferentes versões da API
+    return o.media_salarial || (o as any).media_bruta || (o as any).valor_bruto || (o as any).total_gasto_bruto || 0
+  })
 
   return {
     tooltip: { trigger: 'axis' },
