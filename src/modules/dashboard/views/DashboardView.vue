@@ -28,7 +28,7 @@ const chartOptions = computed(() => {
         label: {
           show: true,
           position: 'right',
-          formatter: (params: any) => formatCurrency(params.value),
+          formatter: (params: { value: number }) => formatCurrency(params.value),
         },
       },
     ],
@@ -84,7 +84,7 @@ const chartOptions = computed(() => {
       >
         <div class="text-center">
           <p class="text-red-500 font-medium">Erro ao carregar dados</p>
-          <p class="text-sm text-slate-400">{{ (error as any)?.message }}</p>
+          <p class="text-sm text-slate-400">{{ (error as Error)?.message }}</p>
         </div>
       </div>
     </div>

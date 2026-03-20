@@ -25,6 +25,7 @@ export default ts.config(
         document: 'readonly',
         navigator: 'readonly',
         MouseEvent: 'readonly',
+        console: 'readonly',
       },
     },
   },

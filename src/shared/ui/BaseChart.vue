@@ -23,7 +23,7 @@ use([
 ])
 
 interface Props {
-  option: any
+  option: Record<string, unknown>
   height?: string | number
 }
 

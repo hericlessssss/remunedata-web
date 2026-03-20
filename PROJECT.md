@@ -76,6 +76,13 @@ src/
 - Suíte de 25 testes unitários com 100% de aprovação e cobertura validada.
 - Correção de configuração do `tsconfig` para suporte estável a aliases de importação (`@/*`).
 
+### Etapa 13: Infraestrutura e Deploy Contínuo (CI/CD)
+- Implementação de pipeline robusta via GitHub Actions.
+- Estratégia de "Direct Upload" para Cloudflare Pages via Wrangler.
+- Gate de produção: deploy condicionado ao sucesso de Lint, Typecheck, Testes Unitários e Build.
+- Configuração de fallback para SPA (Single Page Application).
+- Documentação detalhada do processo de deploy e operação.
+
 ## 6. 💡 Desafios Técnicos e Soluções
 
 | Desafio | Solução |

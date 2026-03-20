@@ -1,5 +1,5 @@
 import { ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 import { useQuery } from '@tanstack/vue-query'
 import { RemunerationService, type SearchFilters } from '../services/remuneration.service'
 
@@ -28,7 +28,7 @@ export function useRemunerationSearch() {
   watch(
     filters,
     (newFilters) => {
-      const query = { ...newFilters } as any
+      const query = { ...newFilters } as LocationQueryRaw
       // Remover campos vazios da URL
       Object.keys(query).forEach((key) => {
         if (!query[key]) delete query[key]
