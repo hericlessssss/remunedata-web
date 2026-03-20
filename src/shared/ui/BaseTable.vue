@@ -33,19 +33,19 @@ defineEmits<{
             ]"
             @click="header.sortable ? $emit('sort', header.key) : null"
           >
-            <div class="flex items-center gap-1.5">
+            <div class="flex items-center gap-2 whitespace-nowrap">
               <slot :name="`header-${header.key}`" :header="header">
                 {{ header.label }}
               </slot>
               
-              <div v-if="header.sortable" class="flex flex-col text-slate-300">
+              <div v-if="header.sortable" class="flex flex-col text-slate-300 pointer-events-none">
                 <ChevronUp 
-                  class="w-3 h-3 -mb-1" 
-                  :class="{ 'text-blue-600': sortKey === header.key && sortOrder === 'asc' }" 
+                  class="w-3 h-3 -mb-1 opacity-50" 
+                  :class="{ '!text-blue-600 !opacity-100': sortKey === header.key && sortOrder === 'asc' }" 
                 />
                 <ChevronDown 
-                  class="w-3 h-3" 
-                  :class="{ 'text-blue-600': sortKey === header.key && sortOrder === 'desc' }" 
+                  class="w-3 h-3 opacity-50" 
+                  :class="{ '!text-blue-600 !opacity-100': sortKey === header.key && sortOrder === 'desc' }" 
                 />
               </div>
             </div>

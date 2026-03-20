@@ -103,11 +103,12 @@ src/
 ## Etapa 19: Otimização de Carga e Detalhamento Sob Demanda
 - **Componentização:** Criado `ExecutionMonthlyProgress.vue` para isolar a lógica de progresso mensal.
 - **Carregamento Lazy:** Detalhes de execução agora são carregados apenas quando a linha é expandida.
-
 ## Etapa 20: Ordenação Server-Side na Consulta
 - **BaseTable Reativa:** Adicionado suporte a cabeçalhos clicáveis e ícones de ordenação.
 - **Lógica de Toggle:** Implementada sequência `asc` -> `desc` -> `limpo`.
 - **Persistência:** Parâmetro `ordering` sincronizado com a URL (Deep Linking).
+- **Correção de Reatividade:** Ajustada a atualização do `ref` em `useRemunerationSearch` para disparar refetch automático no `vue-query`.
+- **Ajuste de Layout:** Aplicado `whitespace-nowrap` nos cabeçalhos para evitar quebra de linha.
 - **Cobertura:** Validada a integridade dos tipos e testes (26/26).
 - Indicadores de integridade e última sincronização no Dashboard principal.
 - Refiguração da resiliência de navegação (Deep Linking) para contornar limitações de endpoints de ID.

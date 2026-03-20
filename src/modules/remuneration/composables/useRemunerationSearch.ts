@@ -60,14 +60,28 @@ export function useRemunerationSearch() {
       newOrdering = ''
     }
 
-    appliedFilters.value.ordering = newOrdering
-    localFilters.value.ordering = newOrdering
-    appliedFilters.value.page = 1 // Reset pagination
+    // ATENÇÃO: Atualizamos a referência completa do objeto para disparar a reatividade do useQuery
+    appliedFilters.value = {
+      ...appliedFilters.value,
+      ordering: newOrdering,
+      page: 1
+    }
+    
+    localFilters.value = {
+      ...localFilters.value,
+      ordering: newOrdering
+    }
   }
 
   const setPage = (page: number) => {
-    appliedFilters.value.page = page
-    localFilters.value.page = page
+    appliedFilters.value = {
+      ...appliedFilters.value,
+      page
+    }
+    localFilters.value = {
+      ...localFilters.value,
+      page
+    }
   }
 
   const clearFilters = () => {
