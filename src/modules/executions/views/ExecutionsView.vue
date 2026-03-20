@@ -32,10 +32,21 @@ const getStatusClass = (status: string) => {
   const s = status.toLowerCase()
   if (s === 'success') return 'bg-green-50 text-green-700 border-green-200'
   if (s === 'running') return 'bg-blue-50 text-blue-700 border-blue-200'
+  if (s === 'pending') return 'bg-slate-50 text-slate-600 border-slate-200'
+  if (s === 'partial_success') return 'bg-amber-50 text-amber-700 border-amber-200'
   return 'bg-red-50 text-red-700 border-red-200'
 }
 
 const handleSync = async () => {
+  const isAlreadyRunning = data.value?.items.some(i => i.status.toLowerCase() === 'running')
+  
+  let force = false
+  if (isAlreadyRunning) {
+    const confirmForce = window.confirm('Já existe uma execução em andamento. Deseja FORÇAR o reinício (desbloquear zumbis)?')
+    if (!confirmForce) return
+    force = true
+  }
+
   const anoStr = window.prompt('Informe o ano para sincronização (ex: 2025):', '2025')
   if (!anoStr) return
 
@@ -47,8 +58,8 @@ const handleSync = async () => {
 
   try {
     isSyncing.value = true
-    await ExecutionService.triggerSync(ano)
-    window.alert('Sincronização disparada com sucesso!')
+    await ExecutionService.triggerSync(ano, force)
+    window.alert(`Sincronização ${force ? 'FORÇADA' : 'disparada'} com sucesso!`)
     refetch()
   } catch {
     window.alert('Falha ao disparar sincronização. Verifique se a API está online.')
@@ -80,8 +91,10 @@ const handleSync = async () => {
         >
           <CheckCircle2 v-if="item.status.toLowerCase() === 'success'" class="w-3.5 h-3.5" />
           <RefreshCw v-else-if="item.status.toLowerCase() === 'running'" class="w-3.5 h-3.5 animate-spin" />
+          <RefreshCw v-else-if="item.status.toLowerCase() === 'pending'" class="w-3.5 h-3.5 text-slate-400" />
+          <CheckCircle2 v-else-if="item.status.toLowerCase() === 'partial_success'" class="w-3.5 h-3.5" />
           <XCircle v-else class="w-3.5 h-3.5" />
-          {{ item.status.toUpperCase() }}
+          {{ item.status.replace('_', ' ').toUpperCase() }}
         </div>
       </template>
 

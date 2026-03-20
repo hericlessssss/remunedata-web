@@ -17,9 +17,9 @@ export const ExecutionService = {
     }
   },
 
-  async triggerSync(ano: number): Promise<Execution> {
+  async triggerSync(ano: number, force = false): Promise<Execution> {
     const { data } = await httpClient.post<Execution>('executions/', null, {
-      params: { ano },
+      params: { ano, force },
     })
     return data
   },

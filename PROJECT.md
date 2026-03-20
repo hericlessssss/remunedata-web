@@ -93,11 +93,11 @@ src/
 - **Implementação Dinâmica:** Adicionado `getLatestExecutionId` para buscar o ID mais recente automaticamente.
 - **Correção da UI:** Botões de exportação (XLSX 1k e CSV 5k) na Consulta agora funcionam com IDs reais.
 
-## Etapa 16: Refatoração da UX de Pesquisa
-- **Busca Manual:** Introduzido o botão "Pesquisar" para evitar disparos reativos constantes.
-- **Desacoplamento de Filtros:** Separado o estado de edição (local) do estado ativo (API/URL).
-- **Precisão de Exportação:** Garantido que a exportação utilize o estado de filtros confirmado pelo usuário.
-- **Saneamento Final:** Linter 100% limpo e suíte de testes passando.
+## Etapa 17: Recuperação de Deadlock e Status
+- **Parâmetro Force:** Implementado `force=true` no disparo de novas execuções para destravar o Worker.
+- **UX de Recuperação:** Adicionado diálogo de confirmação para forçar reinício caso já exista uma tarefa rodando.
+- **Mapeamento de Status:** Suporte visual para `PENDING` (cinza) e `PARTIAL_SUCCESS` (laranja), alinhado com o backend.
+- **Sanidade:** Garantida a formatação amigável de status (ex: "PARTIAL SUCCESS" com replace).
 - Indicadores de integridade e última sincronização no Dashboard principal.
 - Refiguração da resiliência de navegação (Deep Linking) para contornar limitações de endpoints de ID.
 
