@@ -40,8 +40,7 @@ const handleSync = async () => {
     await ExecutionService.triggerSync(ano)
     window.alert('Sincronização disparada com sucesso!')
     refetch()
-  } catch (error) {
-    console.error('Erro ao disparar:', error)
+  } catch {
     window.alert('Falha ao disparar sincronização. Verifique se a API está online.')
   } finally {
     isSyncing.value = false

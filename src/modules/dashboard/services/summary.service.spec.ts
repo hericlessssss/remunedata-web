@@ -12,8 +12,10 @@ describe('SummaryService', () => {
   it('fetches summary successfully', async () => {
     const mockData = {
       total_servidores: 25402,
-      valor_total_bruto: 1250400300.5,
-      media_salarial_bruta: 11500.2,
+      total_gasto_bruto: 1250400300.5,
+      media_salarial: 11500.2,
+      ano_referencia: 2025,
+      top_orgaos: [],
     }
     vi.mocked(httpClient.get).mockResolvedValue({ data: mockData })
 

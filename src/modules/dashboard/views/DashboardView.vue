@@ -21,7 +21,14 @@ const chartOptions = computed(() => {
   
   const values = data.value.top_orgaos.map((o) => {
     // Mapeamento resiliente para diferentes versões da API
-    return o.media_salarial || (o as any).media_bruta || (o as any).valor_bruto || (o as any).total_gasto_bruto || 0
+    const item = o as unknown as Record<string, unknown>
+    return (
+      o.media_salarial ||
+      (item.media_bruta as number) ||
+      (item.valor_bruto as number) ||
+      (item.total_gasto_bruto as number) ||
+      0
+    )
   })
 
   return {
