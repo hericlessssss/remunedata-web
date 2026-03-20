@@ -3,13 +3,16 @@ import type { Execution, PaginationResponse } from '@/core/types/api'
 
 export const ExecutionService = {
   async getAll(page = 1, size = 20): Promise<PaginationResponse<Execution>> {
-    const { data } = await httpClient.get<any>('executions/', {
+    interface ExecutionListResponse {
+      value?: Execution[]
+      Count?: number
+    }
+    const { data } = await httpClient.get<Execution[] | ExecutionListResponse>('executions/', {
       params: { page, size },
     })
 
-    // Suporta tanto array direto quanto objeto envelopado { value: [], Count: n }
     const items = Array.isArray(data) ? data : (data.value || [])
-    const total = data.Count || items.length
+    const total = (!Array.isArray(data) && data.Count) ? data.Count : items.length
 
     return {
       items,

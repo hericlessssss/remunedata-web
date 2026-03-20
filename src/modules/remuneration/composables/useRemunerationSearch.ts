@@ -16,13 +16,12 @@ export function useRemunerationSearch() {
     orgao: (route.query.orgao as string) || '',
     page: route.query.page ? Number(route.query.page) : 1,
     size: route.query.size ? Number(route.query.size) : 25,
-    ordering: (route.query.ordering as string) || '',
   })
 
   // Filtros locais para Edição (Vinculados aos inputs)
   const localFilters = ref<SearchFilters>({ ...appliedFilters.value })
 
-  const { data, isLoading, isFetching, isError, error, refetch } = useQuery({
+  const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ['remuneration', 'search', appliedFilters],
     queryFn: () => RemunerationService.search(appliedFilters.value),
     placeholderData: (previousData) => previousData,
@@ -50,66 +49,32 @@ export function useRemunerationSearch() {
     }
   }
 
-  const setOrdering = (key: string) => {
-    let newOrdering = key
-    
-    // Toggle logic: key -> -key -> ""
-    if (appliedFilters.value.ordering === key) {
-      newOrdering = `-${key}`
-    } else if (appliedFilters.value.ordering === `-${key}`) {
-      newOrdering = ''
-    }
-
-    // ATENÇÃO: Atualizamos a referência completa do objeto para disparar a reatividade do useQuery
-    appliedFilters.value = {
-      ...appliedFilters.value,
-      ordering: newOrdering,
-      page: 1
-    }
-    
-    localFilters.value = {
-      ...localFilters.value,
-      ordering: newOrdering
-    }
-  }
-
   const setPage = (page: number) => {
-    appliedFilters.value = {
-      ...appliedFilters.value,
-      page
-    }
-    localFilters.value = {
-      ...localFilters.value,
-      page
-    }
+    appliedFilters.value.page = page
+    localFilters.value.page = page
   }
 
   const clearFilters = () => {
-    const defaultFilters: SearchFilters = {
+    const defaults = {
       nome: '',
       cpf: '',
-      ano: 2025,
-      mes: '01',
       cargo: '',
       orgao: '',
+      ano: 2024,
+      mes: '01',
       page: 1,
-      size: 25,
-      ordering: '',
     }
-    localFilters.value = { ...defaultFilters }
-    appliedFilters.value = { ...defaultFilters }
+    localFilters.value = { ...defaults }
+    appliedFilters.value = { ...defaults }
   }
 
   return {
-    filters: localFilters, // O componente usa localFilters para binding
-    appliedFilters,        // Para exportação e estados de controle
+    filters: localFilters,
+    appliedFilters,
     data,
     isLoading,
     isFetching,
-    isError,
-    error,
     setPage,
-    setOrdering,
     applySearch,
     clearFilters,
     refetch,

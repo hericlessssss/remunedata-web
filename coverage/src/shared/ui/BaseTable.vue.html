@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>53/53</span>
+                <span class='fraction'>57/57</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>53/53</span>
+                <span class='fraction'>57/57</span>
             </div>
         
             
@@ -138,7 +138,13 @@
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
 <a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -151,21 +157,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -176,7 +167,10 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -192,7 +186,17 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -212,8 +216,12 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&lt;script setup lang="ts" generic="T"&gt;
+import BaseLoading from './BaseLoading.vue'
+&nbsp;
 interface Props {
   items: T[]
   headers: { key: string; label: string; class?: string }[]
@@ -235,22 +243,23 @@ defineEmits&lt;{
           &lt;th
             v-for="header in headers"
             :key="header.key"
-            class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider"
-            :class="header.class"
+            class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider h-12"
           &gt;
-            {{ header.label }}
+            &lt;div class="flex items-center gap-1.5"&gt;
+              &lt;slot :name="`header-${header.key}`" :header="header"&gt;
+                {{ header.label }}
+              &lt;/slot&gt;
+            &lt;/div&gt;
           &lt;/th&gt;
         &lt;/tr&gt;
       &lt;/thead&gt;
-      &lt;tbody class="divide-y divide-slate-100"&gt;
+      &lt;tbody class="bg-white divide-y divide-slate-100"&gt;
         &lt;!-- Loading State --&gt;
-        &lt;template v-if="isLoading"&gt;
-          &lt;tr v-for="i in 8" :key="i" class="animate-pulse"&gt;
-            &lt;td v-for="header in headers" :key="header.key" class="px-6 py-4"&gt;
-              &lt;div class="h-4 bg-slate-100 rounded w-full"&gt;&lt;/div&gt;
-            &lt;/td&gt;
-          &lt;/tr&gt;
-        &lt;/template&gt;
+        &lt;tr v-if="isLoading"&gt;
+          &lt;td :colspan="headers.length"&gt;
+            &lt;BaseLoading label="Buscando registros..." /&gt;
+          &lt;/td&gt;
+        &lt;/tr&gt;
 &nbsp;
         &lt;!-- Empty State --&gt;
         &lt;tr v-else-if="items.length === 0" class="h-64 text-center"&gt;
@@ -265,24 +274,24 @@ defineEmits&lt;{
         &lt;/tr&gt;
 &nbsp;
         &lt;!-- Data State --&gt;
-        &lt;tr
-          v-for="(item, index) in items"
-          v-else
-          :key="index"
-          class="hover:bg-slate-50 transition-colors group cursor-pointer"
-          @click="$emit('row-click', item)"
-        &gt;
-          &lt;td
-            v-for="header in headers"
-            :key="header.key"
-            class="px-6 py-4 text-sm text-slate-600 font-medium group-hover:text-slate-900 border-b border-slate-50"
-            :class="header.class"
+        &lt;template v-for="(item, index) in items" :key="index"&gt;
+          &lt;tr
+            class="hover:bg-slate-50 transition-colors group cursor-pointer"
+            @click="$emit('row-click', item)"
           &gt;
-            &lt;slot :name="`cell-${header.key}`" :item="item" :index="index"&gt;
-              {{ (item as any)[header.key] }}
-            &lt;/slot&gt;
-          &lt;/td&gt;
-        &lt;/tr&gt;
+            &lt;td
+              v-for="header in headers"
+              :key="header.key"
+              class="px-6 py-4 text-sm text-slate-600 font-medium group-hover:text-slate-900 border-b border-slate-50"
+              :class="header.class"
+            &gt;
+              &lt;slot :name="`cell-${header.key}`" :item="item" :index="index"&gt;
+                {{ (item as any)[header.key] }}
+              &lt;/slot&gt;
+            &lt;/td&gt;
+          &lt;/tr&gt;
+          &lt;slot name="row-after" :item="item" :index="index"&gt;&lt;/slot&gt;
+        &lt;/template&gt;
       &lt;/tbody&gt;
     &lt;/table&gt;
   &lt;/div&gt;
@@ -295,7 +304,7 @@ defineEmits&lt;{
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-19T19:15:11.909Z
+                at 2026-03-20T16:09:55.818Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

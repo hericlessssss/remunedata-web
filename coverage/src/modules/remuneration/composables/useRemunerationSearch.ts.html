@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">92.95% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>59/59</span>
+                <span class='fraction'>66/71</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">57.14% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/6</span>
+                <span class='fraction'>4/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">92.95% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>59/59</span>
+                <span class='fraction'>66/71</span>
             </div>
         
             
@@ -132,7 +132,22 @@
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -149,6 +164,11 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -174,6 +194,14 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -189,7 +217,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
@@ -202,7 +232,7 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router'
 import { useQuery } from '@tanstack/vue-query'
 import { RemunerationService, type SearchFilters } from '../services/remuneration.service'
 &nbsp;
@@ -210,7 +240,7 @@ export function useRemunerationSearch() {
   const route = useRoute()
   const router = useRouter()
 &nbsp;
-  const filters = ref&lt;SearchFilters&gt;({
+  const appliedFilters = ref&lt;SearchFilters&gt;({
     nome: (route.query.nome as string) || '',
     cpf: (route.query.cpf as string) || '',
     ano: route.query.<span class="branch-0 cbranch-no" title="branch not covered" >ano ? Number(route.query.ano) : 2</span>025,
@@ -219,19 +249,24 @@ export function useRemunerationSearch() {
     orgao: (route.query.orgao as string) || '',
     page: route.query.<span class="branch-0 cbranch-no" title="branch not covered" >page ? Number(route.query.page) : 1</span>,
     size: route.query.<span class="branch-0 cbranch-no" title="branch not covered" >size ? Number(route.query.size) : 2</span>5,
+    ordering: (route.query.ordering as string) || '',
   })
 &nbsp;
-  const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['remuneration', 'search', filters],
-    queryFn: <span class="fstat-no" title="function not covered" >() =&gt; RemunerationService.search(filters.value),</span>
+  // Filtros locais para Edição (Vinculados aos inputs)
+  const { ordering, ...initialLocalFilters } = appliedFilters.value
+  const localFilters = ref&lt;SearchFilters&gt;({ ...initialLocalFilters })
+&nbsp;
+  const { data, isLoading, isFetching, isError, error, refetch } = useQuery({
+    queryKey: ['remuneration', 'search', appliedFilters],
+    queryFn: <span class="fstat-no" title="function not covered" >() =&gt; RemunerationService.search(appliedFilters.value),</span>
     placeholderData: <span class="fstat-no" title="function not covered" >(previousData) =&gt; previousData,</span>
   })
 &nbsp;
-  // Sincroniza filtros com a URL
+  // Sincroniza filtros ATIVOS com a URL
   watch(
-    filters,
+    appliedFilters,
     (newFilters) =&gt; {
-      const query = { ...newFilters } as any
+      const query = { ...newFilters } as LocationQueryRaw
       // Remover campos vazios da URL
       Object.keys(query).forEach((key) =&gt; {
         if (!query[key]) delete query[key]
@@ -242,30 +277,40 @@ export function useRemunerationSearch() {
     { deep: true },
   )
 &nbsp;
+  const applySearch = <span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    appliedFilters.value = { </span>
+<span class="cstat-no" title="statement not covered" >      ...localFilters.value,</span>
+<span class="cstat-no" title="statement not covered" >      page: 1 // Reinicia a página ao pesquisar</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
+&nbsp;
   const setPage = (page: number) =&gt; {
-    filters.value.page = page
+    appliedFilters.value.page = page
+    localFilters.value.page = page
   }
 &nbsp;
   const clearFilters = () =&gt; {
-    filters.value = {
+    const defaults = {
       nome: '',
       cpf: '',
-      ano: 2025,
-      mes: '01',
       cargo: '',
       orgao: '',
+      ano: 2024,
+      mes: '01',
       page: 1,
-      size: 25,
     }
+    localFilters.value = { ...defaults }
+    appliedFilters.value = { ...defaults }
   }
 &nbsp;
   return {
-    filters,
+    filters: localFilters,
+    appliedFilters,
     data,
     isLoading,
-    isError,
-    error,
+    isFetching,
     setPage,
+    applySearch,
     clearFilters,
     refetch,
   }
@@ -277,7 +322,7 @@ export function useRemunerationSearch() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-19T19:15:11.909Z
+                at 2026-03-20T16:09:55.818Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

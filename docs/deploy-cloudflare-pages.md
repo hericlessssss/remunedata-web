@@ -2,7 +2,7 @@
 
 Este guia fornece instruções detalhadas para configurar e operar o pipeline de CI/CD para o RemuneData Web no Cloudflare Pages.
 
-## 🚀 Estratégia de Deploy: Direct Upload
+##  Estratégia de Deploy: Direct Upload
 
 Diferente do fluxo padrão de integração com o Git da Cloudflare, utilizamos o **GitHub Actions** para realizar o build e o upload direto dos artefatos. Isso garante que o deploy só ocorra se **100% dos testes e validações passarem**.
 
@@ -51,7 +51,7 @@ Para gerar o `CLOUDFLARE_API_TOKEN`:
 
 ---
 
-## 🛠️ Troubleshooting & Questões Comuns
+## ️ Troubleshooting & Questões Comuns
 
 ### 1. Erro de Token Inválido
 Verifique se o token tem a permissão `Cloudflare Pages: Edit` e se não expirou.

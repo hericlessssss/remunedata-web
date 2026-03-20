@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/139</span>
+                <span class='fraction'>0/153</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/139</span>
+                <span class='fraction'>0/153</span>
             </div>
         
             
@@ -222,7 +222,23 @@
 <a name='L157'></a><a href='#L157'>157</a>
 <a name='L158'></a><a href='#L158'>158</a>
 <a name='L159'></a><a href='#L159'>159</a>
-<a name='L160'></a><a href='#L160'>160</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -238,6 +254,22 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -397,10 +429,26 @@
 <span class="cstat-no" title="statement not covered" >const router = useRouter()</span>
 <span class="cstat-no" title="statement not covered" >const id = Number(route.params.id)</span>
 &nbsp;
-// Busca dados do registro atual
+// Busca dados do registro atual (usando atributos como fallback do 404 do ID)
 <span class="cstat-no" title="statement not covered" >const { data: current, isLoading: loadingCurrent } = useQuery({</span>
-<span class="cstat-no" title="statement not covered" >  queryKey: ['remuneration', 'detail', id],</span>
-<span class="cstat-no" title="statement not covered" >  queryFn: () =&gt; RemunerationService.getById(id),</span>
+<span class="cstat-no" title="statement not covered" >  queryKey: ['remuneration', 'detail', id, route.query.nome],</span>
+<span class="cstat-no" title="statement not covered" >  queryFn: async () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    try {</span>
+      // Tenta busca robusta pelos atributos da URL primeiro (garante funcionamento se o id-path falhar)
+<span class="cstat-no" title="statement not covered" >      if (route.query.nome &amp;&amp; route.query.cpf) {</span>
+<span class="cstat-no" title="statement not covered" >        return await RemunerationService.getByAttributes({</span>
+<span class="cstat-no" title="statement not covered" >          nome: route.query.nome as string,</span>
+<span class="cstat-no" title="statement not covered" >          cpf: route.query.cpf as string,</span>
+<span class="cstat-no" title="statement not covered" >          ano: Number(route.query.ano),</span>
+<span class="cstat-no" title="statement not covered" >          mes: route.query.mes as string,</span>
+<span class="cstat-no" title="statement not covered" >        })</span>
+<span class="cstat-no" title="statement not covered" >      }</span>
+<span class="cstat-no" title="statement not covered" >      return await RemunerationService.getById(id)</span>
+<span class="cstat-no" title="statement not covered" >    } catch {</span>
+      // Se tudo falhar, o Vue Query tratará o erro
+<span class="cstat-no" title="statement not covered" >      throw new Error('Falha ao carregar detalhe')</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >  },</span>
 <span class="cstat-no" title="statement not covered" >})</span>
 &nbsp;
 // Busca histórico baseado no CPF (quando disponível)
@@ -547,7 +595,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-19T19:15:11.909Z
+                at 2026-03-20T16:09:55.818Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

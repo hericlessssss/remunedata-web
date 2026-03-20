@@ -1,11 +1,11 @@
-# RemuneData - Frontend Web
+# RemuneData - Projeto Frontend
 
-Portal de transparência e análise remuneratória dos servidores públicos do Distrito Federal.
+Este documento descreve a arquitetura, as decisões técnicas e o histórico de evolução do frontend RemuneData.
 
-## 🚀 Visão do Projeto
-O RemuneData é uma plataforma analítica que consome a API de remunerações para fornecer uma visão clara, rápida e acessível sobre os gastos com pessoal. O foco é transformar dados brutos em insights visuais e permitir a exploração detalhada por servidor.
+## 1. Visão Geral
+O projeto visa criar uma interface rápida, segura e transparente para consulta de dados de remuneração pública. A arquitetura é baseada em módulos funcionais e uma camada de UI compartilhada. O foco é transformar dados brutos em insights visuais e permitir a exploração detalhada por servidor.
 
-## 🛠️ Stack Tecnológico
+## ️ Stack Tecnológico
 - **Core**: Vue 3 (Composition API) + TypeScript + Vite.
 - **Estilização**: Tailwind CSS v4 (Design System Utility-first).
 - **Estado & Cache**: Vue Query (TanStack) para gestão de estado assíncrono e Pinia para estado global.
@@ -14,7 +14,7 @@ O RemuneData é uma plataforma analítica que consome a API de remunerações pa
 - **Qualidade**: Vitest (Unit/Integration), ESLint 9+ e Prettier.
 - **Icons**: Lucide Vue Next.
 
-## 📂 Estrutura de Pastas
+##  Estrutura de Pastas
 ```text
 src/
 ├── app/            # Configurações globais (Router, Layouts, Styles)
@@ -26,7 +26,7 @@ src/
 ├── shared/         # Componentes UI e Utilitários reutilizáveis (Design System)
 ```
 
-## 📈 Histórico de Desenvolvimento (Roadmap)
+##  Histórico de Desenvolvimento (Roadmap)
 
 ### Etapa 1: Fundação do Projeto
 - Inicialização com Vite + Vue 3 + TS.
@@ -99,22 +99,21 @@ src/
 
 ## Etapa 18: Monitoramento em Tempo Real (RPA Progress)
 - **Polling Inteligente:** Ativado `refetchInterval` de 5s no `vue-query`.
-- **Extensibilidade de UI:** Refatorado `BaseTable.vue` para suportar slots de cabeçalho e `row-after`.## Etapa 19: Otimização de Carga e Detalhamento Sob Demanda
+- **Extensibilidade de UI:** Refatorado `BaseTable.vue` para suportar slots de cabeçalho e `row-after`.
+## Etapa 19: Otimização de Carga e Detalhamento Sob Demanda
 - **Componentização:** Criado `ExecutionMonthlyProgress.vue` para isolar a lógica de progresso mensal.
 - **Carregamento Lazy:** Detalhes de execução agora são carregados apenas quando a linha é expandida.
-- **Resiliência de Log:** Corrigido o tratamento de dados no `ExecutionService` (OData wrapping) e no componente de progresso (snake/camel case fallback), garantindo que os meses apareçam mesmo com dados parciais.
+- **Resiliência de Log:** Corrigido o tratamento de dados no `ExecutionService` (OData wrapping) e no componente de progresso, garantindo que os meses apareçam mesmo com dados parciais.
 - **UX de Espera:** Adicionado estado amigável para execuções que acabaram de iniciar e ainda não geraram logs mensais.
-## Etapa 20: Ordenação Server-Side na Consulta
-- **BaseTable Reativa:** Adicionado suporte a cabeçalhos clicáveis e ícones de ordenação.
-- **Lógica de Toggle:** Implementada sequência `asc` -> `desc` -> `limpo`.
-- **Persistência:** Parâmetro `ordering` sincronizado com a URL (Deep Linking).
-- **Correção de Reatividade:** Ajustada a atualização do `ref` em `useRemunerationSearch` para disparar refetch automático no `vue-query`.
-- **Ajuste de Layout:** Aplicado `whitespace-nowrap` nos cabeçalhos para evitar quebra de linha.
+
+## Etapa 20: Estabilização de Layout e Logs
+- **BaseTable Estável:** Revertida para cabeçalhos estáticos para garantir layout consistente em todas as resoluções.
+- **Resiliência de Log:** Corrigido o tratamento de dados no `ExecutionService` (OData wrapping) e no componente de progresso, garantindo que os meses apareçam mesmo com dados parciais.
 - **Cobertura:** Validada a integridade dos tipos e testes (26/26).
 - Indicadores de integridade e última sincronização no Dashboard principal.
 - Refiguração da resiliência de navegação (Deep Linking) para contornar limitações de endpoints de ID.
 
-## 6. 💡 Desafios Técnicos e Soluções
+## 6. Desafios Técnicos e Soluções
 
 | Desafio | Solução |
 | :--- | :--- |
@@ -124,15 +123,21 @@ src/
 | **Performance de Busca** | Evitar requisições excessivas via estratégia de `debounce` no filtro de nome. |
 
 ---
-**Entregue com excelência.** 🐒✨
+**Entregue com excelência.**
 
-## 🧪 Estratégia de Testes
+## 2. Arquitetura e Estrutura
+O projeto segue uma estrutura modular para facilitar a manutenção e escalabilidade.
+
+## 3. UI System e Design
+O design prioriza a legibilidade e a estética profissional (Premium Design).
+
+## Estratégia de Testes
 O projeto segue o princípio de **TDD** para lógica de negócio e componentes core.
 - **Unitários**: Validam formatadores, parsers de datas e lógica de composables.
 - **Componentes**: Testam interações de UI e renderização condicional (Loading/Empty states).
 - **Cobertura**: Foco em manter >80% de cobertura nas pastas `core`, `services` e `composables`.
 
-## 📌 Guia de Estilo (Convenções)
+## Guia de Estilo (Convenções)
 - **Commits**: Seguem o padrão `Conventional Commits` (feat, fix, chore).
 - **Componentes**: Vue SFC com `<script setup>` e TypeScript.
 - **Estilos**: Tailwind CSS com camadas `@layer base` para customização premium.
