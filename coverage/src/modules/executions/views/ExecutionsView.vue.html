@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/155</span>
+                <span class='fraction'>0/158</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/155</span>
+                <span class='fraction'>0/158</span>
             </div>
         
             
@@ -261,7 +261,13 @@
 <a name='L196'></a><a href='#L196'>196</a>
 <a name='L197'></a><a href='#L197'>197</a>
 <a name='L198'></a><a href='#L198'>198</a>
-<a name='L199'></a><a href='#L199'>199</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -276,30 +282,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -316,6 +306,28 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -474,6 +486,23 @@
 <span class="cstat-no" title="statement not covered" >const expandedRows = ref&lt;Set&lt;number&gt;&gt;(new Set())</span>
 <span class="cstat-no" title="statement not covered" >const now = ref(new Date())</span>
 &nbsp;
+// Garante que o cálculo de duração considere UTC, já que a API retorna ISO UTC
+<span class="cstat-no" title="statement not covered" >const formatDuration = (start: string, end: string | null) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  const startTime = new Date(start).getTime()</span>
+<span class="cstat-no" title="statement not covered" >  const endTime = end ? new Date(end).getTime() : now.value.getTime()</span>
+<span class="cstat-no" title="statement not covered" >  const diff = endTime - startTime</span>
+  
+<span class="cstat-no" title="statement not covered" >  if (diff &lt; 0) return '0s'</span>
+  
+<span class="cstat-no" title="statement not covered" >  const seconds = Math.floor(diff / 1000)</span>
+<span class="cstat-no" title="statement not covered" >  if (seconds &lt; 60) return `${seconds}s`</span>
+<span class="cstat-no" title="statement not covered" >  const minutes = Math.floor(seconds / 60)</span>
+<span class="cstat-no" title="statement not covered" >  const hours = Math.floor(minutes / 60)</span>
+  
+<span class="cstat-no" title="statement not covered" >  if (hours &gt; 0) return `${hours}h ${minutes % 60}m`</span>
+<span class="cstat-no" title="statement not covered" >  return `${minutes}m ${seconds % 60}s`</span>
+<span class="cstat-no" title="statement not covered" >}</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >let timer: ReturnType&lt;typeof window.setInterval&gt; | null = null</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >onMounted(() =&gt; {</span>
@@ -499,21 +528,10 @@
 <span class="cstat-no" title="statement not covered" >  { key: 'ano_exercicio', label: 'Ano', class: 'font-bold' },</span>
 <span class="cstat-no" title="statement not covered" >  { key: 'started_at', label: 'Início' },</span>
 <span class="cstat-no" title="statement not covered" >  { key: 'duration', label: 'Duração' },</span>
-<span class="cstat-no" title="statement not covered" >  { key: 'total_registros_coletados', label: 'Registros', class: 'text-right font-mono' },</span>
+<span class="cstat-no" title="statement not covered" >  { key: 'total_registros_coletados', label: 'Total Coletado', class: 'text-right font-mono' },</span>
 <span class="cstat-no" title="statement not covered" >  { key: 'error_message', label: 'Observações', class: 'hidden lg:table-cell' },</span>
 <span class="cstat-no" title="statement not covered" >]</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >const formatDuration = (start: string, end: string | null) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  const endTime = end ? new Date(end).getTime() : now.value.getTime()</span>
-<span class="cstat-no" title="statement not covered" >  const diff = endTime - new Date(start).getTime()</span>
-  
-<span class="cstat-no" title="statement not covered" >  if (diff &lt; 0) return '0s'</span>
-  
-<span class="cstat-no" title="statement not covered" >  const seconds = Math.floor(diff / 1000)</span>
-<span class="cstat-no" title="statement not covered" >  if (seconds &lt; 60) return `${seconds}s`</span>
-<span class="cstat-no" title="statement not covered" >  const minutes = Math.floor(seconds / 60)</span>
-<span class="cstat-no" title="statement not covered" >  return `${minutes}m ${seconds % 60}s`</span>
-<span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >const getStatusClass = (status: string) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  const s = status.toLowerCase()</span>
@@ -561,7 +579,7 @@
 <span class="cstat-no" title="statement not covered" >    &lt;div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4"&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;div&gt;</span>
 <span class="cstat-no" title="statement not covered" >        &lt;h2 class="text-3xl font-bold text-slate-900 font-serif"&gt;Execuções&lt;/h2&gt;</span>
-<span class="cstat-no" title="statement not covered" >        &lt;p class="text-slate-500"&gt;Log de auditoria das sincronizações de dados com o portal.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;p class="text-slate-500"&gt;Log de auditoria das sincronizações de dados processados.&lt;/p&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;BaseButton :loading="isSyncing" @click="handleSync"&gt;</span>
 <span class="cstat-no" title="statement not covered" >        &lt;RefreshCw class="w-4 h-4 mr-2" :class="{ 'animate-spin': isSyncing }" /&gt;</span>
@@ -664,7 +682,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-20T20:34:17.019Z
+                at 2026-03-20T20:57:39.934Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
