@@ -1,4 +1,6 @@
 <script setup lang="ts" generic="T">
+import BaseLoading from './BaseLoading.vue'
+
 interface Props {
   items: T[]
   headers: { key: string; label: string; class?: string }[]
@@ -29,13 +31,11 @@ defineEmits<{
       </thead>
       <tbody class="divide-y divide-slate-100">
         <!-- Loading State -->
-        <template v-if="isLoading">
-          <tr v-for="i in 8" :key="i" class="animate-pulse">
-            <td v-for="header in headers" :key="header.key" class="px-6 py-4">
-              <div class="h-4 bg-slate-100 rounded w-full"></div>
-            </td>
-          </tr>
-        </template>
+        <tr v-if="isLoading">
+          <td :colspan="headers.length">
+            <BaseLoading label="Buscando registros..." />
+          </td>
+        </tr>
 
         <!-- Empty State -->
         <tr v-else-if="items.length === 0" class="h-64 text-center">

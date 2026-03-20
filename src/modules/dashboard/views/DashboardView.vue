@@ -5,6 +5,7 @@ import { useDashboardSummary } from '../composables/useDashboardSummary'
 import { formatCurrency } from '@/core/formatters/currency'
 import BaseCard from '@/shared/ui/BaseCard.vue'
 import BaseChart from '@/shared/ui/BaseChart.vue'
+import BaseLoading from '@/shared/ui/BaseLoading.vue'
 
 const { data, isLoading, isError, error } = useDashboardSummary()
 
@@ -12,7 +13,7 @@ const chartOptions = computed(() => {
   if (!data.value) return {}
 
   const categories = data.value.top_orgaos.map((o) => o.nome_orgao.split(' ').slice(0, 2).join(' '))
-  const values = data.value.top_orgaos.map((o) => o.media_bruta)
+  const values = data.value.top_orgaos.map((o) => o.media_salarial)
 
   return {
     tooltip: { trigger: 'axis' },
@@ -55,14 +56,14 @@ const chartOptions = computed(() => {
         :icon="Users"
       />
       <BaseCard
-        title="Média Salarial Bruta"
-        :value="isLoading ? '...' : formatCurrency(data?.media_salarial_bruta || 0)"
+        title="Média Salarial"
+        :value="isLoading ? '...' : formatCurrency(data?.media_salarial || 0)"
         description="Remuneração média mensal"
         :icon="TrendingUp"
       />
       <BaseCard
         title="Gasto Total Bruto"
-        :value="isLoading ? '...' : formatCurrency(data?.valor_total_bruto || 0)"
+        :value="isLoading ? '...' : formatCurrency(data?.total_gasto_bruto || 0)"
         description="Total folha de pagamento"
         :icon="Wallet"
       />
@@ -71,12 +72,7 @@ const chartOptions = computed(() => {
     <!-- Charts Section -->
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
       <h3 class="text-lg font-bold text-slate-800 mb-6">Média Salarial por Órgão (Top 5)</h3>
-      <div
-        v-if="isLoading"
-        class="h-[350px] flex items-center justify-center bg-slate-50 rounded-lg animate-pulse"
-      >
-        <span class="text-slate-400 font-medium">Carregando dados analíticos...</span>
-      </div>
+      <BaseLoading v-if="isLoading" label="Analisando dados remuneratórios..." />
       <BaseChart v-else-if="data" :option="chartOptions" />
       <div
         v-else-if="isError"

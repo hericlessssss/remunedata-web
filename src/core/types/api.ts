@@ -22,13 +22,13 @@ export interface Remuneration {
 export interface TopOrgao {
   nome_orgao: string
   total_servidores: number
-  media_bruta: number
+  media_salarial: number
 }
 
 export interface Summary {
   total_servidores: number
-  valor_total_bruto: number
-  media_salarial_bruta: number
+  total_gasto_bruto: number
+  media_salarial: number
   ano_referencia: number
   top_orgaos: TopOrgao[]
 }
