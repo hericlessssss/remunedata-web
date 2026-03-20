@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { CheckCircle2, XCircle, Calendar, RefreshCw, ChevronDown, ChevronUp } from 'lucide-vue-next'
 import { useExecutions } from '../composables/useExecutions'
 import { ExecutionService } from '../services/execution.service'
@@ -11,6 +11,19 @@ import ExecutionMonthlyProgress from '../components/ExecutionMonthlyProgress.vue
 const { data, isLoading, page, refetch } = useExecutions()
 const isSyncing = ref(false)
 const expandedRows = ref<Set<number>>(new Set())
+const now = ref(new Date())
+
+let timer: ReturnType<typeof window.setInterval> | null = null
+
+onMounted(() => {
+  timer = window.setInterval(() => {
+    now.value = new Date()
+  }, 1000)
+})
+
+onUnmounted(() => {
+  if (timer) window.clearInterval(timer)
+})
 
 const toggleRow = (id: number) => {
   if (expandedRows.value.has(id)) {
@@ -30,8 +43,11 @@ const tableHeaders = [
 ]
 
 const formatDuration = (start: string, end: string | null) => {
-  if (!end) return '-'
-  const diff = new Date(end).getTime() - new Date(start).getTime()
+  const endTime = end ? new Date(end).getTime() : now.value.getTime()
+  const diff = endTime - new Date(start).getTime()
+  
+  if (diff < 0) return '0s'
+  
   const seconds = Math.floor(diff / 1000)
   if (seconds < 60) return `${seconds}s`
   const minutes = Math.floor(seconds / 60)

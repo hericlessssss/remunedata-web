@@ -31,9 +31,15 @@ const getStatusClass = (status: string) => {
 const getMonthlyCount = (m: MonthlyExecution, allMonths: MonthlyExecution[]) => {
   if (m.status !== 'running') return m.registros_coletados ?? 0
   
-  // O total do pai é muito mais frequente (atualizado a cada página pelo worker)
-  // Enquanto o total do 'mes' (filho) é atualizado com menos frequência no BD.
-  // Se só tem 1 mês rodando, o total do pai é o progresso desse mês.
+  // Encontra qual é o PRIMEIRO mês que está rodando na lista
+  const firstRunningMonth = allMonths.find(month => month.status === 'running')
+  
+  // Só aplicamos a estimativa baseada no pai para o primeiro mês da fila de execução
+  // Isso evita que o total global apareça em todos os meses se o backend marcar todos como 'running'
+  if (firstRunningMonth?.mes_referencia !== m.mes_referencia) {
+    return m.registros_coletados ?? 0
+  }
+
   const otherMonthsTotal = allMonths
     .filter(month => month.mes_referencia !== m.mes_referencia && month.status === 'success')
     .reduce((acc, month) => acc + (month.registros_coletados || 0), 0)
