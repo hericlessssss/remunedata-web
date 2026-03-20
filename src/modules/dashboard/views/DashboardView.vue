@@ -13,39 +13,36 @@ const chartOptions = computed(() => {
   if (!data.value) return {}
 
   const categories = data.value.top_orgaos.map((o) => {
-    // Se começar com "SECRETARIA DE", remover para encurtar
-    let name = o.nome_orgao.replace(/^SECRETARIA DE (ESTADO DE )?/i, '').trim()
-    if (name.length > 20) name = name.substring(0, 18) + '...'
+    // Limpar espaços extras e remover prefixos repetitivos
+    let name = o.nome_orgao.trim().replace(/^SECRETARIA DE (ESTADO DE )?/i, '').trim()
+    if (name.length > 25) name = name.substring(0, 23) + '...'
     return name
   })
   
   const values = data.value.top_orgaos.map((o) => {
-    // Mapeamento resiliente para diferentes versões da API
     const item = o as unknown as Record<string, unknown>
-    return (
-      o.media_salarial ||
-      (item.media_bruta as number) ||
-      (item.valor_bruto as number) ||
-      (item.total_gasto_bruto as number) ||
-      0
-    )
+    // Usar count (da API real) ou fallbacks
+    return (item.count as number) || o.total_servidores || (o.media_salarial as number) || 0
   })
 
   return {
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-    xAxis: { type: 'value', axisLabel: { formatter: '{value} R$' } },
-    yAxis: { type: 'category', data: categories },
+    xAxis: { 
+      type: 'value', 
+      axisLabel: { formatter: (val: number) => val.toLocaleString('pt-BR') } 
+    },
+    yAxis: { type: 'category', data: categories, inverse: true },
     series: [
       {
-        name: 'Média Salarial Bruta',
+        name: 'Total de Servidores',
         type: 'bar',
         data: values,
         itemStyle: { color: '#1e293b' },
         label: {
           show: true,
           position: 'right',
-          formatter: (params: { value: number }) => formatCurrency(params.value),
+          formatter: (params: { value: number }) => params.value.toLocaleString('pt-BR'),
         },
       },
     ],
@@ -85,9 +82,8 @@ const chartOptions = computed(() => {
       />
     </div>
 
-    <!-- Charts Section -->
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-      <h3 class="text-lg font-bold text-slate-800 mb-6">Média Salarial por Órgão (Top 5)</h3>
+      <h3 class="text-lg font-bold text-slate-800 mb-6">Top 5 Órgãos por Volume de Servidores</h3>
       <BaseLoading v-if="isLoading" label="Analisando dados remuneratórios..." />
       <BaseChart v-else-if="data" :option="chartOptions" />
       <div

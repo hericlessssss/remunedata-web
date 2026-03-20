@@ -21,8 +21,9 @@ export interface Remuneration {
 
 export interface TopOrgao {
   nome_orgao: string
-  total_servidores: number
-  media_salarial: number
+  total_servidores?: number
+  count?: number
+  media_salarial?: number
 }
 
 export interface Summary {
