@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { computed } from 'vue'
 import { Search, ChevronLeft, ChevronRight, FileDown } from 'lucide-vue-next'
 import { useRemunerationSearch } from '../composables/useRemunerationSearch'
 import { RemunerationService } from '../services/remuneration.service'
@@ -8,11 +8,21 @@ import { formatCompetence } from '@/core/formatters/date'
 import BaseButton from '@/shared/ui/BaseButton.vue'
 import BaseTable from '@/shared/ui/BaseTable.vue'
 
-const { filters, data, isFetching, setPage } = useRemunerationSearch()
+const { 
+  filters, 
+  data, 
+  isFetching, 
+  setPage, 
+  applySearch 
+} = useRemunerationSearch()
 
-const handleExport = (type: 'xlsx' | 'csv') => {
-  const url = RemunerationService.getExportUrl(type, filters.value)
-  window.open(url, '_blank')
+const handleExport = async (type: 'xlsx' | 'csv') => {
+  try {
+    const url = await RemunerationService.getExportUrl(type)
+    window.open(url, '_blank')
+  } catch {
+    window.alert('Erro ao gerar exportação. Verifique se existem execuções finalizadas.')
+  }
 }
 
 const tableHeaders = [
@@ -24,29 +34,7 @@ const tableHeaders = [
   { key: 'valor_liquido', label: 'Vlr. Líquido' },
 ]
 
-// Debounce local para campos de texto
-const isTyping = ref(false)
-const localNome = ref(filters.value.nome)
-const localCargo = ref(filters.value.cargo)
-const localOrgao = ref(filters.value.orgao)
-
-let debounceTimer: number | undefined
-
-const handleDebounce = (field: 'nome' | 'cargo' | 'orgao', value: string) => {
-  isTyping.value = true
-  if (debounceTimer) window.clearTimeout(debounceTimer)
-  debounceTimer = window.setTimeout(() => {
-    filters.value[field] = value
-    filters.value.page = 1
-    isTyping.value = false
-  }, 500)
-}
-
-watch(localNome, (val) => handleDebounce('nome', val || ''))
-watch(localCargo, (val) => handleDebounce('cargo', val || ''))
-watch(localOrgao, (val) => handleDebounce('orgao', val || ''))
-
-const isLoading = computed(() => isFetching.value || isTyping.value)
+const isLoading = computed(() => isFetching.value)
 
 const anos = [2025, 2024, 2023]
 const meses = [
@@ -93,10 +81,11 @@ const meses = [
             <div class="relative">
               <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
-                v-model="localNome"
+                v-model="filters.nome"
                 type="text"
                 placeholder="Ex: FRANCISCO..."
                 class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
+                @keyup.enter="applySearch"
               />
             </div>
           </div>
@@ -109,6 +98,7 @@ const meses = [
               type="text"
               placeholder="***.000.***-**"
               class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
+              @keyup.enter="applySearch"
             />
           </div>
   
@@ -116,10 +106,11 @@ const meses = [
         <div class="space-y-1">
           <label class="text-xs font-bold text-slate-400 uppercase">Cargo</label>
           <input
-            v-model="localCargo"
+            v-model="filters.cargo"
             type="text"
             placeholder="Ex: Delegado..."
             class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
+            @keyup.enter="applySearch"
           />
         </div>
 
@@ -127,10 +118,11 @@ const meses = [
         <div class="space-y-1">
           <label class="text-xs font-bold text-slate-400 uppercase">Órgão</label>
           <input
-            v-model="localOrgao"
+            v-model="filters.orgao"
             type="text"
             placeholder="Ex: Policia..."
             class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
+            @keyup.enter="applySearch"
           />
         </div>
 
@@ -146,14 +138,21 @@ const meses = [
         </div>
 
         <!-- Mes -->
-        <div class="space-y-1">
+        <div class="space-y-1 flex flex-col">
           <label class="text-xs font-bold text-slate-400 uppercase">Mês</label>
-          <select
-            v-model="filters.mes"
-            class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
-          >
-            <option v-for="m in meses" :key="m.v" :value="m.v">{{ m.l }}</option>
-          </select>
+          <div class="flex gap-2">
+            <select
+              v-model="filters.mes"
+              class="flex-1 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
+            >
+              <option v-for="m in meses" :key="m.v" :value="m.v">{{ m.l }}</option>
+            </select>
+            
+            <BaseButton :loading="isFetching" class="px-6 gap-2" @click="applySearch">
+              <Search class="w-4 h-4" />
+              Pesquisar
+            </BaseButton>
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import httpClient from '@/core/http/client'
-import type { Remuneration, PaginationResponse } from '@/core/types/api'
+import type { Remuneration, PaginationResponse, Execution } from '@/core/types/api'
 
 export interface SearchFilters {
   nome?: string
@@ -40,17 +40,22 @@ export const RemunerationService = {
     return data.items
   },
 
-  getExportUrl(type: 'xlsx' | 'csv', filters: SearchFilters): string {
-    const baseUrl = httpClient.defaults.baseURL || ''
-    const params = new URLSearchParams()
-    
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value) params.append(key, value.toString())
-    })
+  async getLatestExecutionId(): Promise<number | null> {
+    const { data } = await httpClient.get<Execution[]>('executions/')
+    if (data && data.length > 0) {
+      return data[0].id
+    }
+    return null
+  },
 
-    // Adiciona o limite conforme requisito (1k XLSX, 5k CSV)
-    params.set('size', type === 'xlsx' ? '1000' : '5000')
+  async getExportUrl(type: 'xlsx' | 'csv'): Promise<string> {
+    const baseUrl = httpClient.defaults.baseURL || ''
+    const executionId = await this.getLatestExecutionId()
     
-    return `${baseUrl}remuneration/export/${type}?${params.toString()}`
+    if (!executionId) {
+      throw new Error('Nenhuma execução encontrada para exportação')
+    }
+
+    return `${baseUrl}executions/${executionId}/export?format=${type}`
   },
 }

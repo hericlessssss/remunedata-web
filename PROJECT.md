@@ -87,6 +87,17 @@ src/
 - Implementação de filtros avançados por **CPF** na consulta pública.
 - Integração de exportação multi-formato (**XLSX** limitado a 1k e **CSV** limitado a 5k) conforme requisitos regulatórios.
 - Enriquecimento da auditoria de execuções com colunas de **Duração** e **Parâmetros** (Ano).
+
+## Etapa 15: Correção da Exportação e Entrega Final
+- **Identificação do Endpoint Real:** Descoberto que a exportação é vinculada ao ID da execução (`/executions/{id}/export`).
+- **Implementação Dinâmica:** Adicionado `getLatestExecutionId` para buscar o ID mais recente automaticamente.
+- **Correção da UI:** Botões de exportação (XLSX 1k e CSV 5k) na Consulta agora funcionam com IDs reais.
+
+## Etapa 16: Refatoração da UX de Pesquisa
+- **Busca Manual:** Introduzido o botão "Pesquisar" para evitar disparos reativos constantes.
+- **Desacoplamento de Filtros:** Separado o estado de edição (local) do estado ativo (API/URL).
+- **Precisão de Exportação:** Garantido que a exportação utilize o estado de filtros confirmado pelo usuário.
+- **Saneamento Final:** Linter 100% limpo e suíte de testes passando.
 - Indicadores de integridade e última sincronização no Dashboard principal.
 - Refiguração da resiliência de navegação (Deep Linking) para contornar limitações de endpoints de ID.
 

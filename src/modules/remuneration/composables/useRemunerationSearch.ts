@@ -7,7 +7,7 @@ export function useRemunerationSearch() {
   const route = useRoute()
   const router = useRouter()
 
-  const filters = ref<SearchFilters>({
+  const appliedFilters = ref<SearchFilters>({
     nome: (route.query.nome as string) || '',
     cpf: (route.query.cpf as string) || '',
     ano: route.query.ano ? Number(route.query.ano) : 2025,
@@ -18,15 +18,18 @@ export function useRemunerationSearch() {
     size: route.query.size ? Number(route.query.size) : 25,
   })
 
+  // Filtros locais para Edição (Vinculados aos inputs)
+  const localFilters = ref<SearchFilters>({ ...appliedFilters.value })
+
   const { data, isLoading, isFetching, isError, error, refetch } = useQuery({
-    queryKey: ['remuneration', 'search', filters],
-    queryFn: () => RemunerationService.search(filters.value),
+    queryKey: ['remuneration', 'search', appliedFilters],
+    queryFn: () => RemunerationService.search(appliedFilters.value),
     placeholderData: (previousData) => previousData,
   })
 
-  // Sincroniza filtros com a URL
+  // Sincroniza filtros ATIVOS com a URL
   watch(
-    filters,
+    appliedFilters,
     (newFilters) => {
       const query = { ...newFilters } as LocationQueryRaw
       // Remover campos vazios da URL
@@ -39,12 +42,20 @@ export function useRemunerationSearch() {
     { deep: true },
   )
 
+  const applySearch = () => {
+    appliedFilters.value = { 
+      ...localFilters.value,
+      page: 1 // Reinicia a página ao pesquisar
+    }
+  }
+
   const setPage = (page: number) => {
-    filters.value.page = page
+    appliedFilters.value.page = page
+    localFilters.value.page = page
   }
 
   const clearFilters = () => {
-    filters.value = {
+    const defaultFilters: SearchFilters = {
       nome: '',
       cpf: '',
       ano: 2025,
@@ -54,16 +65,20 @@ export function useRemunerationSearch() {
       page: 1,
       size: 25,
     }
+    localFilters.value = { ...defaultFilters }
+    appliedFilters.value = { ...defaultFilters }
   }
 
   return {
-    filters,
+    filters: localFilters, // O componente usa localFilters para binding
+    appliedFilters,        // Para exportação e estados de controle
     data,
     isLoading,
     isFetching,
     isError,
     error,
     setPage,
+    applySearch,
     clearFilters,
     refetch,
   }
