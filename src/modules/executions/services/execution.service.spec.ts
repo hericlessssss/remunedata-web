@@ -40,7 +40,7 @@ describe('ExecutionService', () => {
     const result = await ExecutionService.triggerSync(2025)
 
     expect(httpClient.post).toHaveBeenCalledWith('executions/', null, {
-      params: { ano: 2025 },
+      params: { ano: 2025, force: false },
     })
     expect(result).toEqual(mockExecution)
   })
