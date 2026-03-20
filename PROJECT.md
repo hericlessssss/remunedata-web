@@ -108,7 +108,8 @@ src/
 
 ## Etapa 20: Estabilização de Layout e Logs
 - **BaseTable Estável:** Revertida para cabeçalhos estáticos para garantir layout consistente em todas as resoluções.
-- **Resiliência de Log:** Corrigido o tratamento de dados no `ExecutionService` (OData wrapping) e no componente de progresso, garantindo que os meses apareçam mesmo com dados parciais.
+- **Resiliência de Log:** Corrigido o tratamento de dados no `ExecutionService` (OData wrapping) e no componente de progresso.
+- **Roteamento de Detalhes:** Removida a barra final (`/`) no endpoint de detalhes para habilitar o campo `monthly_executions` na API.
 - **Cobertura:** Validada a integridade dos tipos e testes (26/26).
 - Indicadores de integridade e última sincronização no Dashboard principal.
 - Refiguração da resiliência de navegação (Deep Linking) para contornar limitações de endpoints de ID.

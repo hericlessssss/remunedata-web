@@ -31,7 +31,7 @@ export const ExecutionService = {
   },
 
   async getById(id: number): Promise<Execution> {
-    const { data } = await httpClient.get<Execution>(`executions/${id}/`)
+    const { data } = await httpClient.get<Execution>(`executions/${id}`)
     return data
   },
 }
