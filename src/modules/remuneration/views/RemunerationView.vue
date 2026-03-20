@@ -10,9 +10,11 @@ import BaseTable from '@/shared/ui/BaseTable.vue'
 
 const { 
   filters, 
+  appliedFilters,
   data, 
   isFetching, 
   setPage, 
+  setOrdering,
   applySearch 
 } = useRemunerationSearch()
 
@@ -26,13 +28,24 @@ const handleExport = async (type: 'xlsx' | 'csv') => {
 }
 
 const tableHeaders = [
-  { key: 'nome_servidor', label: 'Servidor' },
-  { key: 'orgao', label: 'Órgão', class: 'hidden lg:table-cell' },
-  { key: 'cargo', label: 'Cargo', class: 'hidden md:table-cell' },
+  { key: 'nome_servidor', label: 'Servidor', sortable: true },
+  { key: 'orgao', label: 'Órgão', class: 'hidden lg:table-cell', sortable: true },
+  { key: 'cargo', label: 'Cargo', class: 'hidden md:table-cell', sortable: true },
   { key: 'referencia', label: 'Referência' },
-  { key: 'valor_bruto', label: 'Vlr. Bruto' },
-  { key: 'valor_liquido', label: 'Vlr. Líquido' },
+  { key: 'valor_bruto', label: 'Vlr. Bruto', sortable: true },
+  { key: 'valor_liquido', label: 'Vlr. Líquido', sortable: true },
 ]
+
+const sortKey = computed(() => {
+  const o = appliedFilters.value.ordering || ''
+  return o.startsWith('-') ? o.substring(1) : o
+})
+
+const sortOrder = computed(() => {
+  const o = appliedFilters.value.ordering || ''
+  if (!o) return undefined
+  return o.startsWith('-') ? 'desc' : 'asc'
+})
 
 const isLoading = computed(() => isFetching.value)
 
@@ -158,7 +171,14 @@ const meses = [
     </div>
 
     <!-- Tabela -->
-    <BaseTable :headers="tableHeaders" :items="data?.items || []" :is-loading="isLoading">
+    <BaseTable 
+      :headers="tableHeaders" 
+      :items="data?.items || []" 
+      :is-loading="isLoading"
+      :sort-key="sortKey"
+      :sort-order="sortOrder"
+      @sort="setOrdering"
+    >
       <template #cell-nome_servidor="{ item }">
         <RouterLink
           :to="{

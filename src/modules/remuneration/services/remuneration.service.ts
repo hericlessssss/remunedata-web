@@ -10,6 +10,7 @@ export interface SearchFilters {
   orgao?: string
   page?: number
   size?: number
+  ordering?: string
 }
 
 export const RemunerationService = {

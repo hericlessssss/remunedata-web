@@ -16,6 +16,7 @@ export function useRemunerationSearch() {
     orgao: (route.query.orgao as string) || '',
     page: route.query.page ? Number(route.query.page) : 1,
     size: route.query.size ? Number(route.query.size) : 25,
+    ordering: (route.query.ordering as string) || '',
   })
 
   // Filtros locais para Edição (Vinculados aos inputs)
@@ -49,6 +50,21 @@ export function useRemunerationSearch() {
     }
   }
 
+  const setOrdering = (key: string) => {
+    let newOrdering = key
+    
+    // Toggle logic: key -> -key -> ""
+    if (appliedFilters.value.ordering === key) {
+      newOrdering = `-${key}`
+    } else if (appliedFilters.value.ordering === `-${key}`) {
+      newOrdering = ''
+    }
+
+    appliedFilters.value.ordering = newOrdering
+    localFilters.value.ordering = newOrdering
+    appliedFilters.value.page = 1 // Reset pagination
+  }
+
   const setPage = (page: number) => {
     appliedFilters.value.page = page
     localFilters.value.page = page
@@ -64,6 +80,7 @@ export function useRemunerationSearch() {
       orgao: '',
       page: 1,
       size: 25,
+      ordering: '',
     }
     localFilters.value = { ...defaultFilters }
     appliedFilters.value = { ...defaultFilters }
@@ -78,6 +95,7 @@ export function useRemunerationSearch() {
     isError,
     error,
     setPage,
+    setOrdering,
     applySearch,
     clearFilters,
     refetch,

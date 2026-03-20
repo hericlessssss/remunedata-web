@@ -100,12 +100,15 @@ src/
 ## Etapa 18: Monitoramento em Tempo Real (RPA Progress)
 - **Polling Inteligente:** Ativado `refetchInterval` de 5s no `vue-query`.
 - **Extensibilidade de UI:** Refatorado `BaseTable.vue` para suportar slots de cabeçalho e `row-after`.
-
 ## Etapa 19: Otimização de Carga e Detalhamento Sob Demanda
 - **Componentização:** Criado `ExecutionMonthlyProgress.vue` para isolar a lógica de progresso mensal.
-- **Carregamento Lazy:** Detalhes de execução agora são carregados via `getById` apenas quando a linha é expandida.
-- **Resiliência:** Corrigida a lógica de exibição do botão de expansão (Chevron), que agora depende apenas do status da execução e não da presença de dados prévios.
-- **Estabilidade:** Mantida a aprovação de 100% dos testes unitários.
+- **Carregamento Lazy:** Detalhes de execução agora são carregados apenas quando a linha é expandida.
+
+## Etapa 20: Ordenação Server-Side na Consulta
+- **BaseTable Reativa:** Adicionado suporte a cabeçalhos clicáveis e ícones de ordenação.
+- **Lógica de Toggle:** Implementada sequência `asc` -> `desc` -> `limpo`.
+- **Persistência:** Parâmetro `ordering` sincronizado com a URL (Deep Linking).
+- **Cobertura:** Validada a integridade dos tipos e testes (26/26).
 - Indicadores de integridade e última sincronização no Dashboard principal.
 - Refiguração da resiliência de navegação (Deep Linking) para contornar limitações de endpoints de ID.
 

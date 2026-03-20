@@ -1,15 +1,18 @@
 <script setup lang="ts" generic="T">
-import BaseLoading from './BaseLoading.vue'
+import { ChevronUp, ChevronDown } from 'lucide-vue-next'
 
 interface Props {
   items: T[]
-  headers: { key: string; label: string; class?: string }[]
+  headers: { key: string; label: string; class?: string; sortable?: boolean }[]
   isLoading?: boolean
+  sortKey?: string
+  sortOrder?: 'asc' | 'desc'
 }
 
 defineProps<Props>()
 defineEmits<{
   (e: 'row-click', item: T): void
+  (e: 'sort', key: string): void
 }>()
 </script>
 
@@ -23,11 +26,28 @@ defineEmits<{
             v-for="header in headers"
             :key="header.key"
             class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider"
-            :class="header.class"
+            :class="[
+              header.class,
+              { 'cursor-pointer hover:bg-slate-100/50 transition-colors select-none': header.sortable }
+            ]"
+            @click="header.sortable ? $emit('sort', header.key) : null"
           >
-            <slot :name="`header-${header.key}`" :header="header">
-              {{ header.label }}
-            </slot>
+            <div class="flex items-center gap-1.5">
+              <slot :name="`header-${header.key}`" :header="header">
+                {{ header.label }}
+              </slot>
+              
+              <div v-if="header.sortable" class="flex flex-col text-slate-300">
+                <ChevronUp 
+                  class="w-3 h-3 -mb-1" 
+                  :class="{ 'text-blue-600': sortKey === header.key && sortOrder === 'asc' }" 
+                />
+                <ChevronDown 
+                  class="w-3 h-3" 
+                  :class="{ 'text-blue-600': sortKey === header.key && sortOrder === 'desc' }" 
+                />
+              </div>
+            </div>
           </th>
         </tr>
       </thead>
