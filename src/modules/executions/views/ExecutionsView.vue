@@ -130,7 +130,8 @@ const handleSync = async () => {
           <td :colspan="tableHeaders.length" class="p-4 border-b border-slate-100">
             <ExecutionMonthlyProgress 
               :execution-id="item.id" 
-              :status="item.status" 
+              :status="item.status"
+              :parent-total="item.total_registros_coletados"
             />
           </td>
         </tr>

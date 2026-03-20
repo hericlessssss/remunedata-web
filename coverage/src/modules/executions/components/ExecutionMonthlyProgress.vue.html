@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
@@ -136,7 +136,22 @@
 <a name='L71'></a><a href='#L71'>71</a>
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -146,6 +161,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -160,6 +176,20 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -217,6 +247,7 @@
 <span class="cstat-no" title="statement not covered" >const props = defineProps&lt;{</span>
   executionId: number
   status: string
+  parentTotal: number
 }&gt;()
 &nbsp;
 <span class="cstat-no" title="statement not covered" >const { data, isLoading } = useQuery({</span>
@@ -235,6 +266,20 @@
 <span class="cstat-no" title="statement not covered" >  if (s === 'pending') return 'bg-slate-50 text-slate-600 border-slate-200'</span>
 <span class="cstat-no" title="statement not covered" >  if (s === 'partial_success') return 'bg-amber-50 text-amber-700 border-amber-200'</span>
 <span class="cstat-no" title="statement not covered" >  return 'bg-red-50 text-red-700 border-red-200'</span>
+<span class="cstat-no" title="statement not covered" >}</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >const getMonthlyCount = (m: any, allMonths: any[]) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  if (m.status !== 'running') return m.registros_coletados ?? 0</span>
+  
+  // O total do pai é muito mais frequente (atualizado a cada página pelo worker)
+  // Enquanto o total do 'mes' (filho) é atualizado com menos frequência no BD.
+  // Se só tem 1 mês rodando, o total do pai é o progresso desse mês.
+<span class="cstat-no" title="statement not covered" >  const otherMonthsTotal = allMonths</span>
+<span class="cstat-no" title="statement not covered" >    .filter(month =&gt; month.mes_referencia !== m.mes_referencia &amp;&amp; month.status === 'success')</span>
+<span class="cstat-no" title="statement not covered" >    .reduce((acc, month) =&gt; acc + (month.registros_coletados || 0), 0)</span>
+  
+<span class="cstat-no" title="statement not covered" >  const estimated = props.parentTotal - otherMonthsTotal</span>
+<span class="cstat-no" title="statement not covered" >  return Math.max(m.registros_coletados ?? 0, estimated)</span>
 <span class="cstat-no" title="statement not covered" >}</span>
 &lt;/script&gt;
 &nbsp;
@@ -266,7 +311,7 @@
 <span class="cstat-no" title="statement not covered" >        &lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >        &lt;div&gt;</span>
 <span class="cstat-no" title="statement not covered" >          &lt;div class="text-sm font-bold text-slate-700"&gt;</span>
-<span class="cstat-no" title="statement not covered" >            {{ (m.registros_coletados ?? 0).toLocaleString('pt-BR') }}</span>
+<span class="cstat-no" title="statement not covered" >            {{ getMonthlyCount(m, data.monthly_executions || (data as any).monthlyExecutions).toLocaleString('pt-BR') }}</span>
 <span class="cstat-no" title="statement not covered" >          &lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >          &lt;div class="text-[10px] text-slate-400 uppercase font-bold tracking-tight"&gt;Registros&lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >        &lt;/div&gt;</span>
@@ -289,7 +334,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-20T16:21:21.245Z
+                at 2026-03-20T17:12:01.334Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

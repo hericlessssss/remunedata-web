@@ -6,6 +6,7 @@ import { ExecutionService } from '../services/execution.service'
 const props = defineProps<{
   executionId: number
   status: string
+  parentTotal: number
 }>()
 
 const { data, isLoading } = useQuery({
@@ -24,6 +25,20 @@ const getStatusClass = (status: string) => {
   if (s === 'pending') return 'bg-slate-50 text-slate-600 border-slate-200'
   if (s === 'partial_success') return 'bg-amber-50 text-amber-700 border-amber-200'
   return 'bg-red-50 text-red-700 border-red-200'
+}
+
+const getMonthlyCount = (m: any, allMonths: any[]) => {
+  if (m.status !== 'running') return m.registros_coletados ?? 0
+  
+  // O total do pai é muito mais frequente (atualizado a cada página pelo worker)
+  // Enquanto o total do 'mes' (filho) é atualizado com menos frequência no BD.
+  // Se só tem 1 mês rodando, o total do pai é o progresso desse mês.
+  const otherMonthsTotal = allMonths
+    .filter(month => month.mes_referencia !== m.mes_referencia && month.status === 'success')
+    .reduce((acc, month) => acc + (month.registros_coletados || 0), 0)
+  
+  const estimated = props.parentTotal - otherMonthsTotal
+  return Math.max(m.registros_coletados ?? 0, estimated)
 }
 </script>
 
@@ -55,7 +70,7 @@ const getStatusClass = (status: string) => {
         </div>
         <div>
           <div class="text-sm font-bold text-slate-700">
-            {{ (m.registros_coletados ?? 0).toLocaleString('pt-BR') }}
+            {{ getMonthlyCount(m, data.monthly_executions || (data as any).monthlyExecutions).toLocaleString('pt-BR') }}
           </div>
           <div class="text-[10px] text-slate-400 uppercase font-bold tracking-tight">Registros</div>
         </div>
