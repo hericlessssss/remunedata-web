@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query'
-import { CheckCircle2, XCircle, RefreshCw } from 'lucide-vue-next'
+import { CheckCircle2, XCircle, RefreshCw, Clock, Activity } from 'lucide-vue-next'
 import { ExecutionService } from '../services/execution.service'
-import type { MonthlyExecution } from '@/core/types/api'
 
 const props = defineProps<{
   executionId: number
@@ -15,83 +14,105 @@ const { data, isLoading } = useQuery({
   queryFn: () => ExecutionService.getById(props.executionId),
   refetchInterval: () => {
     const s = props.status.toLowerCase()
-    return (s === 'running' || s === 'pending') ? 5000 : false
+    return (s === 'running' || s === 'pending') ? 3000 : false
   }
 })
 
 const getStatusClass = (status: string) => {
   const s = status.toLowerCase()
-  if (s === 'success') return 'bg-green-50 text-green-700 border-green-200'
-  if (s === 'running') return 'bg-blue-50 text-blue-700 border-blue-200'
-  if (s === 'pending') return 'bg-slate-50 text-slate-600 border-slate-200'
-  if (s === 'partial_success') return 'bg-amber-50 text-amber-700 border-amber-200'
-  return 'bg-red-50 text-red-700 border-red-200'
+  if (s === 'success') return 'bg-emerald-50 text-emerald-700 border-emerald-200'
+  if (s === 'running') return 'bg-sky-50 text-sky-700 border-sky-200 ring-2 ring-sky-100 ring-offset-1'
+  if (s === 'pending') return 'bg-slate-50 text-slate-500 border-slate-200'
+  if (s === 'partial_success' || s === 'warning') return 'bg-amber-50 text-amber-700 border-amber-200'
+  return 'bg-rose-50 text-rose-700 border-rose-200'
 }
 
-const getMonthlyCount = (m: MonthlyExecution, allMonths: MonthlyExecution[]) => {
-  if (m.status !== 'running') return m.registros_coletados ?? 0
-  
-  // Encontra qual é o PRIMEIRO mês que está rodando na lista
-  const firstRunningMonth = allMonths.find(month => month.status === 'running')
-  
-  // Se não for o mês ativo da fila, apenas retorna o valor real da API (evita duplicar o total do pai)
-  if (firstRunningMonth?.mes_referencia !== m.mes_referencia) {
-    return m.registros_coletados ?? 0
-  }
-
-  // Se o total do pai for maior que o que temos no mês, usamos o do pai como estimativa real-time
-  const otherMonthsTotal = allMonths
-    .filter(month => month.mes_referencia !== m.mes_referencia && month.status === 'success')
-    .reduce((acc, month) => acc + (month.registros_coletados || 0), 0)
-  
-  const estimated = props.parentTotal - otherMonthsTotal
-  
-  // Se a estimativa for muito discrepante do valor base (750), usamos ela
-  return Math.max(m.registros_coletados ?? 0, estimated)
+const getStatusLabel = (status: string) => {
+  const s = status.toLowerCase()
+  if (s === 'success') return 'Concluído'
+  if (s === 'running') return 'Processando'
+  if (s === 'pending') return 'Aguardando'
+  if (s === 'partial_success') return 'Parcial'
+  if (s === 'error') return 'Erro'
+  return status.toUpperCase()
 }
 </script>
 
 <template>
-  <div v-if="isLoading" class="flex items-center justify-center p-8">
-    <RefreshCw class="w-6 h-6 text-blue-500 animate-spin mr-3" />
-    <span class="text-slate-500 font-medium font-mono animate-pulse">Obtendo logs de orquestração...</span>
+  <div v-if="isLoading" class="flex flex-col items-center justify-center p-12 bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
+    <div class="relative mb-4">
+      <RefreshCw class="w-10 h-10 text-blue-500 animate-spin" />
+      <Activity class="w-4 h-4 text-blue-600 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+    </div>
+    <span class="text-slate-600 font-bold text-sm tracking-tight mb-1">NITRO ENGINE: ANALISANDO ORQUESTRAÇÃO</span>
+    <span class="text-slate-400 text-[10px] uppercase font-mono animate-pulse">Sincronizando lotes de processamento...</span>
   </div>
   
-  <div v-else-if="data" class="space-y-4">
-    <div v-if="(data.monthly_executions || data.monthlyExecutions)?.length" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+  <div v-else-if="data" class="space-y-6">
+    <!-- Grid de Meses -->
+    <div v-if="(data.monthly_executions || data.monthlyExecutions)?.length" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
       <div 
         v-for="m in (data.monthly_executions || data.monthlyExecutions)" 
         :key="m.id || m.mes_referencia"
-        class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm space-y-2 relative overflow-hidden transition-all hover:border-blue-200"
+        class="group bg-white p-4 rounded-xl border border-slate-200 shadow-sm transition-all duration-300 hover:shadow-md hover:border-blue-300 relative overflow-hidden"
+        :class="{ 'ring-2 ring-blue-500/10 border-blue-400': m.status === 'running' }"
       >
+        <!-- Running Progress Glow -->
         <div 
           v-if="m.status === 'running'"
-          class="absolute top-0 left-0 w-full h-1 bg-blue-400 animate-pulse"
+          class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-sky-300 to-blue-400 bg-[length:200%_auto] animate-[shimmer_2s_infinite_linear]"
         ></div>
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Mês {{ m.mes_referencia }}</span>
-          <div :class="getStatusClass(m.status)" class="p-1 rounded-full border">
-            <CheckCircle2 v-if="m.status === 'success'" class="w-3 h-3" />
-            <RefreshCw v-else-if="m.status === 'running'" class="w-3 h-3 animate-spin" />
-            <RefreshCw v-else-if="m.status === 'pending'" class="w-3 h-3 opacity-30" />
-            <XCircle v-else class="w-3 h-3" />
+
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex flex-col">
+            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Mês</span>
+            <span class="text-xl font-black text-slate-700 leading-none">{{ m.mes_referencia.padStart(2, '0') }}</span>
+          </div>
+          <div :class="getStatusClass(m.status)" class="p-1.5 rounded-lg border transition-colors group-hover:scale-110 duration-200">
+            <CheckCircle2 v-if="m.status === 'success'" class="w-4 h-4" />
+            <RefreshCw v-else-if="m.status === 'running'" class="w-4 h-4 animate-spin" />
+            <Clock v-else-if="m.status === 'pending'" class="w-4 h-4 opacity-50" />
+            <XCircle v-else class="w-4 h-4" />
           </div>
         </div>
-        <div>
-          <div class="text-sm font-bold text-slate-700">
-            {{ getMonthlyCount(m, data.monthly_executions || data.monthlyExecutions || []).toLocaleString('pt-BR') }}
+
+        <div class="space-y-1">
+          <div class="flex items-baseline gap-1">
+            <span class="text-lg font-black text-slate-800 tabular-nums">
+              {{ (m.registros_coletados || 0).toLocaleString('pt-BR') }}
+            </span>
           </div>
-          <div class="text-[10px] text-slate-400 uppercase font-extrabold tracking-tight">Coletados (Mês)</div>
+          <div class="flex items-center justify-between">
+            <span class="text-[9px] text-slate-400 uppercase font-bold tracking-tight">Registros Coletados</span>
+            <span class="text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-tighter" :class="getStatusClass(m.status)">
+              {{ getStatusLabel(m.status) }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
     
-    <div v-else class="p-8 text-center bg-white/50 rounded-xl border border-dashed border-slate-200">
-      <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 mb-3 text-slate-400">
-        <RefreshCw class="w-5 h-5" />
+    <!-- Empty State -->
+    <div v-else class="p-10 text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-inner">
+      <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-slate-50 mb-4 text-slate-300 shadow-sm border border-slate-100">
+        <Activity class="w-7 h-7" />
       </div>
-      <p class="text-slate-500 text-sm font-medium">Logs de orquestração ainda não gerados para esta execução.</p>
-      <p class="text-slate-400 text-[10px] uppercase mt-1">Aguardando início do processamento mensal...</p>
+      <h4 class="text-slate-800 font-bold mb-1">Logs de Orquestração Indisponíveis</h4>
+      <p class="text-slate-500 text-sm max-w-sm mx-auto">
+        A Nitro Engine ainda não gerou os pontos de controle para esta sincronização. 
+        Os dados serão exibidos assim que o processamento mensal for iniciado.
+      </p>
+      <div class="mt-4 inline-flex items-center px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] uppercase font-black tracking-widest animate-pulse">
+        Aguardando Workers...
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+</style>
+
