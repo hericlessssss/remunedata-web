@@ -99,10 +99,11 @@ src/
 
 ## Etapa 18: Monitoramento em Tempo Real (RPA Progress)
 - **Polling Inteligente:** Ativado `refetchInterval` de 5s no `vue-query`.
-- **Extensibilidade de UI:** Refatorado `BaseTable.vue` para suportar slots de cabeçalho e `row-after`.
-## Etapa 19: Otimização de Carga e Detalhamento Sob Demanda
+- **Extensibilidade de UI:** Refatorado `BaseTable.vue` para suportar slots de cabeçalho e `row-after`.## Etapa 19: Otimização de Carga e Detalhamento Sob Demanda
 - **Componentização:** Criado `ExecutionMonthlyProgress.vue` para isolar a lógica de progresso mensal.
 - **Carregamento Lazy:** Detalhes de execução agora são carregados apenas quando a linha é expandida.
+- **Resiliência de Log:** Corrigido o tratamento de dados no `ExecutionService` (OData wrapping) e no componente de progresso (snake/camel case fallback), garantindo que os meses apareçam mesmo com dados parciais.
+- **UX de Espera:** Adicionado estado amigável para execuções que acabaram de iniciar e ainda não geraram logs mensais.
 ## Etapa 20: Ordenação Server-Side na Consulta
 - **BaseTable Reativa:** Adicionado suporte a cabeçalhos clicáveis e ícones de ordenação.
 - **Lógica de Toggle:** Implementada sequência `asc` -> `desc` -> `limpo`.
