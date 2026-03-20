@@ -6,6 +6,7 @@ import { ExecutionService } from '../services/execution.service'
 import { formatDate } from '@/core/formatters/date'
 import BaseTable from '@/shared/ui/BaseTable.vue'
 import BaseButton from '@/shared/ui/BaseButton.vue'
+import ExecutionMonthlyProgress from '../components/ExecutionMonthlyProgress.vue'
 
 const { data, isLoading, page, refetch } = useExecutions()
 const isSyncing = ref(false)
@@ -102,7 +103,7 @@ const handleSync = async () => {
       <template #cell-status="{ item }">
         <div class="flex items-center gap-3">
           <button 
-            v-if="item.monthly_executions?.length"
+            v-if="item.status.toLowerCase() !== 'pending'"
             class="p-1 hover:bg-slate-100 rounded transition-colors"
             @click="toggleRow(item.id)"
           >
@@ -127,33 +128,10 @@ const handleSync = async () => {
       <template #row-after="{ item }">
         <tr v-if="expandedRows.has(item.id)" class="bg-slate-50/50">
           <td :colspan="tableHeaders.length" class="p-4 border-b border-slate-100">
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              <div 
-                v-for="m in item.monthly_executions" 
-                :key="m.mes_referencia"
-                class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm space-y-2 relative overflow-hidden"
-              >
-                <div 
-                  v-if="m.status === 'running'"
-                  class="absolute top-0 left-0 w-full h-1 bg-blue-400 animate-pulse"
-                ></div>
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-slate-400">Mês {{ m.mes_referencia }}</span>
-                  <div :class="getStatusClass(m.status)" class="p-1 rounded-full border">
-                    <CheckCircle2 v-if="m.status === 'success'" class="w-3 h-3" />
-                    <RefreshCw v-else-if="m.status === 'running'" class="w-3 h-3 animate-spin" />
-                    <RefreshCw v-else-if="m.status === 'pending'" class="w-3 h-3 opacity-30" />
-                    <XCircle v-else class="w-3 h-3" />
-                  </div>
-                </div>
-                <div>
-                  <div class="text-sm font-bold text-slate-700">
-                    {{ m.registros_coletados.toLocaleString('pt-BR') }}
-                  </div>
-                  <div class="text-[10px] text-slate-400 uppercase font-bold tracking-tight">Registros</div>
-                </div>
-              </div>
-            </div>
+            <ExecutionMonthlyProgress 
+              :execution-id="item.id" 
+              :status="item.status" 
+            />
           </td>
         </tr>
       </template>

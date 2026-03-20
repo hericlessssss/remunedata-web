@@ -98,10 +98,14 @@ src/
 - **Mapeamento de Status:** Suporte visual para `PENDING` e `PARTIAL_SUCCESS`.
 
 ## Etapa 18: Monitoramento em Tempo Real (RPA Progress)
-- **Polling Inteligente:** Ativado `refetchInterval` de 5s no `vue-query` enquanto houver tarefas ativas.
-- **Detalhamento Mensal:** Adicionada interface expansível na tabela de execuções para mostrar o progresso por mês.
-- **Extensibilidade de UI:** Refatorado o componente `BaseTable.vue` para suportar slots de cabeçalho e linhas adicionais (`row-after`).
-- **QA:** Suíte de testes (26/26) totalmente sincronizada e aprovada.
+- **Polling Inteligente:** Ativado `refetchInterval` de 5s no `vue-query`.
+- **Extensibilidade de UI:** Refatorado `BaseTable.vue` para suportar slots de cabeçalho e `row-after`.
+
+## Etapa 19: Otimização de Carga e Detalhamento Sob Demanda
+- **Componentização:** Criado `ExecutionMonthlyProgress.vue` para isolar a lógica de progresso mensal.
+- **Carregamento Lazy:** Detalhes de execução agora são carregados via `getById` apenas quando a linha é expandida.
+- **Resiliência:** Corrigida a lógica de exibição do botão de expansão (Chevron), que agora depende apenas do status da execução e não da presença de dados prévios.
+- **Estabilidade:** Mantida a aprovação de 100% dos testes unitários.
 - Indicadores de integridade e última sincronização no Dashboard principal.
 - Refiguração da resiliência de navegação (Deep Linking) para contornar limitações de endpoints de ID.
 

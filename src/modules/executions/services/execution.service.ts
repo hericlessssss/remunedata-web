@@ -23,4 +23,9 @@ export const ExecutionService = {
     })
     return data
   },
+
+  async getById(id: number): Promise<Execution> {
+    const { data } = await httpClient.get<Execution>(`executions/${id}/`)
+    return data
+  },
 }
