@@ -34,17 +34,19 @@ const getMonthlyCount = (m: MonthlyExecution, allMonths: MonthlyExecution[]) => 
   // Encontra qual é o PRIMEIRO mês que está rodando na lista
   const firstRunningMonth = allMonths.find(month => month.status === 'running')
   
-  // Só aplicamos a estimativa baseada no pai para o primeiro mês da fila de execução
-  // Isso evita que o total global apareça em todos os meses se o backend marcar todos como 'running'
+  // Se não for o mês ativo da fila, apenas retorna o valor real da API (evita duplicar o total do pai)
   if (firstRunningMonth?.mes_referencia !== m.mes_referencia) {
     return m.registros_coletados ?? 0
   }
 
+  // Se o total do pai for maior que o que temos no mês, usamos o do pai como estimativa real-time
   const otherMonthsTotal = allMonths
     .filter(month => month.mes_referencia !== m.mes_referencia && month.status === 'success')
     .reduce((acc, month) => acc + (month.registros_coletados || 0), 0)
   
   const estimated = props.parentTotal - otherMonthsTotal
+  
+  // Se a estimativa for muito discrepante do valor base (750), usamos ela
   return Math.max(m.registros_coletados ?? 0, estimated)
 }
 </script>
@@ -79,7 +81,7 @@ const getMonthlyCount = (m: MonthlyExecution, allMonths: MonthlyExecution[]) => 
           <div class="text-sm font-bold text-slate-700">
             {{ getMonthlyCount(m, data.monthly_executions || data.monthlyExecutions || []).toLocaleString('pt-BR') }}
           </div>
-          <div class="text-[10px] text-slate-400 uppercase font-bold tracking-tight">Registros</div>
+          <div class="text-[10px] text-slate-400 uppercase font-extrabold tracking-tight">Coletados (Mês)</div>
         </div>
       </div>
     </div>

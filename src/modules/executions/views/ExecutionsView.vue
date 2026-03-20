@@ -13,6 +13,23 @@ const isSyncing = ref(false)
 const expandedRows = ref<Set<number>>(new Set())
 const now = ref(new Date())
 
+// Garante que o cálculo de duração considere UTC, já que a API retorna ISO UTC
+const formatDuration = (start: string, end: string | null) => {
+  const startTime = new Date(start).getTime()
+  const endTime = end ? new Date(end).getTime() : now.value.getTime()
+  const diff = endTime - startTime
+  
+  if (diff < 0) return '0s'
+  
+  const seconds = Math.floor(diff / 1000)
+  if (seconds < 60) return `${seconds}s`
+  const minutes = Math.floor(seconds / 60)
+  const hours = Math.floor(minutes / 60)
+  
+  if (hours > 0) return `${hours}h ${minutes % 60}m`
+  return `${minutes}m ${seconds % 60}s`
+}
+
 let timer: ReturnType<typeof window.setInterval> | null = null
 
 onMounted(() => {
@@ -38,21 +55,10 @@ const tableHeaders = [
   { key: 'ano_exercicio', label: 'Ano', class: 'font-bold' },
   { key: 'started_at', label: 'Início' },
   { key: 'duration', label: 'Duração' },
-  { key: 'total_registros_coletados', label: 'Registros', class: 'text-right font-mono' },
+  { key: 'total_registros_coletados', label: 'Total Coletado', class: 'text-right font-mono' },
   { key: 'error_message', label: 'Observações', class: 'hidden lg:table-cell' },
 ]
 
-const formatDuration = (start: string, end: string | null) => {
-  const endTime = end ? new Date(end).getTime() : now.value.getTime()
-  const diff = endTime - new Date(start).getTime()
-  
-  if (diff < 0) return '0s'
-  
-  const seconds = Math.floor(diff / 1000)
-  if (seconds < 60) return `${seconds}s`
-  const minutes = Math.floor(seconds / 60)
-  return `${minutes}m ${seconds % 60}s`
-}
 
 const getStatusClass = (status: string) => {
   const s = status.toLowerCase()
@@ -100,7 +106,7 @@ const handleSync = async () => {
     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
       <div>
         <h2 class="text-3xl font-bold text-slate-900 font-serif">Execuções</h2>
-        <p class="text-slate-500">Log de auditoria das sincronizações de dados com o portal.</p>
+        <p class="text-slate-500">Log de auditoria das sincronizações de dados processados.</p>
       </div>
       <BaseButton :loading="isSyncing" @click="handleSync">
         <RefreshCw class="w-4 h-4 mr-2" :class="{ 'animate-spin': isSyncing }" />
