@@ -2,6 +2,7 @@
 import { useQuery } from '@tanstack/vue-query'
 import { CheckCircle2, XCircle, RefreshCw } from 'lucide-vue-next'
 import { ExecutionService } from '../services/execution.service'
+import type { MonthlyExecution } from '@/core/types/api'
 
 const props = defineProps<{
   executionId: number
@@ -27,7 +28,7 @@ const getStatusClass = (status: string) => {
   return 'bg-red-50 text-red-700 border-red-200'
 }
 
-const getMonthlyCount = (m: any, allMonths: any[]) => {
+const getMonthlyCount = (m: MonthlyExecution, allMonths: MonthlyExecution[]) => {
   if (m.status !== 'running') return m.registros_coletados ?? 0
   
   // O total do pai é muito mais frequente (atualizado a cada página pelo worker)
