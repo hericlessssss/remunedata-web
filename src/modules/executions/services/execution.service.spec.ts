@@ -15,21 +15,22 @@ describe('ExecutionService', () => {
   })
 
   it('fetches executions paginated', async () => {
-    const mockData = {
-      items: [{ id: 1, status: 'SUCCESS' }],
+    const mockItems = [{ id: 1, status: 'SUCCESS' }]
+    const expectedResult = {
+      items: mockItems,
       total: 1,
       page: 1,
       size: 20,
       pages: 1,
     }
-    vi.mocked(httpClient.get).mockResolvedValue({ data: mockData })
+    vi.mocked(httpClient.get).mockResolvedValue({ data: mockItems })
 
     const result = await ExecutionService.getAll(1)
 
     expect(httpClient.get).toHaveBeenCalledWith('executions/', {
       params: { page: 1, size: 20 },
     })
-    expect(result).toEqual(mockData)
+    expect(result).toEqual(expectedResult)
   })
 
   it('triggers a manual synchronization', async () => {

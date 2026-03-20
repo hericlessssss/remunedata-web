@@ -3,10 +3,18 @@ import type { Execution, PaginationResponse } from '@/core/types/api'
 
 export const ExecutionService = {
   async getAll(page = 1, size = 20): Promise<PaginationResponse<Execution>> {
-    const { data } = await httpClient.get<PaginationResponse<Execution>>('executions/', {
+    const { data } = await httpClient.get<Execution[]>('executions/', {
       params: { page, size },
     })
-    return data
+
+    // A API retorna um array direto, o frontend espera PaginationResponse
+    return {
+      items: data,
+      total: data.length,
+      page,
+      size,
+      pages: Math.ceil(data.length / size),
+    }
   },
 
   async triggerSync(ano: number): Promise<Execution> {

@@ -62,7 +62,7 @@ const handleSync = async () => {
     </div>
 
     <!-- Tabela -->
-    <BaseTable :headers="tableHeaders" :items="data?.items || []" :loading="isLoading">
+    <BaseTable :headers="tableHeaders" :items="data?.items || []" :is-loading="isLoading">
       <template #cell-status="{ item }">
         <div
           class="flex items-center gap-2 px-2.5 py-1 rounded-full border text-xs font-bold w-fit"
