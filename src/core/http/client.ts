@@ -5,8 +5,10 @@ import axios, {
 } from 'axios'
 import { ENV } from '@/core/config/env'
 
+const baseURL = ENV.API_URL.endsWith('/') ? ENV.API_URL : `${ENV.API_URL}/`
+
 const httpClient = axios.create({
-  baseURL: ENV.API_URL,
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },
