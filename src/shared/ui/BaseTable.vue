@@ -1,5 +1,6 @@
 <script setup lang="ts" generic="T">
 import { ChevronUp, ChevronDown } from 'lucide-vue-next'
+import BaseLoading from './BaseLoading.vue'
 
 interface Props {
   items: T[]
