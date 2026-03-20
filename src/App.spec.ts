@@ -7,7 +7,12 @@ describe('App Smoke Test', () => {
   it('should render the application title', async () => {
     const router = createRouter({
       history: createWebHistory(),
-      routes: [{ path: '/', component: { template: '<div>Home</div>' } }],
+      routes: [
+        { path: '/', component: { template: '<div>Home</div>' } },
+        { path: '/dashboard', component: { template: '<div>Dashboard</div>' } },
+        { path: '/remuneration', component: { template: '<div>Remuneration</div>' } },
+        { path: '/executions', component: { template: '<div>Executions</div>' } },
+      ],
     })
     const wrapper = mount(App, {
       global: {
