@@ -38,7 +38,7 @@ router.onError((error, to) => {
   ]
 
   if (errors.some(msg => error.message?.includes(msg))) {
-    // eslint-disable-next-line no-console ()
+    // eslint-disable-next-line no-console
     console.warn('Chunk loading failed. Force refreshing page...')
     window.location.href = to.fullPath
   }

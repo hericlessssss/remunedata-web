@@ -35,6 +35,7 @@ export interface Summary {
 }
 
 export interface MonthlyExecution {
+  id?: number
   mes_referencia: string
   status: 'pending' | 'running' | 'success' | 'partial_success' | 'error'
   registros_coletados: number
@@ -49,4 +50,5 @@ export interface Execution {
   total_registros_coletados: number
   error_message?: string | null
   monthly_executions?: MonthlyExecution[]
+  monthlyExecutions?: MonthlyExecution[]
 }

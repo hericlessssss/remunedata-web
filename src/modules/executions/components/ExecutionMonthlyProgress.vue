@@ -50,9 +50,9 @@ const getMonthlyCount = (m: MonthlyExecution, allMonths: MonthlyExecution[]) => 
   </div>
   
   <div v-else-if="data" class="space-y-4">
-    <div v-if="(data.monthly_executions || (data as any).monthlyExecutions)?.length" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+    <div v-if="(data.monthly_executions || data.monthlyExecutions)?.length" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
       <div 
-        v-for="m in (data.monthly_executions || (data as any).monthlyExecutions)" 
+        v-for="m in (data.monthly_executions || data.monthlyExecutions)" 
         :key="m.id || m.mes_referencia"
         class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm space-y-2 relative overflow-hidden transition-all hover:border-blue-200"
       >
@@ -71,7 +71,7 @@ const getMonthlyCount = (m: MonthlyExecution, allMonths: MonthlyExecution[]) => 
         </div>
         <div>
           <div class="text-sm font-bold text-slate-700">
-            {{ getMonthlyCount(m, data.monthly_executions || (data as any).monthlyExecutions).toLocaleString('pt-BR') }}
+            {{ getMonthlyCount(m, data.monthly_executions || data.monthlyExecutions || []).toLocaleString('pt-BR') }}
           </div>
           <div class="text-[10px] text-slate-400 uppercase font-bold tracking-tight">Registros</div>
         </div>
