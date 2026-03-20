@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { Search, ChevronLeft, ChevronRight, FileDown } from 'lucide-vue-next'
 import { useRemunerationSearch } from '../composables/useRemunerationSearch'
 import { formatCurrency } from '@/core/formatters/currency'
@@ -7,7 +7,7 @@ import { formatCompetence } from '@/core/formatters/date'
 import BaseButton from '@/shared/ui/BaseButton.vue'
 import BaseTable from '@/shared/ui/BaseTable.vue'
 
-const { filters, data, isLoading, setPage } = useRemunerationSearch()
+const { filters, data, isFetching, setPage } = useRemunerationSearch()
 
 const tableHeaders = [
   { key: 'nome_servidor', label: 'Servidor' },
@@ -18,16 +18,29 @@ const tableHeaders = [
   { key: 'valor_liquido', label: 'Vlr. Líquido' },
 ]
 
-// Debounce local para o nome
+// Debounce local para campos de texto
+const isTyping = ref(false)
 const localNome = ref(filters.value.nome)
+const localCargo = ref(filters.value.cargo)
+const localOrgao = ref(filters.value.orgao)
+
 let debounceTimer: number | undefined
-watch(localNome, (val) => {
+
+const handleDebounce = (field: 'nome' | 'cargo' | 'orgao', value: string) => {
+  isTyping.value = true
   if (debounceTimer) window.clearTimeout(debounceTimer)
   debounceTimer = window.setTimeout(() => {
-    filters.value.nome = val
+    filters.value[field] = value
     filters.value.page = 1
+    isTyping.value = false
   }, 500)
-})
+}
+
+watch(localNome, (val) => handleDebounce('nome', val || ''))
+watch(localCargo, (val) => handleDebounce('cargo', val || ''))
+watch(localOrgao, (val) => handleDebounce('orgao', val || ''))
+
+const isLoading = computed(() => isFetching.value || isTyping.value)
 
 const anos = [2025, 2024, 2023]
 const meses = [
@@ -61,7 +74,7 @@ const meses = [
 
     <!-- Filtros -->
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         <!-- Nome -->
         <div class="space-y-1">
           <label class="text-xs font-bold text-slate-400 uppercase">Nome do Servidor</label>
@@ -80,9 +93,20 @@ const meses = [
         <div class="space-y-1">
           <label class="text-xs font-bold text-slate-400 uppercase">Cargo</label>
           <input
-            v-model="filters.cargo"
+            v-model="localCargo"
             type="text"
             placeholder="Ex: Delegado..."
+            class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
+          />
+        </div>
+
+        <!-- Órgão -->
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-slate-400 uppercase">Órgão</label>
+          <input
+            v-model="localOrgao"
+            type="text"
+            placeholder="Ex: Policia..."
             class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
           />
         </div>
@@ -112,7 +136,7 @@ const meses = [
     </div>
 
     <!-- Tabela -->
-    <BaseTable :headers="tableHeaders" :items="data?.items || []" :loading="isLoading">
+    <BaseTable :headers="tableHeaders" :items="data?.items || []" :is-loading="isLoading">
       <template #cell-nome_servidor="{ item }">
         <RouterLink
           :to="{ name: 'remuneration-detail', params: { id: item.id } }"

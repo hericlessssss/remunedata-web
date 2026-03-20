@@ -18,7 +18,7 @@ export function useRemunerationSearch() {
     size: route.query.size ? Number(route.query.size) : 25,
   })
 
-  const { data, isLoading, isError, error, refetch } = useQuery({
+  const { data, isLoading, isFetching, isError, error, refetch } = useQuery({
     queryKey: ['remuneration', 'search', filters],
     queryFn: () => RemunerationService.search(filters.value),
     placeholderData: (previousData) => previousData,
@@ -60,6 +60,7 @@ export function useRemunerationSearch() {
     filters,
     data,
     isLoading,
+    isFetching,
     isError,
     error,
     setPage,
