@@ -39,4 +39,18 @@ export const RemunerationService = {
     })
     return data.items
   },
+
+  getExportUrl(type: 'xlsx' | 'csv', filters: SearchFilters): string {
+    const baseUrl = httpClient.defaults.baseURL || ''
+    const params = new URLSearchParams()
+    
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) params.append(key, value.toString())
+    })
+
+    // Adiciona o limite conforme requisito (1k XLSX, 5k CSV)
+    params.set('size', type === 'xlsx' ? '1000' : '5000')
+    
+    return `${baseUrl}remuneration/export/${type}?${params.toString()}`
+  },
 }

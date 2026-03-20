@@ -83,6 +83,13 @@ src/
 - Configuração de fallback para SPA (Single Page Application).
 - Documentação detalhada do processo de deploy e operação.
 
+### Etapa 14: Conformidade Documental e Telemetria de RPA
+- Implementação de filtros avançados por **CPF** na consulta pública.
+- Integração de exportação multi-formato (**XLSX** limitado a 1k e **CSV** limitado a 5k) conforme requisitos regulatórios.
+- Enriquecimento da auditoria de execuções com colunas de **Duração** e **Parâmetros** (Ano).
+- Indicadores de integridade e última sincronização no Dashboard principal.
+- Refiguração da resiliência de navegação (Deep Linking) para contornar limitações de endpoints de ID.
+
 ## 6. 💡 Desafios Técnicos e Soluções
 
 | Desafio | Solução |

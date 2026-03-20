@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { CheckCircle2, XCircle, Clock, Calendar, RefreshCw } from 'lucide-vue-next'
+import { CheckCircle2, XCircle, Calendar, RefreshCw } from 'lucide-vue-next'
 import { useExecutions } from '../composables/useExecutions'
 import { ExecutionService } from '../services/execution.service'
 import { formatDate } from '@/core/formatters/date'
@@ -12,11 +12,21 @@ const isSyncing = ref(false)
 
 const tableHeaders = [
   { key: 'status', label: 'Status' },
+  { key: 'ano_exercicio', label: 'Ano', class: 'font-bold' },
   { key: 'started_at', label: 'Início' },
-  { key: 'finished_at', label: 'Conclusão' },
+  { key: 'duration', label: 'Duração' },
   { key: 'total_registros_coletados', label: 'Registros', class: 'text-right font-mono' },
   { key: 'error_message', label: 'Observações', class: 'hidden lg:table-cell' },
 ]
+
+const formatDuration = (start: string, end: string | null) => {
+  if (!end) return '-'
+  const diff = new Date(end).getTime() - new Date(start).getTime()
+  const seconds = Math.floor(diff / 1000)
+  if (seconds < 60) return `${seconds}s`
+  const minutes = Math.floor(seconds / 60)
+  return `${minutes}m ${seconds % 60}s`
+}
 
 const getStatusClass = (status: string) => {
   const s = status.toLowerCase()
@@ -82,12 +92,16 @@ const handleSync = async () => {
         </span>
       </template>
 
-      <template #cell-finished_at="{ item }">
-        <span v-if="item.finished_at" class="flex items-center gap-1.5 text-slate-400">
-          <Clock class="w-3.5 h-3.5" />
-          {{ formatDate(item.finished_at) }}
+      <template #cell-duration="{ item }">
+        <span class="text-xs text-slate-500">
+          {{ formatDuration(item.started_at, item.finished_at) }}
         </span>
-        <span v-else class="text-amber-500 font-medium animate-pulse">Sincronizando...</span>
+      </template>
+
+      <template #cell-ano_exercicio="{ item }">
+        <span class="px-2 py-0.5 bg-slate-100 rounded text-slate-600 text-xs font-bold">
+          {{ item.ano_exercicio }}
+        </span>
       </template>
 
       <template #cell-total_registros_coletados="{ item }">

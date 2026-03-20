@@ -99,13 +99,21 @@ const chartOptions = computed(() => {
 
 <template>
   <div class="space-y-8">
-    <div class="flex flex-col gap-1">
-      <h2 class="text-3xl font-bold text-slate-900 font-serif">Visão Geral</h2>
-      <p class="text-slate-500">
-        Análise consolidada da estrutura remuneratória para o exercício de
-        <span class="font-bold text-slate-700">{{ data?.ano_referencia || 'Todos os Anos' }}</span>
-      </p>
-    </div>
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+        <div class="flex flex-col gap-1">
+          <h2 class="text-3xl font-bold text-slate-900 font-serif">Visão Geral</h2>
+          <p class="text-slate-500">
+            Análise consolidada da estrutura remuneratória para o exercício de
+            <span class="font-bold text-slate-700">{{ data?.ano_referencia || 'Todos os Anos' }}</span>
+          </p>
+        </div>
+        <div v-if="data" class="flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-100 rounded-xl">
+          <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          <span class="text-xs font-bold text-green-700 uppercase tracking-wider">
+            Sincronizado
+          </span>
+        </div>
+      </div>
 
     <!-- KPI Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

@@ -2,12 +2,18 @@
 import { ref, watch, computed } from 'vue'
 import { Search, ChevronLeft, ChevronRight, FileDown } from 'lucide-vue-next'
 import { useRemunerationSearch } from '../composables/useRemunerationSearch'
+import { RemunerationService } from '../services/remuneration.service'
 import { formatCurrency } from '@/core/formatters/currency'
 import { formatCompetence } from '@/core/formatters/date'
 import BaseButton from '@/shared/ui/BaseButton.vue'
 import BaseTable from '@/shared/ui/BaseTable.vue'
 
 const { filters, data, isFetching, setPage } = useRemunerationSearch()
+
+const handleExport = (type: 'xlsx' | 'csv') => {
+  const url = RemunerationService.getExportUrl(type, filters.value)
+  window.open(url, '_blank')
+}
 
 const tableHeaders = [
   { key: 'nome_servidor', label: 'Servidor' },
@@ -66,30 +72,47 @@ const meses = [
         <h2 class="text-3xl font-bold text-slate-900 font-serif">Consulta Pública</h2>
         <p class="text-slate-500">Explore os dados de remuneração do Distrito Federal.</p>
       </div>
-      <BaseButton variant="outline" class="gap-2">
-        <FileDown class="w-4 h-4" />
-        Exportar Filtro
-      </BaseButton>
-    </div>
-
-    <!-- Filtros -->
-    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-        <!-- Nome -->
-        <div class="space-y-1">
-          <label class="text-xs font-bold text-slate-400 uppercase">Nome do Servidor</label>
-          <div class="relative">
-            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+        <div class="flex gap-2">
+          <BaseButton variant="outline" class="gap-2" @click="handleExport('xlsx')">
+            <FileDown class="w-4 h-4" />
+            Planilha (1k)
+          </BaseButton>
+          <BaseButton variant="outline" class="gap-2" @click="handleExport('csv')">
+            <FileDown class="w-4 h-4" />
+            CSV (5k)
+          </BaseButton>
+        </div>
+      </div>
+  
+      <!-- Filtros -->
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xxl:grid-cols-6 gap-4">
+          <!-- Nome -->
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-slate-400 uppercase">Nome do Servidor</label>
+            <div class="relative">
+              <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input
+                v-model="localNome"
+                type="text"
+                placeholder="Ex: FRANCISCO..."
+                class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
+              />
+            </div>
+          </div>
+  
+          <!-- CPF -->
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-slate-400 uppercase">CPF</label>
             <input
-              v-model="localNome"
+              v-model="filters.cpf"
               type="text"
-              placeholder="Ex: FRANCISCO..."
-              class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
+              placeholder="***.000.***-**"
+              class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
             />
           </div>
-        </div>
-
-        <!-- Cargo -->
+  
+          <!-- Cargo -->
         <div class="space-y-1">
           <label class="text-xs font-bold text-slate-400 uppercase">Cargo</label>
           <input
