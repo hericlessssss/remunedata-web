@@ -29,7 +29,7 @@ Para que uma funcionalidade seja considerada concluída, deve obedecer aos segui
 - Documentação técnica e histórico do projeto atualizados no `PROJECT.md`.
 
 ## Qualidade e Cobertura
-- **Média Geral de Cobertura (Núcleo)**: ~85.5%
+- **Média Geral de Cobertura (Núcleo)**: ~85.4%
 - **Formatadores e Core**: 100%
 - **UI Components (Shared)**: 100%
 - **Lint & Typecheck**: Obrigatórios em cada Pull Request via GitHub Actions.

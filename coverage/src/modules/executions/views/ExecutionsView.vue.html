@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/144</span>
+                <span class='fraction'>0/155</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/144</span>
+                <span class='fraction'>0/155</span>
             </div>
         
             
@@ -245,10 +245,39 @@
 <a name='L180'></a><a href='#L180'>180</a>
 <a name='L181'></a><a href='#L181'>181</a>
 <a name='L182'></a><a href='#L182'>182</a>
-<a name='L183'></a><a href='#L183'>183</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -279,6 +308,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -428,7 +460,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&lt;script setup lang="ts"&gt;
-<span class="cstat-no" title="statement not covered" >import { ref } from 'vue'</span>
+<span class="cstat-no" title="statement not covered" >import { ref, onMounted, onUnmounted } from 'vue'</span>
 <span class="cstat-no" title="statement not covered" >import { CheckCircle2, XCircle, Calendar, RefreshCw, ChevronDown, ChevronUp } from 'lucide-vue-next'</span>
 <span class="cstat-no" title="statement not covered" >import { useExecutions } from '../composables/useExecutions'</span>
 <span class="cstat-no" title="statement not covered" >import { ExecutionService } from '../services/execution.service'</span>
@@ -440,6 +472,19 @@
 <span class="cstat-no" title="statement not covered" >const { data, isLoading, page, refetch } = useExecutions()</span>
 <span class="cstat-no" title="statement not covered" >const isSyncing = ref(false)</span>
 <span class="cstat-no" title="statement not covered" >const expandedRows = ref&lt;Set&lt;number&gt;&gt;(new Set())</span>
+<span class="cstat-no" title="statement not covered" >const now = ref(new Date())</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >let timer: ReturnType&lt;typeof window.setInterval&gt; | null = null</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >onMounted(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  timer = window.setInterval(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    now.value = new Date()</span>
+<span class="cstat-no" title="statement not covered" >  }, 1000)</span>
+<span class="cstat-no" title="statement not covered" >})</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >onUnmounted(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  if (timer) window.clearInterval(timer)</span>
+<span class="cstat-no" title="statement not covered" >})</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >const toggleRow = (id: number) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  if (expandedRows.value.has(id)) {</span>
@@ -459,8 +504,11 @@
 <span class="cstat-no" title="statement not covered" >]</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >const formatDuration = (start: string, end: string | null) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  if (!end) return '-'</span>
-<span class="cstat-no" title="statement not covered" >  const diff = new Date(end).getTime() - new Date(start).getTime()</span>
+<span class="cstat-no" title="statement not covered" >  const endTime = end ? new Date(end).getTime() : now.value.getTime()</span>
+<span class="cstat-no" title="statement not covered" >  const diff = endTime - new Date(start).getTime()</span>
+  
+<span class="cstat-no" title="statement not covered" >  if (diff &lt; 0) return '0s'</span>
+  
 <span class="cstat-no" title="statement not covered" >  const seconds = Math.floor(diff / 1000)</span>
 <span class="cstat-no" title="statement not covered" >  if (seconds &lt; 60) return `${seconds}s`</span>
 <span class="cstat-no" title="statement not covered" >  const minutes = Math.floor(seconds / 60)</span>
@@ -616,7 +664,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-20T17:19:22.612Z
+                at 2026-03-20T20:34:17.019Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
