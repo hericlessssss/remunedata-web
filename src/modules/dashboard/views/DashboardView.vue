@@ -42,7 +42,7 @@ const chartOptions = computed(() => {
       <h2 class="text-3xl font-bold text-slate-900 font-serif">Visão Geral</h2>
       <p class="text-slate-500">
         Métricas e análise da estrutura remuneratória do DF em
-        {{ data?.ano_referencia || '...' }}
+        {{ data?.ano_referencia || ':' }}
       </p>
     </div>
 
