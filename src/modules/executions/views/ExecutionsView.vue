@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { CheckCircle2, XCircle, Calendar, RefreshCw } from 'lucide-vue-next'
+import { CheckCircle2, XCircle, Calendar, RefreshCw, ChevronDown, ChevronUp } from 'lucide-vue-next'
 import { useExecutions } from '../composables/useExecutions'
 import { ExecutionService } from '../services/execution.service'
 import { formatDate } from '@/core/formatters/date'
@@ -9,6 +9,15 @@ import BaseButton from '@/shared/ui/BaseButton.vue'
 
 const { data, isLoading, page, refetch } = useExecutions()
 const isSyncing = ref(false)
+const expandedRows = ref<Set<number>>(new Set())
+
+const toggleRow = (id: number) => {
+  if (expandedRows.value.has(id)) {
+    expandedRows.value.delete(id)
+  } else {
+    expandedRows.value.add(id)
+  }
+}
 
 const tableHeaders = [
   { key: 'status', label: 'Status' },
@@ -84,18 +93,69 @@ const handleSync = async () => {
 
     <!-- Tabela -->
     <BaseTable :headers="tableHeaders" :items="data?.items || []" :is-loading="isLoading">
-      <template #cell-status="{ item }">
-        <div
-          class="flex items-center gap-2 px-2.5 py-1 rounded-full border text-xs font-bold w-fit"
-          :class="getStatusClass(item.status)"
-        >
-          <CheckCircle2 v-if="item.status.toLowerCase() === 'success'" class="w-3.5 h-3.5" />
-          <RefreshCw v-else-if="item.status.toLowerCase() === 'running'" class="w-3.5 h-3.5 animate-spin" />
-          <RefreshCw v-else-if="item.status.toLowerCase() === 'pending'" class="w-3.5 h-3.5 text-slate-400" />
-          <CheckCircle2 v-else-if="item.status.toLowerCase() === 'partial_success'" class="w-3.5 h-3.5" />
-          <XCircle v-else class="w-3.5 h-3.5" />
-          {{ item.status.replace('_', ' ').toUpperCase() }}
+      <template #header-status>
+        <div class="flex items-center gap-2">
+          <span>Status</span>
         </div>
+      </template>
+
+      <template #cell-status="{ item }">
+        <div class="flex items-center gap-3">
+          <button 
+            v-if="item.monthly_executions?.length"
+            class="p-1 hover:bg-slate-100 rounded transition-colors"
+            @click="toggleRow(item.id)"
+          >
+            <ChevronDown v-if="!expandedRows.has(item.id)" class="w-4 h-4 text-slate-400" />
+            <ChevronUp v-else class="w-4 h-4 text-slate-600" />
+          </button>
+          <div
+            class="flex items-center gap-2 px-2.5 py-1 rounded-full border text-xs font-bold w-fit"
+            :class="getStatusClass(item.status)"
+          >
+            <CheckCircle2 v-if="item.status.toLowerCase() === 'success'" class="w-3.5 h-3.5" />
+            <RefreshCw v-else-if="item.status.toLowerCase() === 'running'" class="w-3.5 h-3.5 animate-spin" />
+            <RefreshCw v-else-if="item.status.toLowerCase() === 'pending'" class="w-3.5 h-3.5 text-slate-400" />
+            <CheckCircle2 v-else-if="item.status.toLowerCase() === 'partial_success'" class="w-3.5 h-3.5" />
+            <XCircle v-else class="w-3.5 h-3.5" />
+            {{ item.status.replace('_', ' ').toUpperCase() }}
+          </div>
+        </div>
+      </template>
+
+      <!-- Expandable Row -->
+      <template #row-after="{ item }">
+        <tr v-if="expandedRows.has(item.id)" class="bg-slate-50/50">
+          <td :colspan="tableHeaders.length" class="p-4 border-b border-slate-100">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              <div 
+                v-for="m in item.monthly_executions" 
+                :key="m.mes_referencia"
+                class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm space-y-2 relative overflow-hidden"
+              >
+                <div 
+                  v-if="m.status === 'running'"
+                  class="absolute top-0 left-0 w-full h-1 bg-blue-400 animate-pulse"
+                ></div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-slate-400">Mês {{ m.mes_referencia }}</span>
+                  <div :class="getStatusClass(m.status)" class="p-1 rounded-full border">
+                    <CheckCircle2 v-if="m.status === 'success'" class="w-3 h-3" />
+                    <RefreshCw v-else-if="m.status === 'running'" class="w-3 h-3 animate-spin" />
+                    <RefreshCw v-else-if="m.status === 'pending'" class="w-3 h-3 opacity-30" />
+                    <XCircle v-else class="w-3 h-3" />
+                  </div>
+                </div>
+                <div>
+                  <div class="text-sm font-bold text-slate-700">
+                    {{ m.registros_coletados.toLocaleString('pt-BR') }}
+                  </div>
+                  <div class="text-[10px] text-slate-400 uppercase font-bold tracking-tight">Registros</div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
       </template>
 
       <template #cell-started_at="{ item }">

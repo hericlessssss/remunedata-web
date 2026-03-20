@@ -25,7 +25,9 @@ defineEmits<{
             class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider"
             :class="header.class"
           >
-            {{ header.label }}
+            <slot :name="`header-${header.key}`" :header="header">
+              {{ header.label }}
+            </slot>
           </th>
         </tr>
       </thead>
@@ -50,24 +52,24 @@ defineEmits<{
         </tr>
 
         <!-- Data State -->
-        <tr
-          v-for="(item, index) in items"
-          v-else
-          :key="index"
-          class="hover:bg-slate-50 transition-colors group cursor-pointer"
-          @click="$emit('row-click', item)"
-        >
-          <td
-            v-for="header in headers"
-            :key="header.key"
-            class="px-6 py-4 text-sm text-slate-600 font-medium group-hover:text-slate-900 border-b border-slate-50"
-            :class="header.class"
+        <template v-for="(item, index) in items" :key="index">
+          <tr
+            class="hover:bg-slate-50 transition-colors group cursor-pointer"
+            @click="$emit('row-click', item)"
           >
-            <slot :name="`cell-${header.key}`" :item="item" :index="index">
-              {{ (item as any)[header.key] }}
-            </slot>
-          </td>
-        </tr>
+            <td
+              v-for="header in headers"
+              :key="header.key"
+              class="px-6 py-4 text-sm text-slate-600 font-medium group-hover:text-slate-900 border-b border-slate-50"
+              :class="header.class"
+            >
+              <slot :name="`cell-${header.key}`" :item="item" :index="index">
+                {{ (item as any)[header.key] }}
+              </slot>
+            </td>
+          </tr>
+          <slot name="row-after" :item="item" :index="index"></slot>
+        </template>
       </tbody>
     </table>
   </div>

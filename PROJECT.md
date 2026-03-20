@@ -94,10 +94,14 @@ src/
 - **Correção da UI:** Botões de exportação (XLSX 1k e CSV 5k) na Consulta agora funcionam com IDs reais.
 
 ## Etapa 17: Recuperação de Deadlock e Status
-- **Parâmetro Force:** Implementado `force=true` no disparo de novas execuções para destravar o Worker.
-- **UX de Recuperação:** Adicionado diálogo de confirmação para forçar reinício caso já exista uma tarefa rodando.
-- **Mapeamento de Status:** Suporte visual para `PENDING` (cinza) e `PARTIAL_SUCCESS` (laranja), alinhado com o backend.
-- **Sanidade:** Garantida a formatação amigável de status (ex: "PARTIAL SUCCESS" com replace).
+- **Parâmetro Force:** Implementado `force=true` no disparo de novas execuções.
+- **Mapeamento de Status:** Suporte visual para `PENDING` e `PARTIAL_SUCCESS`.
+
+## Etapa 18: Monitoramento em Tempo Real (RPA Progress)
+- **Polling Inteligente:** Ativado `refetchInterval` de 5s no `vue-query` enquanto houver tarefas ativas.
+- **Detalhamento Mensal:** Adicionada interface expansível na tabela de execuções para mostrar o progresso por mês.
+- **Extensibilidade de UI:** Refatorado o componente `BaseTable.vue` para suportar slots de cabeçalho e linhas adicionais (`row-after`).
+- **QA:** Suíte de testes (26/26) totalmente sincronizada e aprovada.
 - Indicadores de integridade e última sincronização no Dashboard principal.
 - Refiguração da resiliência de navegação (Deep Linking) para contornar limitações de endpoints de ID.
 
