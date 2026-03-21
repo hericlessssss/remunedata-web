@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import { CheckCircle2, XCircle, RefreshCw, Clock, Activity } from 'lucide-vue-next'
 import { ExecutionService } from '../services/execution.service'
@@ -9,7 +10,7 @@ const props = defineProps<{
   parentTotal: number
 }>()
 
-const { data, isLoading } = useQuery({
+const { data, isLoading, refetch } = useQuery({
   queryKey: ['executions', 'detail', props.executionId],
   queryFn: () => ExecutionService.getById(props.executionId),
   refetchInterval: () => {
@@ -18,7 +19,24 @@ const { data, isLoading } = useQuery({
   }
 })
 
-const getStatusClass = (status: string) => {
+const retryingMonths = ref<Set<string>>(new Set())
+
+const handleRetryMonth = async (mes: string) => {
+  try {
+    retryingMonths.value.add(mes)
+    await ExecutionService.retryMonth(props.executionId, mes)
+    // Pequeno delay para o polling capturar o novo status 'running' do worker
+    window.setTimeout(() => {
+      refetch()
+      retryingMonths.value.delete(mes)
+    }, 1500)
+  } catch {
+    retryingMonths.value.delete(mes)
+  }
+}
+
+const getStatusClass = (status: string, isRetrying = false) => {
+  if (isRetrying) return 'bg-sky-50 text-sky-700 border-sky-200 ring-2 ring-sky-100 ring-offset-1'
   const s = status.toLowerCase()
   if (s === 'success') return 'bg-emerald-50 text-emerald-700 border-emerald-200'
   if (s === 'running') return 'bg-sky-50 text-sky-700 border-sky-200 ring-2 ring-sky-100 ring-offset-1'
@@ -27,7 +45,8 @@ const getStatusClass = (status: string) => {
   return 'bg-rose-50 text-rose-700 border-rose-200'
 }
 
-const getStatusLabel = (status: string) => {
+const getStatusLabel = (status: string, isRetrying = false) => {
+  if (isRetrying) return 'Reiniciando'
   const s = status.toLowerCase()
   if (s === 'success') return 'Concluído'
   if (s === 'running') return 'Processando'
@@ -55,11 +74,11 @@ const getStatusLabel = (status: string) => {
         v-for="m in (data.monthly_executions || data.monthlyExecutions)" 
         :key="m.id || m.mes_referencia"
         class="group bg-white p-4 rounded-xl border border-slate-200 shadow-sm transition-all duration-300 hover:shadow-md hover:border-blue-300 relative overflow-hidden"
-        :class="{ 'ring-2 ring-blue-500/10 border-blue-400': m.status === 'running' }"
+        :class="{ 'ring-2 ring-blue-500/10 border-blue-400': m.status === 'running' || retryingMonths.has(m.mes_referencia) }"
       >
-        <!-- Running Progress Glow -->
+        <!-- Running/Retry Progress Glow -->
         <div 
-          v-if="m.status === 'running'"
+          v-if="m.status === 'running' || retryingMonths.has(m.mes_referencia)"
           class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-sky-300 to-blue-400 bg-[length:200%_auto] animate-[shimmer_2s_infinite_linear]"
         ></div>
 
@@ -68,10 +87,21 @@ const getStatusLabel = (status: string) => {
             <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Mês</span>
             <span class="text-xl font-black text-slate-700 leading-none">{{ m.mes_referencia.padStart(2, '0') }}</span>
           </div>
-          <div :class="getStatusClass(m.status)" class="p-1.5 rounded-lg border transition-colors group-hover:scale-110 duration-200">
+          <div :class="getStatusClass(m.status, retryingMonths.has(m.mes_referencia))" class="p-1.5 rounded-lg border transition-colors group-hover:scale-110 duration-200">
             <CheckCircle2 v-if="m.status === 'success'" class="w-4 h-4" />
-            <RefreshCw v-else-if="m.status === 'running'" class="w-4 h-4 animate-spin" />
+            <RefreshCw v-else-if="m.status === 'running' || retryingMonths.has(m.mes_referencia)" class="w-4 h-4 animate-spin" />
             <Clock v-else-if="m.status === 'pending'" class="w-4 h-4 opacity-50" />
+            
+            <template v-else-if="m.status === 'error'">
+              <button 
+                class="retry-button hover:rotate-180 transition-transform duration-500 flex items-center justify-center"
+                title="Tentar Novamente (Recuperação Super Nitro)"
+                @click.stop="handleRetryMonth(m.mes_referencia)"
+              >
+                <RefreshCw class="w-4 h-4 cursor-pointer" />
+              </button>
+            </template>
+            
             <XCircle v-else class="w-4 h-4" />
           </div>
         </div>
@@ -84,8 +114,8 @@ const getStatusLabel = (status: string) => {
           </div>
           <div class="flex items-center justify-between">
             <span class="text-[9px] text-slate-400 uppercase font-bold tracking-tight">Registros Coletados</span>
-            <span class="text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-tighter" :class="getStatusClass(m.status)">
-              {{ getStatusLabel(m.status) }}
+            <span class="text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-tighter" :class="getStatusClass(m.status, retryingMonths.has(m.mes_referencia))">
+              {{ getStatusLabel(m.status, retryingMonths.has(m.mes_referencia)) }}
             </span>
           </div>
         </div>

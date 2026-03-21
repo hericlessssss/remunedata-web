@@ -34,4 +34,10 @@ export const ExecutionService = {
     const { data } = await httpClient.get<Execution>(`executions/${id}`)
     return data
   },
+  
+  async retryMonth(executionId: number, mes: string): Promise<void> {
+    await httpClient.post(`executions/${executionId}/retry-month`, null, {
+      params: { mes },
+    })
+  },
 }

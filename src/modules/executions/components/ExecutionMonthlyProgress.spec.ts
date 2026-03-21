@@ -11,6 +11,7 @@ vi.mock('@tanstack/vue-query', () => ({
 vi.mock('../services/execution.service', () => ({
   ExecutionService: {
     getById: vi.fn(),
+    retryMonth: vi.fn(),
   },
 }))
 
@@ -103,5 +104,47 @@ describe('ExecutionMonthlyProgress.vue', () => {
     // Check for "Processando" label and running background class
     expect(wrapper.text()).toContain('Processando')
     expect(wrapper.find('.bg-sky-50').exists()).toBe(true)
+  })
+
+  it('renders retry button for months with error status and triggers retry action', async () => {
+    const mockMonthlyExecutions = [
+      { mes_referencia: '01', status: 'error', registros_coletados: 100 },
+    ]
+
+    vi.mocked(useQuery).mockReturnValue({
+      data: {
+        id: mockExecutionId,
+        monthly_executions: mockMonthlyExecutions,
+      },
+      isLoading: false,
+    } as unknown as ReturnType<typeof useQuery>)
+
+    const wrapper = mount(ExecutionMonthlyProgress, {
+      props: {
+        executionId: mockExecutionId,
+        status: 'error',
+        parentTotal: 100,
+      },
+      global: {
+        stubs: {
+          RefreshCw: true,
+          CheckCircle2: true,
+          XCircle: true,
+          Clock: true,
+          Activity: true,
+        },
+      },
+    })
+
+    // Check for retry button
+    const retryButton = wrapper.find('button.retry-button')
+    expect(retryButton.exists()).toBe(true)
+
+    const { ExecutionService } = await import('../services/execution.service')
+    vi.mocked(ExecutionService.retryMonth).mockResolvedValueOnce()
+
+    await retryButton.trigger('click')
+
+    expect(ExecutionService.retryMonth).toHaveBeenCalledWith(mockExecutionId, '01')
   })
 })
