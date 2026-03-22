@@ -36,7 +36,7 @@ const tableHeaders = [
 
 const isLoading = computed(() => isFetching.value)
 
-const anos = [2025, 2024, 2023]
+const anos = [2026, 2025, 2024, 2023, 2022, 2021, 2020]
 const meses = [
   { v: '01', l: 'Janeiro' },
   { v: '02', l: 'Fevereiro' },

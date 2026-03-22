@@ -98,11 +98,7 @@ const toggleSidebar = () => {
         </div>
 
         <div class="flex items-center gap-4">
-          <span
-            class="text-[10px] sm:text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full font-bold uppercase tracking-wider"
-          >
-            Sistema Online
-          </span>
+          <!-- Espaço reservado para futuras ações no header -->
         </div>
       </header>
 
