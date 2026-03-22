@@ -43,15 +43,23 @@ const { data: history, isLoading: loadingHistory } = useQuery({
   enabled: computed(() => !!current.value?.cpf_servidor),
 })
 
-const chartOptions = computed(() => {
-  if (!history.value) return {}
-
-  // Ordenar histórico por data
-  const sorted = [...history.value].sort((a, b) => {
+// Ordenar histórico por data (Ascendente para o gráfico)
+const sortedHistory = computed(() => {
+  if (!history.value) return []
+  return [...history.value].sort((a, b) => {
     const dateA = new Date(a.ano_exercicio, Number(a.mes_referencia) - 1)
     const dateB = new Date(b.ano_exercicio, Number(b.mes_referencia) - 1)
     return dateA.getTime() - dateB.getTime()
   })
+})
+
+// Histórico reverso (Descendente para a lista e referência mais recente)
+const descendingHistory = computed(() => [...sortedHistory.value].reverse())
+
+const latestEntry = computed(() => descendingHistory.value[0] || current.value)
+
+const chartOptions = computed(() => {
+  if (sortedHistory.value.length === 0) return {}
 
   return {
     tooltip: { trigger: 'axis' },
@@ -59,21 +67,21 @@ const chartOptions = computed(() => {
     grid: { left: '3%', right: '4%', bottom: '10%', containLabel: true },
     xAxis: {
       type: 'category',
-      data: sorted.map((h) => formatCompetence(h.mes_referencia, h.ano_exercicio)),
+      data: sortedHistory.value.map((h) => formatCompetence(h.mes_referencia, h.ano_exercicio)),
     },
     yAxis: { type: 'value', axisLabel: { formatter: (v: number) => `R$ ${v / 1000}k` } },
     series: [
       {
         name: 'Vlr. Bruto',
         type: 'line',
-        data: sorted.map((h) => h.valor_bruto),
+        data: sortedHistory.value.map((h) => h.valor_bruto),
         smooth: true,
         itemStyle: { color: '#1e293b' },
       },
       {
         name: 'Vlr. Líquido',
         type: 'line',
-        data: sorted.map((h) => h.valor_liquido),
+        data: sortedHistory.value.map((h) => h.valor_liquido),
         smooth: true,
         itemStyle: { color: '#10b981' },
       },
@@ -106,9 +114,9 @@ const goBack = () => router.back()
             <span class="flex items-center gap-1.5"><Briefcase class="w-4 h-4" /> {{ current.cargo }}</span>
           </div>
         </div>
-        <div class="bg-green-50 text-green-700 px-4 py-2 rounded-lg border border-green-100">
+        <div v-if="latestEntry" class="bg-green-50 text-green-700 px-4 py-2 rounded-lg border border-green-100">
            <p class="text-xs font-bold uppercase tracking-wider opacity-70">Última Referência</p>
-           <p class="text-lg font-bold">{{ formatCompetence(current.mes_referencia, current.ano_exercicio) }}</p>
+           <p class="text-lg font-bold">{{ formatCompetence(latestEntry.mes_referencia, latestEntry.ano_exercicio) }}</p>
         </div>
       </div>
     </div>
@@ -153,7 +161,7 @@ const goBack = () => router.back()
             <h3 class="font-bold text-slate-800">Histórico de Contracheques</h3>
         </div>
         <div class="divide-y divide-slate-100">
-             <div v-for="h in history" :key="h.id" class="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+             <div v-for="h in descendingHistory" :key="h.id" class="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
                 <div>
                     <p class="font-bold text-slate-700">{{ formatCompetence(h.mes_referencia, h.ano_exercicio) }}</p>
                     <p class="text-xs text-slate-400">Referência Mensal</p>
