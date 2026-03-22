@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -121,26 +121,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -166,26 +166,26 @@ withDefaults(defineProps&lt;Props&gt;(), {
 &lt;/script&gt;
 &nbsp;
 &lt;template&gt;
-<span class="cstat-no" title="statement not covered" >  &lt;div</span>
-<span class="cstat-no" title="statement not covered" >    :class="[</span>
+  &lt;div
+    :class="[
       'flex flex-col items-center justify-center gap-4 transition-all duration-300',
       fullScreen ? 'fixed inset-0 z-[100] bg-white/80 backdrop-blur-sm' : 'h-full w-full min-h-[300px]'
     ]"
   &gt;
-<span class="cstat-no" title="statement not covered" >    &lt;div class="relative"&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;!-- Círculo externo (track) --&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;div class="w-16 h-16 border-4 border-slate-100 rounded-full"&gt;&lt;/div&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;!-- Círculo animado (spinner) --&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;div class="absolute top-0 left-0 w-16 h-16 border-4 border-slate-900 border-t-transparent rounded-full animate-spin"&gt;&lt;/div&gt;</span>
+    &lt;div class="relative"&gt;
+      &lt;!-- Círculo externo (track) --&gt;
+      &lt;div class="w-16 h-16 border-4 border-slate-100 rounded-full"&gt;&lt;/div&gt;
+      &lt;!-- Círculo animado (spinner) --&gt;
+      &lt;div class="absolute top-0 left-0 w-16 h-16 border-4 border-slate-900 border-t-transparent rounded-full animate-spin"&gt;&lt;/div&gt;
       
-<span class="cstat-no" title="statement not covered" >      &lt;!-- Efeito de pulsação no centro --&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-slate-400 rounded-full animate-pulse"&gt;&lt;/div&gt;</span>
-<span class="cstat-no" title="statement not covered" >    &lt;/div&gt;</span>
+      &lt;!-- Efeito de pulsação no centro --&gt;
+      &lt;div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-slate-400 rounded-full animate-pulse"&gt;&lt;/div&gt;
+    &lt;/div&gt;
     
-<span class="cstat-no" title="statement not covered" >    &lt;p v-if="label" class="text-slate-500 font-medium animate-pulse text-sm"&gt;</span>
-<span class="cstat-no" title="statement not covered" >      {{ label }}</span>
-<span class="cstat-no" title="statement not covered" >    &lt;/p&gt;</span>
-<span class="cstat-no" title="statement not covered" >  &lt;/div&gt;</span>
+    &lt;p v-if="label" class="text-slate-500 font-medium animate-pulse text-sm"&gt;
+      {{ label<span class="branch-0 cbranch-no" title="branch not covered" > }}</span>
+    &lt;/p&gt;
+  &lt;/div&gt;
 &lt;/template&gt;
 &nbsp;
 &lt;style scoped&gt;
@@ -205,7 +205,7 @@ withDefaults(defineProps&lt;Props&gt;(), {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-20T20:57:39.934Z
+                at 2026-03-22T02:21:11.119Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>21/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>2/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>21/21</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -85,50 +85,50 @@
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >export function formatCompetence(mes: string | number, ano: number | string): string {<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >  const m = String(mes).padStart(2, '0')</span>
-<span class="cstat-no" title="statement not covered" >  const months: Record&lt;string, string&gt; = {</span>
-<span class="cstat-no" title="statement not covered" >    '01': 'Jan',</span>
-<span class="cstat-no" title="statement not covered" >    '02': 'Fev',</span>
-<span class="cstat-no" title="statement not covered" >    '03': 'Mar',</span>
-<span class="cstat-no" title="statement not covered" >    '04': 'Abr',</span>
-<span class="cstat-no" title="statement not covered" >    '05': 'Mai',</span>
-<span class="cstat-no" title="statement not covered" >    '06': 'Jun',</span>
-<span class="cstat-no" title="statement not covered" >    '07': 'Jul',</span>
-<span class="cstat-no" title="statement not covered" >    '08': 'Ago',</span>
-<span class="cstat-no" title="statement not covered" >    '09': 'Set',</span>
-<span class="cstat-no" title="statement not covered" >    '10': 'Out',</span>
-<span class="cstat-no" title="statement not covered" >    '11': 'Nov',</span>
-<span class="cstat-no" title="statement not covered" >    '12': 'Dez',</span>
-<span class="cstat-no" title="statement not covered" >  }</span>
-<span class="cstat-no" title="statement not covered" >  return `${months[m] || m}/${ano}`</span>
-<span class="cstat-no" title="statement not covered" >}</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export function formatCompetence(mes: string | number, ano: number | string): string {
+  const m = String(mes).padStart(2, '0')
+  const months: Record&lt;string, string&gt; = {
+    '01': 'Jan',
+    '02': 'Fev',
+    '03': 'Mar',
+    '04': 'Abr',
+    '05': 'Mai',
+    '06': 'Jun',
+    '07': 'Jul',
+    '08': 'Ago',
+    '09': 'Set',
+    '10': 'Out',
+    '11': 'Nov',
+    '12': 'Dez',
+  }
+  return `${months[m<span class="branch-0 cbranch-no" title="branch not covered" >] || m}</span>/${ano}`
+}
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export function formatDate(date: string | Date): string {</span>
-<span class="cstat-no" title="statement not covered" >  return new Intl.DateTimeFormat('pt-BR').format(new Date(date))</span>
-<span class="cstat-no" title="statement not covered" >}</span>
+export function formatDate(date: string | Date): string {
+  return new Intl.DateTimeFormat('pt-BR').format(new Date(date))
+}
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -136,7 +136,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-20T20:57:39.934Z
+                at 2026-03-22T02:21:11.119Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
