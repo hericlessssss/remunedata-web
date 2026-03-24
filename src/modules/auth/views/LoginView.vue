@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { supabase } from '@/core/auth/supabase'
 import { LogIn, Mail, Lock, Loader2, AlertCircle } from 'lucide-vue-next'
 
+const route = useRoute()
 const router = useRouter()
 const email = ref('')
 const password = ref('')
@@ -22,7 +23,19 @@ async function handleLogin() {
 
     if (signInError) throw signInError
 
-    router.push({ name: 'dashboard' })
+    let redirectPath = route.query.redirect as string
+    
+    // Se não houver redirect na URL, tenta recuperar do localStorage (vido de um signup recente)
+    if (!redirectPath) {
+      redirectPath = localStorage.getItem('auth_redirect') || ''
+      localStorage.removeItem('auth_redirect')
+    }
+
+    if (redirectPath && redirectPath !== 'undefined') {
+      router.push(redirectPath)
+    } else {
+      router.push({ name: 'dashboard' })
+    }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Erro ao realizar login. Tente novamente.'
     error.value = message
@@ -46,13 +59,13 @@ async function handleLogin() {
       <div class="space-y-1.5">
         <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">E-mail</label>
         <div class="relative group">
-          <Mail class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+          <Mail class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
           <input
             v-model="email"
             type="email"
             required
             placeholder="seu@email.com"
-            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-hidden font-medium"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900 transition-all outline-hidden font-medium"
           />
         </div>
       </div>
@@ -60,18 +73,18 @@ async function handleLogin() {
       <div class="space-y-1.5">
         <div class="flex items-center justify-between ml-1">
           <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Senha</label>
-          <router-link :to="{ name: 'recovery' }" class="text-xs text-blue-600 hover:text-blue-700 font-bold transition-colors">
+          <router-link :to="{ name: 'recovery' }" class="text-xs text-slate-900 hover:opacity-70 font-black uppercase tracking-wider transition-all">
             Esqueceu a senha?
           </router-link>
         </div>
         <div class="relative group">
-          <Lock class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+          <Lock class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
           <input
             v-model="password"
             type="password"
             required
             placeholder="••••••••"
-            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-hidden font-medium"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900 transition-all outline-hidden font-medium"
           />
         </div>
       </div>
@@ -91,7 +104,7 @@ async function handleLogin() {
       <div class="text-center pt-4">
         <p class="text-sm text-slate-500 font-medium">
           Ainda não tem acesso?
-          <router-link :to="{ name: 'signup' }" class="text-blue-600 hover:text-blue-700 font-bold transition-colors">
+          <router-link :to="{ name: 'signup' }" class="text-slate-900 hover:opacity-70 font-black uppercase tracking-wider transition-all ml-1">
             Solicitar Cadastro
           </router-link>
         </p>

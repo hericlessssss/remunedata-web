@@ -103,12 +103,12 @@ const meses = [
         <div class="space-y-1">
           <label class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Nome do Servidor</label>
           <div class="relative group">
-            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
             <input
               v-model="filters.nome"
               type="text"
               placeholder="Ex: FRANCISCO..."
-              class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all font-medium"
+              class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900 transition-all font-medium"
               @keyup.enter="applySearch"
             />
           </div>
@@ -147,7 +147,7 @@ const meses = [
           <label class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Ano</label>
           <select
             v-model="filters.ano"
-            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all font-medium appearance-none"
+            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900 transition-all font-medium appearance-none cursor-pointer"
             @change="applySearch"
           >
             <option v-for="ano in anos" :key="ano" :value="ano">{{ ano }}</option>
@@ -159,7 +159,7 @@ const meses = [
           <label class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Mês</label>
           <select
             v-model="filters.mes"
-            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all font-medium appearance-none"
+            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900 transition-all font-medium appearance-none cursor-pointer"
             @change="applySearch"
           >
             <option v-for="m in meses" :key="m.v" :value="m.v">{{ m.l }}</option>
@@ -213,7 +213,7 @@ const meses = [
       </template>
 
       <template #cell-valor_liquido="{ item }">
-        <span class="text-green-600 font-semibold">{{ formatCurrency(item.valor_liquido) }}</span>
+        <span class="text-slate-900 font-black">{{ formatCurrency(item.valor_liquido) }}</span>
       </template>
     </BaseTable>
 

@@ -83,7 +83,7 @@ const chartOptions = computed(() => {
         type: 'line',
         data: sortedHistory.value.map((h) => h.valor_liquido),
         smooth: true,
-        itemStyle: { color: '#10b981' },
+        itemStyle: { color: '#94a3b8' },
       },
     ],
   }
@@ -114,8 +114,8 @@ const goBack = () => router.back()
             <span class="flex items-center gap-1.5"><Briefcase class="w-4 h-4" /> {{ current.cargo }}</span>
           </div>
         </div>
-        <div v-if="latestEntry" class="bg-green-50 text-green-700 px-4 py-2 rounded-lg border border-green-100">
-           <p class="text-xs font-bold uppercase tracking-wider opacity-70">Última Referência</p>
+        <div v-if="latestEntry" class="bg-slate-900 text-white px-4 py-2 rounded-lg border border-slate-800 shadow-lg shadow-slate-900/10">
+           <p class="text-[10px] font-black uppercase tracking-widest opacity-70">Última Referência</p>
            <p class="text-lg font-bold">{{ formatCompetence(latestEntry.mes_referencia, latestEntry.ano_exercicio) }}</p>
         </div>
       </div>
@@ -173,7 +173,7 @@ const goBack = () => router.back()
                     </div>
                     <div>
                         <p class="text-xs text-slate-400 uppercase font-bold">Líquido</p>
-                        <p class="font-bold text-green-600">{{ formatCurrency(h.valor_liquido) }}</p>
+                        <p class="font-black text-slate-900">{{ formatCurrency(h.valor_liquido) }}</p>
                     </div>
                 </div>
              </div>

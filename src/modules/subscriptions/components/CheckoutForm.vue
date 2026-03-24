@@ -42,12 +42,12 @@ const handleSubmit = () => {
 <template>
   <div class="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl border border-slate-100 animate-in fade-in zoom-in duration-300">
     <div class="flex items-center gap-3 mb-6">
-      <div class="p-2 bg-blue-100 text-blue-600 rounded-xl">
+      <div class="p-2 bg-slate-900 text-white rounded-xl shadow-lg shadow-slate-900/10">
         <ShieldCheck class="w-6 h-6" />
       </div>
       <div>
         <h3 class="text-xl font-bold text-slate-900 leading-tight">Dados de Faturamento</h3>
-        <p class="text-sm text-slate-500">Plano selecionado: <span class="font-bold text-blue-600">{{ planName }}</span></p>
+        <p class="text-sm text-slate-500">Plano selecionado: <span class="font-black text-slate-900 underline decoration-slate-200 underline-offset-4">{{ planName }}</span></p>
       </div>
     </div>
 
@@ -61,7 +61,7 @@ const handleSubmit = () => {
             v-model="form.name"
             type="text" 
             placeholder="Seu nome como no cartão"
-            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900 outline-none transition-all font-medium"
             required
           />
         </div>
@@ -78,7 +78,7 @@ const handleSubmit = () => {
               v-maska="'###.###.###-##'"
               type="text" 
               placeholder="000.000.000-00"
-              class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+              class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900 outline-none transition-all font-medium"
               required
             />
           </div>
@@ -94,7 +94,7 @@ const handleSubmit = () => {
               v-maska="'(##) #####-####'"
               type="text" 
               placeholder="(00) 00000-0000"
-              class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+              class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900 outline-none transition-all font-medium"
               required
             />
           </div>
@@ -104,7 +104,7 @@ const handleSubmit = () => {
       <div class="pt-4 flex flex-col gap-3">
         <BaseButton
           type="submit"
-          class="w-full py-6 text-base font-bold rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:shadow-xl hover:shadow-blue-500/30 border-none transition-transform active:scale-95"
+          class="w-full py-6 text-base font-bold rounded-2xl bg-slate-900 hover:bg-slate-800 hover:shadow-2xl hover:shadow-slate-900/20 border-none transition-all active:scale-95 text-white"
           :disabled="!isFormValid || loading"
           :loading="loading"
         >

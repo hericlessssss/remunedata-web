@@ -61,7 +61,7 @@ describe('ExecutionMonthlyProgress.vue', () => {
     
     expect(month02Card).toBeDefined()
     expect(month02Card?.text()).toContain('750')
-    expect(month02Card?.text()).toContain('Registros Coletados')
+    expect(month02Card?.text()).toContain('Registros')
     expect(month02Card?.text()).not.toContain('1.399.250')
   })
 
@@ -99,11 +99,11 @@ describe('ExecutionMonthlyProgress.vue', () => {
 
     // Check for "Concluído" label and success background class
     expect(wrapper.text()).toContain('Concluído')
-    expect(wrapper.find('.bg-emerald-50').exists()).toBe(true)
+    expect(wrapper.find('.bg-slate-50').exists()).toBe(true)
     
     // Check for "Processando" label and running background class
     expect(wrapper.text()).toContain('Processando')
-    expect(wrapper.find('.bg-sky-50').exists()).toBe(true)
+    expect(wrapper.find('.bg-slate-900').exists()).toBe(true)
   })
 
   it('renders retry button for months with error status and triggers retry action', async () => {

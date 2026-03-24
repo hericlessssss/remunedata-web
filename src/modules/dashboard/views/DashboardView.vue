@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Users, TrendingUp, Wallet, RefreshCw } from 'lucide-vue-next'
+import { Users, TrendingUp, Wallet, RefreshCw, Zap, ArrowRight } from 'lucide-vue-next'
 import { useDashboardSummary } from '../composables/useDashboardSummary'
 import { formatCurrency } from '@/core/formatters/currency'
 import BaseCard from '@/shared/ui/BaseCard.vue'
 import BaseChart from '@/shared/ui/BaseChart.vue'
 import BaseSkeleton from '@/shared/ui/BaseSkeleton.vue'
+import BaseButton from '@/shared/ui/BaseButton.vue'
+import { useSubscriptionStore } from '@/modules/subscriptions/store/subscriptionStore'
 
+const subStore = useSubscriptionStore()
 const { data, isLoading, isFetching, isError, error } = useDashboardSummary()
 
 const chartOptions = computed(() => {
@@ -97,13 +100,39 @@ const chartOptions = computed(() => {
       </div>
       <div v-if="data" class="flex items-center gap-3 px-4 py-2 bg-white border border-slate-200 rounded-2xl shadow-sm">
         <div class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-slate-900"></span>
         </div>
         <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
           Monitorando em Tempo Real
-          <RefreshCw v-if="isFetching" class="w-3 h-3 animate-spin text-blue-500" />
+          <RefreshCw v-if="isFetching" class="w-3 h-3 animate-spin text-slate-900" />
         </span>
+      </div>
+    </div>
+
+    <!-- Upgrade CTA Banner -->
+    <div 
+      v-if="!subStore.isActive"
+      class="relative overflow-hidden bg-slate-900 rounded-3xl p-8 text-white shadow-2xl animate-in fade-in slide-in-from-top-4 duration-700"
+    >
+      <div class="absolute top-0 right-0 w-64 h-64 bg-slate-800 rounded-full -mr-20 -mt-20 blur-3xl opacity-50"></div>
+      <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="space-y-2 text-center md:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 text-[10px] font-black uppercase tracking-widest border border-slate-700">
+            <Zap class="w-3 h-3 text-white fill-current" />
+            Acesso Gratuito
+          </div>
+          <h3 class="text-2xl font-bold font-serif tracking-tight">Libere o poder total do RemuneData</h3>
+          <p class="text-slate-400 max-w-lg text-sm font-medium">
+            Você está vendo o dashboard resumido. Assine um plano para desbloquear a consulta pública, filtros por cargo/órgão e detalhes de servidores.
+          </p>
+        </div>
+        <RouterLink to="/subscriptions/plans">
+          <BaseButton class="bg-white text-slate-900 border-none px-8 py-3 rounded-2xl font-bold hover:scale-105 transition-transform flex items-center gap-2">
+            Ver Planos Disponíveis
+            <ArrowRight class="w-4 h-4" />
+          </BaseButton>
+        </RouterLink>
       </div>
     </div>
 
@@ -129,7 +158,7 @@ const chartOptions = computed(() => {
           </p>
         </template>
         <template #footer>
-          <p class="text-xs text-slate-500 text-emerald-600 font-bold">↑ Remuneração Bruta Estimada</p>
+          <p class="text-xs text-slate-400 font-bold italic">Remuneração Bruta Estimada</p>
         </template>
       </BaseCard>
 

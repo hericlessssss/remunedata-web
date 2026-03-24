@@ -3,6 +3,8 @@ import { ref } from 'vue'
 import { supabase } from '@/core/auth/supabase'
 import { UserPlus, Mail, Lock, Loader2, AlertCircle, CheckCircle2, ArrowLeft } from 'lucide-vue-next'
 
+import { useRoute } from 'vue-router'
+const route = useRoute()
 const email = ref('')
 const password = ref('')
 const loading = ref(false)
@@ -25,6 +27,12 @@ async function handleSignup() {
 
     if (signUpError) throw signUpError
     
+    // Persiste a intenção (redirect) para recuperar após a confirmação de e-mail
+    const redirectPath = route.query.redirect as string
+    if (redirectPath) {
+      localStorage.setItem('auth_redirect', redirectPath)
+    }
+    
     success.value = true
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Erro ao criar conta. Tente novamente.'
@@ -37,7 +45,7 @@ async function handleSignup() {
 
 <template>
   <div>
-    <router-link :to="{ name: 'login' }" class="flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors text-xs font-bold uppercase tracking-wider mb-6 group">
+    <router-link :to="{ name: 'login', query: route.query }" class="flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors text-xs font-bold uppercase tracking-wider mb-6 group">
       <ArrowLeft class="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
       Voltar para o login
     </router-link>
@@ -47,8 +55,8 @@ async function handleSignup() {
 
     <div v-if="success" class="space-y-8 text-center animate-fade-in py-4">
       <div class="flex justify-center">
-        <div class="bg-emerald-50 p-4 rounded-2xl ring-1 ring-emerald-100">
-          <CheckCircle2 class="w-12 h-12 text-emerald-500" />
+        <div class="bg-slate-50 p-4 rounded-2xl ring-1 ring-slate-100 shadow-xl shadow-slate-900/5">
+          <CheckCircle2 class="w-12 h-12 text-slate-900" />
         </div>
       </div>
       <div class="space-y-3">
@@ -58,7 +66,7 @@ async function handleSignup() {
           <br>Verifique seu e-mail para ativar sua conta.
         </p>
       </div>
-      <router-link :to="{ name: 'login' }" class="block w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-slate-900/10">
+      <router-link :to="{ name: 'login', query: route.query }" class="block w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-slate-900/10">
         Ir para Login
       </router-link>
     </div>
@@ -72,13 +80,13 @@ async function handleSignup() {
       <div class="space-y-1.5">
         <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">E-mail Corporativo</label>
         <div class="relative group">
-          <Mail class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+          <Mail class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
           <input
             v-model="email"
             type="email"
             required
             placeholder="seu@email.com"
-            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-hidden font-medium"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900 transition-all outline-hidden font-medium"
           />
         </div>
       </div>
@@ -86,14 +94,14 @@ async function handleSignup() {
       <div class="space-y-1.5">
         <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Senha de Acesso</label>
         <div class="relative group">
-          <Lock class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+          <Lock class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
           <input
             v-model="password"
             type="password"
             required
             placeholder="Mínimo 6 caracteres"
             minlength="6"
-            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-hidden font-medium"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900 transition-all outline-hidden font-medium"
           />
         </div>
       </div>
@@ -102,7 +110,7 @@ async function handleSignup() {
         <button
           type="submit"
           :disabled="loading"
-          class="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-300 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-600/10 active:scale-[0.98]"
+          class="w-full bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-slate-900/10 active:scale-[0.98]"
         >
           <Loader2 v-if="loading" class="w-5 h-5 animate-spin" />
           <UserPlus v-else class="w-5 h-5" />
@@ -113,7 +121,7 @@ async function handleSignup() {
       <div class="text-center pt-4">
         <p class="text-sm text-slate-500 font-medium">
           Já possui cadastro?
-          <router-link :to="{ name: 'login' }" class="text-emerald-600 hover:text-emerald-700 font-bold transition-colors">
+          <router-link :to="{ name: 'login', query: route.query }" class="text-slate-900 hover:opacity-70 font-black uppercase tracking-wider transition-all ml-1">
             Fazer login
           </router-link>
         </p>

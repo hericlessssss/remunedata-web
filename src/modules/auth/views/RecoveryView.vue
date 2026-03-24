@@ -42,8 +42,8 @@ async function handleRecovery() {
 
     <div v-if="success" class="space-y-8 text-center animate-fade-in py-4">
       <div class="flex justify-center">
-        <div class="bg-blue-50 p-4 rounded-2xl ring-1 ring-blue-100">
-          <CheckCircle2 class="w-12 h-12 text-blue-500" />
+        <div class="bg-slate-50 p-4 rounded-2xl ring-1 ring-slate-100 shadow-xl shadow-slate-900/5">
+          <CheckCircle2 class="w-12 h-12 text-slate-900" />
         </div>
       </div>
       <div class="space-y-3">
@@ -67,13 +67,13 @@ async function handleRecovery() {
       <div class="space-y-1.5">
         <label class="text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">E-mail de Cadastro</label>
         <div class="relative group">
-          <Mail class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+          <Mail class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
           <input
             v-model="email"
             type="email"
             required
             placeholder="seu@email.com"
-            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-hidden font-medium"
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900 transition-all outline-hidden font-medium"
           />
         </div>
       </div>
@@ -82,7 +82,7 @@ async function handleRecovery() {
         <button
           type="submit"
           :disabled="loading"
-          class="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-600/10 active:scale-[0.98]"
+          class="w-full bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-slate-900/10 active:scale-[0.98]"
         >
           <Loader2 v-if="loading" class="w-5 h-5 animate-spin" />
           <KeyRound v-else class="w-5 h-5" />

@@ -5,38 +5,42 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      name: 'home',
+      component: () => import('@/modules/home/views/LandingView.vue'),
+    },
+    {
+      path: '/app',
       component: () => import('@/app/layouts/MainLayout.vue'),
       redirect: '/dashboard',
       children: [
         {
-          path: 'dashboard',
+          path: '/dashboard',
           name: 'dashboard',
           component: () => import('@/modules/dashboard/views/DashboardView.vue'),
           meta: { requiresAuth: true },
         },
         {
-          path: 'remuneration',
+          path: '/remuneration',
           name: 'remuneration',
           component: () => import('@/modules/remuneration/views/RemunerationView.vue'),
           meta: { requiresAuth: true, requiresSubscription: true },
         },
         {
-          path: 'remuneration/:id',
+          path: '/remuneration/:id',
           name: 'remuneration-detail',
           component: () => import('@/modules/remuneration/views/RemunerationDetailView.vue'),
           meta: { requiresAuth: true, requiresSubscription: true },
         },
         {
-          path: 'executions',
+          path: '/executions',
           name: 'executions',
           component: () => import('@/modules/executions/views/ExecutionsView.vue'),
-          meta: { requiresAuth: true },
+          meta: { requiresAuth: true, requiresSubscription: true },
         },
         {
-          path: 'subscriptions/plans',
+          path: '/subscriptions/plans',
           name: 'subscriptions-plans',
           component: () => import('@/modules/subscriptions/views/PlansView.vue'),
-          meta: { requiresAuth: false }, // Aberto para atrair novos usuários
         },
       ],
     },
@@ -61,6 +65,11 @@ const router = createRouter({
         },
       ],
     },
+    // Rota 404 - Redireciona para Home
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: { name: 'home' }
+    }
   ],
 })
 
@@ -73,7 +82,10 @@ router.beforeEach(async (to, _from, next) => {
 
   // Se a rota exige auth e o usuário não está logado
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    return next({ name: 'login', query: { redirect: to.fullPath } })
+    return next({ 
+      name: 'login', 
+      query: { redirect: to.fullPath } 
+    })
   }
 
   // Se o usuário está logado, garantimos que temos o status da assinatura
@@ -81,13 +93,16 @@ router.beforeEach(async (to, _from, next) => {
     await subStore.fetchStatus()
   }
 
-  // Se a rota exige assinatura ativa
+  // Se a rota exige assinatura ativa e usuário não tem
   if (to.meta.requiresSubscription && !subStore.isActive) {
-    return next({ name: 'subscriptions-plans' })
+    return next({ 
+      name: 'subscriptions-plans',
+      query: { redirect: 'forbidden' }
+    })
   }
 
-  // Se o usuário está logado e tenta acessar login/signup
-  if (to.path.startsWith('/auth') && authStore.isAuthenticated) {
+  // Se o usuário está logado e tenta acessar login/signup ou a landing page
+  if (authStore.isAuthenticated && (to.path.startsWith('/auth') || to.path === '/')) {
     return next({ name: 'dashboard' })
   }
 

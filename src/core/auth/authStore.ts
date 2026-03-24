@@ -29,9 +29,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function signOut() {
+    const subStore = (await import('@/modules/subscriptions/store/subscriptionStore')).useSubscriptionStore()
     await supabase.auth.signOut()
     user.value = null
     session.value = null
+    subStore.clearStatus()
   }
 
   return {
