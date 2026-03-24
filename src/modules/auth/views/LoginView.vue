@@ -27,8 +27,8 @@ async function handleLogin() {
     
     // Se não houver redirect na URL, tenta recuperar do localStorage (vido de um signup recente)
     if (!redirectPath) {
-      redirectPath = localStorage.getItem('auth_redirect') || ''
-      localStorage.removeItem('auth_redirect')
+      redirectPath = window.localStorage.getItem('auth_redirect') || ''
+      window.localStorage.removeItem('auth_redirect')
     }
 
     if (redirectPath && redirectPath !== 'undefined') {

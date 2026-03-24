@@ -210,8 +210,7 @@
 <a name='L145'></a><a href='#L145'>145</a>
 <a name='L146'></a><a href='#L146'>146</a>
 <a name='L147'></a><a href='#L147'>147</a>
-<a name='L148'></a><a href='#L148'>148</a>
-<a name='L149'></a><a href='#L149'>149</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L148'></a><a href='#L148'>148</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -343,7 +342,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -397,13 +395,13 @@ const handleRetryMonth = async (mes: string) =&gt; {
 }
 &nbsp;
 const getStatusClass = (status: string, isRetrying = false) =&gt; {
-  if (isRetrying) return 'bg-sky-50 text-sky-700 border-sky-200 ring-2 ring-sky-100 ring-offset-1'
+  if (isRetrying) return 'bg-slate-900 text-white border-slate-900 ring-4 ring-slate-900/10'
   const s = status.toLowerCase()
-  if (s === 'success') return 'bg-emerald-50 text-emerald-700 border-emerald-200'
-  if (s === 'running') return 'bg-sky-50 text-sky-700 border-sky-200 ring-2 ring-sky-100 ring-offset-1'
-  if (s === 'pending') return 'bg-slate-50 text-slate-500 border-slate-200'
-  if (s === 'partial_success' || s === 'warning') <span class="branch-0 cbranch-no" title="branch not covered" >return 'bg-amber-50 text-amber-700 border-amber-200'</span>
-  return 'bg-rose-50 text-rose-700 border-rose-200'
+  if (s === 'success') return 'bg-slate-50 text-slate-900 border-slate-200'
+  if (s === 'running') return 'bg-slate-900 text-white border-slate-900 shadow-lg shadow-slate-900/20'
+  if (s === 'pending') return 'bg-slate-50 text-slate-400 border-slate-100 italic'
+  if (s === 'partial_success' || s === 'warning') <span class="branch-0 cbranch-no" title="branch not covered" >return 'bg-slate-100 text-slate-800 border-slate-300'</span>
+  return 'bg-white text-slate-900 border-slate-900 font-black decoration-double underline'
 }
 &nbsp;
 const getStatusLabel = (status: string, isRetrying = false) =&gt; {
@@ -421,10 +419,10 @@ const getStatusLabel = (status: string, isRetrying = false) =&gt; {
 &lt;template&gt;
   &lt;div v-if="<span class="branch-0 cbranch-no" title="branch not covered" >isLoading" class="flex flex-col items-center justify-center p-12 bg-slate-50/50 rounded-xl border border-dashed border-slate-200"&gt;</span>
 <span class="cstat-no" title="statement not covered" >    &lt;div class="relative mb-4"&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;RefreshCw class="w-10 h-10 text-blue-500 animate-spin" /&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;Activity class="w-4 h-4 text-blue-600 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" /&gt;</span>
+<span class="cstat-no" title="statement not covered" >      &lt;RefreshCw class="w-10 h-10 text-slate-900 animate-spin" /&gt;</span>
+<span class="cstat-no" title="statement not covered" >      &lt;Activity class="w-4 h-4 text-slate-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" /&gt;</span>
 <span class="cstat-no" title="statement not covered" >    &lt;/div&gt;</span>
-<span class="cstat-no" title="statement not covered" >    &lt;span class="text-slate-600 font-bold text-sm tracking-tight mb-1"&gt;NITRO ENGINE: ANALISANDO ORQUESTRAÇÃO&lt;/span&gt;</span>
+<span class="cstat-no" title="statement not covered" >    &lt;span class="text-slate-900 font-black text-sm tracking-tighter mb-1 uppercase"&gt;Nitro Engine: Orquestração Ativa&lt;/span&gt;</span>
 <span class="cstat-no" title="statement not covered" >    &lt;span class="text-slate-400 text-[10px] uppercase font-mono animate-pulse"&gt;Sincronizando lotes de processamento...&lt;/span&gt;</span>
   &lt;/div&gt;
   
@@ -434,21 +432,21 @@ const getStatusLabel = (status: string, isRetrying = false) =&gt; {
       &lt;div 
         v-for="m in (data.monthly_executions || data.monthlyExecutions)" 
         :key="m.id || m.mes_referencia"
-        class="group bg-white p-4 rounded-xl border border-slate-200 shadow-sm transition-all duration-300 hover:shadow-md hover:border-blue-300 relative overflow-hidden"
-        :class="{ 'ring-2 ring-blue-500/10 border-blue-400': m.status === 'running' || retryingMonths.has(m.mes_referencia) }"
+        class="group bg-white p-4 rounded-xl border border-slate-200 shadow-sm transition-all duration-300 hover:border-slate-900 relative overflow-hidden"
+        :class="{ 'ring-4 ring-slate-900/5 border-slate-900': m.status === 'running' || retryingMonths.has(m.mes_referencia) }"
       &gt;
         &lt;!-- Running/Retry Progress Glow --&gt;
         &lt;div 
           v-if="m.status === 'running' || retryingMonths.has(m.mes_referencia)"
-          class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-sky-300 to-blue-400 bg-[length:200%_auto] animate-[shimmer_2s_infinite_linear]"
+          class="absolute top-0 left-0 w-full h-1 bg-slate-900 animate-pulse"
         &gt;&lt;/div&gt;
 &nbsp;
         &lt;div class="flex items-start justify-between mb-4"&gt;
           &lt;div class="flex flex-col"&gt;
             &lt;span class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1"&gt;Mês&lt;/span&gt;
-            &lt;span class="text-xl font-black text-slate-700 leading-none"&gt;{{ m.mes_referencia.padStart(2, '0') }}&lt;/span&gt;
+            &lt;span class="text-xl font-black text-slate-900 leading-none"&gt;{{ m.mes_referencia.padStart(2, '0') }}&lt;/span&gt;
           &lt;/div&gt;
-          &lt;div :class="getStatusClass(m.status, retryingMonths.has(m.mes_referencia))" class="p-1.5 rounded-lg border transition-colors group-hover:scale-110 duration-200"&gt;
+          &lt;div :class="getStatusClass(m.status, retryingMonths.has(m.mes_referencia))" class="p-1.5 rounded-lg border transition-all group-hover:scale-110 duration-200 shadow-sm"&gt;
             &lt;CheckCircle2 v-if="m.status === 'success'" class="w-4 h-4" /&gt;
             &lt;RefreshCw v-else-if="m.status === 'running' || retryingMonths.has(m.mes_referencia)" class="w-4 h-4 animate-spin" /&gt;
             &lt;Clock v-else-if="m.status === 'pending'" class="w-4 h-4 opacity-50" /&gt;
@@ -456,7 +454,7 @@ const getStatusLabel = (status: string, isRetrying = false) =&gt; {
             &lt;template v-else-if="m.status === 'error'"&gt;
               &lt;button 
                 class="retry-button hover:rotate-180 transition-transform duration-500 flex items-center justify-center"
-                title="Tentar Novamente (Recuperação Super Nitro)"
+                title="Tentar Novamente"
                 @click.stop="handleRetryMonth(m.mes_referencia)"
               &gt;
                 &lt;RefreshCw class="w-4 h-4 cursor-pointer"<span class="branch-0 cbranch-no" title="branch not covered" > /&gt;</span>
@@ -474,7 +472,7 @@ const getStatusLabel = (status: string, isRetrying = false) =&gt; {
             &lt;/span&gt;
           &lt;/div&gt;
           &lt;div class="flex items-center justify-between"&gt;
-            &lt;span class="text-[9px] text-slate-400 uppercase font-bold tracking-tight"&gt;Registros Coletados&lt;/span&gt;
+            &lt;span class="text-[9px] text-slate-400 uppercase font-black tracking-tighter"&gt;Registros&lt;/span&gt;
             &lt;span class="text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-tighter" :class="getStatusClass(m.status, retryingMonths.has(m.mes_referencia))"&gt;
               {{ getStatusLabel(m.status, retryingMonths.has(m.mes_referencia)) }}
             &lt;/span&gt;
@@ -485,15 +483,14 @@ const getStatusLabel = (status: string, isRetrying = false) =&gt; {
     
     &lt;!-- Empty State --&gt;
     &lt;div v-else class="p-10 text-center bg-white rounded-2xl border border-dashed border-slate-200 shadow-inner"&gt;
-      &lt;div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-slate-50 mb-4 text-slate-300 shadow-sm border border-slate-100"&gt;
+      &lt;div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-slate-50 mb-4 text-slate-400 shadow-sm border border-slate-100"&gt;
         &lt;Activity class="w-7 h-7" /&gt;
       &lt;/div&gt;
-      &lt;h4 class="text-slate-800 font-bold mb-1"&gt;Logs de Orquestração Indisponíveis&lt;/h4&gt;
-      &lt;p class="text-slate-500 text-sm max-w-sm mx-auto"&gt;
-        A Nitro Engine ainda não gerou os pontos de controle para esta sincronização. 
-        Os dados serão exibidos assim que o processamento mensal for iniciado.
+      &lt;h4 class="text-slate-900 font-black uppercase tracking-tighter mb-1"&gt;Logs Indisponíveis&lt;/h4&gt;
+      &lt;p class="text-slate-500 text-sm max-w-sm mx-auto font-medium"&gt;
+        A Nitro Engine ainda não gerou os pontos de controle para esta sincronização.
       &lt;/p&gt;
-      &lt;div class="mt-4 inline-flex items-center px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] uppercase font-black tracking-widest animate-pulse"&gt;
+      &lt;div class="mt-4 inline-flex items-center px-4 py-1.5 bg-slate-900 text-white rounded-full text-[10px] uppercase font-black tracking-widest animate-pulse border border-slate-800"&gt;
         Aguardando Workers...
       &lt;/div&gt;
     &lt;/div&gt;
@@ -514,7 +511,7 @@ const getStatusLabel = (status: string, isRetrying = false) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-03-22T02:21:11.119Z
+                at 2026-03-24T19:59:54.408Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

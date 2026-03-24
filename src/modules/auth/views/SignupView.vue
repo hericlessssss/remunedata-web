@@ -30,7 +30,7 @@ async function handleSignup() {
     // Persiste a intenção (redirect) para recuperar após a confirmação de e-mail
     const redirectPath = route.query.redirect as string
     if (redirectPath) {
-      localStorage.setItem('auth_redirect', redirectPath)
+      window.localStorage.setItem('auth_redirect', redirectPath)
     }
     
     success.value = true

@@ -49,8 +49,8 @@ const checkUrlParams = async () => {
       const allPlans = await SubscriptionService.getPlans()
       const plan = allPlans.find(p => p.slug === planSlug)
       if (plan) selectedPlan.value = plan
-    } catch (e) {
-      console.error('Erro ao carregar planos para auto-seleção', e)
+    } catch {
+      // Silently ignore error for auto-selection logic to avoid console warnings
     }
   }
 }
