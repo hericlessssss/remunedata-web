@@ -48,6 +48,17 @@ export const RemunerationService = {
     return null
   },
 
+  /**
+   * Busca listas distintas de cargos e órgãos para filtros.
+   */
+  async getDistinctFilters(): Promise<{ cargos: string[]; orgaos: string[] }> {
+    const { data } = await httpClient.get('/remuneration/distinct-filters')
+    return data
+  },
+
+  /**
+   * Gera URL de exportação.
+   */
   async getExportUrl(type: 'xlsx' | 'csv'): Promise<string> {
     const baseUrl = httpClient.defaults.baseURL || ''
     const executionId = await this.getLatestExecutionId()

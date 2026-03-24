@@ -5,29 +5,75 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      component: () => import('@/app/layouts/MainLayout.vue'),
       redirect: '/dashboard',
+      children: [
+        {
+          path: 'dashboard',
+          name: 'dashboard',
+          component: () => import('@/modules/dashboard/views/DashboardView.vue'),
+          meta: { requiresAuth: true },
+        },
+        {
+          path: 'remuneration',
+          name: 'remuneration',
+          component: () => import('@/modules/remuneration/views/RemunerationView.vue'),
+          meta: { requiresAuth: true },
+        },
+        {
+          path: 'remuneration/:id',
+          name: 'remuneration-detail',
+          component: () => import('@/modules/remuneration/views/RemunerationDetailView.vue'),
+          meta: { requiresAuth: true },
+        },
+        {
+          path: 'executions',
+          name: 'executions',
+          component: () => import('@/modules/executions/views/ExecutionsView.vue'),
+          meta: { requiresAuth: true },
+        },
+      ],
     },
     {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: () => import('@/modules/dashboard/views/DashboardView.vue'),
-    },
-    {
-      path: '/remuneration',
-      name: 'remuneration',
-      component: () => import('@/modules/remuneration/views/RemunerationView.vue'),
-    },
-    {
-      path: '/remuneration/:id',
-      name: 'remuneration-detail',
-      component: () => import('@/modules/remuneration/views/RemunerationDetailView.vue'),
-    },
-    {
-      path: '/executions',
-      name: 'executions',
-      component: () => import('@/modules/executions/views/ExecutionsView.vue'),
+      path: '/auth',
+      component: () => import('@/modules/auth/layouts/AuthLayout.vue'),
+      children: [
+        {
+          path: 'login',
+          name: 'login',
+          component: () => import('@/modules/auth/views/LoginView.vue'),
+        },
+        {
+          path: 'signup',
+          name: 'signup',
+          component: () => import('@/modules/auth/views/SignupView.vue'),
+        },
+        {
+          path: 'recovery',
+          name: 'recovery',
+          component: () => import('@/modules/auth/views/RecoveryView.vue'),
+        },
+      ],
     },
   ],
+})
+
+import { useAuthStore } from '@/core/auth/authStore'
+
+router.beforeEach(async (to, _from, next) => {
+  const authStore = useAuthStore()
+
+  // Se a rota exige auth e o usuário não está logado
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    return next({ name: 'login' })
+  }
+
+  // Se o usuário está logado e tenta acessar login/signup
+  if (to.path.startsWith('/auth') && authStore.isAuthenticated) {
+    return next({ name: 'dashboard' })
+  }
+
+  next()
 })
 
 router.onError((error, to) => {

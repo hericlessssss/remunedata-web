@@ -1,20 +1,33 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { Search, ChevronLeft, ChevronRight, FileDown } from 'lucide-vue-next'
+import { ref } from 'vue'
+import { Search, ChevronLeft, ChevronRight, FileDown, Filter } from 'lucide-vue-next'
+import { useQuery } from '@tanstack/vue-query'
 import { useRemunerationSearch } from '../composables/useRemunerationSearch'
 import { RemunerationService } from '../services/remuneration.service'
 import { formatCurrency } from '@/core/formatters/currency'
 import { formatCompetence } from '@/core/formatters/date'
 import BaseButton from '@/shared/ui/BaseButton.vue'
 import BaseTable from '@/shared/ui/BaseTable.vue'
+import BaseSelectSearch from '@/shared/ui/BaseSelectSearch.vue'
+import BaseSkeleton from '@/shared/ui/BaseSkeleton.vue'
 
 const { 
   filters, 
   data, 
-  isFetching, 
+  isFetching,
+  isLoading: isInitialLoading,
   setPage, 
   applySearch 
 } = useRemunerationSearch()
+
+const showMobileFilters = ref(false)
+
+// Busca filtros distintos (Cargos e Órgãos) - Cache de 24h conforme API
+const { data: distinctFilters, isLoading: isLoadingFilters } = useQuery({
+  queryKey: ['remuneration', 'distinct-filters'],
+  queryFn: () => RemunerationService.getDistinctFilters(),
+  staleTime: 1000 * 60 * 60 * 24, 
+})
 
 const handleExport = async (type: 'xlsx' | 'csv') => {
   try {
@@ -33,8 +46,6 @@ const tableHeaders = [
   { key: 'valor_bruto', label: 'Vlr. Bruto' },
   { key: 'valor_liquido', label: 'Vlr. Líquido' },
 ]
-
-const isLoading = computed(() => isFetching.value)
 
 const anos = [2026, 2025, 2024, 2023, 2022, 2021, 2020]
 const meses = [
@@ -56,109 +67,117 @@ const meses = [
 <template>
   <div class="space-y-6">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div>
-        <h2 class="text-3xl font-bold text-slate-900 font-serif">Consulta Pública</h2>
-        <p class="text-slate-500">Explore os dados de remuneração do Distrito Federal.</p>
+      <div class="flex flex-col gap-1">
+        <h2 class="text-3xl font-bold text-slate-900 font-serif tracking-tight">Consulta Pública</h2>
+        <p class="text-slate-500 font-medium">Explore os dados de remuneração do Distrito Federal.</p>
       </div>
-        <div class="flex gap-2">
-          <BaseButton variant="outline" class="gap-2" @click="handleExport('xlsx')">
+      <div class="flex items-center gap-2">
+        <BaseButton 
+          variant="outline" 
+          class="md:hidden gap-2" 
+          @click="showMobileFilters = !showMobileFilters"
+        >
+          <Filter class="w-4 h-4" />
+          Filtros
+        </BaseButton>
+        <div class="hidden sm:flex gap-2">
+          <BaseButton variant="outline" class="gap-2 text-xs font-bold" @click="handleExport('xlsx')">
             <FileDown class="w-4 h-4" />
-            Planilha (1k)
+            XLSX (1k)
           </BaseButton>
-          <BaseButton variant="outline" class="gap-2" @click="handleExport('csv')">
+          <BaseButton variant="outline" class="gap-2 text-xs font-bold" @click="handleExport('csv')">
             <FileDown class="w-4 h-4" />
             CSV (5k)
           </BaseButton>
         </div>
       </div>
+    </div>
   
-      <!-- Filtros -->
-      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xxl:grid-cols-6 gap-4">
-          <!-- Nome -->
-          <div class="space-y-1">
-            <label class="text-xs font-bold text-slate-400 uppercase">Nome do Servidor</label>
-            <div class="relative">
-              <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <input
-                v-model="filters.nome"
-                type="text"
-                placeholder="Ex: FRANCISCO..."
-                class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
-                @keyup.enter="applySearch"
-              />
-            </div>
-          </div>
-  
-          <!-- CPF -->
-          <div class="space-y-1">
-            <label class="text-xs font-bold text-slate-400 uppercase">CPF</label>
+    <!-- Filtros -->
+    <div 
+      class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6 transition-all"
+      :class="{ 'hidden md:block': !showMobileFilters }"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xxl:grid-cols-6 gap-6">
+        <!-- Nome -->
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Nome do Servidor</label>
+          <div class="relative group">
+            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
             <input
-              v-model="filters.cpf"
+              v-model="filters.nome"
               type="text"
-              placeholder="***.000.***-**"
-              class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
+              placeholder="Ex: FRANCISCO..."
+              class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all font-medium"
               @keyup.enter="applySearch"
             />
           </div>
-  
-          <!-- Cargo -->
-        <div class="space-y-1">
-          <label class="text-xs font-bold text-slate-400 uppercase">Cargo</label>
-          <input
-            v-model="filters.cargo"
-            type="text"
-            placeholder="Ex: Delegado..."
-            class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
-            @keyup.enter="applySearch"
-          />
         </div>
 
-        <!-- Órgão -->
-        <div class="space-y-1">
-          <label class="text-xs font-bold text-slate-400 uppercase">Órgão</label>
-          <input
-            v-model="filters.orgao"
-            type="text"
-            placeholder="Ex: Policia..."
-            class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
-            @keyup.enter="applySearch"
-          />
+        <!-- Cargo -->
+        <div v-if="isLoadingFilters" class="space-y-1">
+          <label class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Cargo</label>
+          <BaseSkeleton height="42px" rounded="rounded-xl" />
         </div>
+        <BaseSelectSearch
+          v-else
+          v-model="filters.cargo"
+          :options="distinctFilters?.cargos || []"
+          label="Cargo"
+          placeholder="Selecione o cargo..."
+          @change="applySearch"
+        />
+
+        <!-- Órgão -->
+        <div v-if="isLoadingFilters" class="space-y-1">
+          <label class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Órgão</label>
+          <BaseSkeleton height="42px" rounded="rounded-xl" />
+        </div>
+        <BaseSelectSearch
+          v-else
+          v-model="filters.orgao"
+          :options="distinctFilters?.orgaos || []"
+          label="Órgão"
+          placeholder="Selecione o órgão..."
+          @change="applySearch"
+        />
 
         <!-- Ano -->
         <div class="space-y-1">
-          <label class="text-xs font-bold text-slate-400 uppercase">Ano</label>
+          <label class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Ano</label>
           <select
             v-model="filters.ano"
-            class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
+            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all font-medium appearance-none"
+            @change="applySearch"
           >
             <option v-for="ano in anos" :key="ano" :value="ano">{{ ano }}</option>
           </select>
         </div>
 
         <!-- Mes -->
-        <div class="space-y-1 flex flex-col">
-          <label class="text-xs font-bold text-slate-400 uppercase">Mês</label>
-          <div class="flex gap-2">
-            <select
-              v-model="filters.mes"
-              class="flex-1 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all font-medium"
-            >
-              <option v-for="m in meses" :key="m.v" :value="m.v">{{ m.l }}</option>
-            </select>
-            
-            <BaseButton :loading="isFetching" class="px-6 gap-2" @click="applySearch">
-              <Search class="w-4 h-4" />
-              Pesquisar
-            </BaseButton>
-          </div>
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Mês</label>
+          <select
+            v-model="filters.mes"
+            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all font-medium appearance-none"
+            @change="applySearch"
+          >
+            <option v-for="m in meses" :key="m.v" :value="m.v">{{ m.l }}</option>
+          </select>
+        </div>
+
+        <!-- Ação -->
+        <div class="flex items-end">
+          <BaseButton :loading="isFetching" class="w-full h-[42px] gap-2 rounded-xl bg-slate-900 border-none shadow-lg shadow-slate-900/20" @click="applySearch">
+            <Search class="w-4 h-4" />
+            Aplicar Filtros
+          </BaseButton>
         </div>
       </div>
     </div>
 
     <!-- Tabela -->
-    <BaseTable :headers="tableHeaders" :items="data?.items || []" :is-loading="isLoading">
+    <BaseTable :headers="tableHeaders" :items="data?.items || []" :is-loading="isInitialLoading && !data">
       <template #cell-nome_servidor="{ item }">
         <RouterLink
           :to="{

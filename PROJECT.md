@@ -114,6 +114,13 @@ src/
 - Indicadores de integridade e última sincronização no Dashboard principal.
 - Refiguração da resiliência de navegação (Deep Linking) para contornar limitações de endpoints de ID.
 
+### Etapa 21: Autenticação Segura com Supabase
+- **Infra:** Integração do `@supabase/supabase-js` e configuração de injeção de JWT no `httpClient`.
+- **Estado:** Implementação da `authStore` (Pinia) com persistência de sessão e `onAuthStateChange`.
+- **UI:** Criação de telas de Login, Signup e Recovery com Glassmorphism e micro-animações.
+- **Segurança:** Implementação de `beforeEach` guards para proteção de rotas privadas.
+- **UX:** Adição de Logout e informações do usuário no `MainLayout`.
+
 ## 6. Desafios Técnicos e Soluções
 
 | Desafio | Solução |

@@ -3,7 +3,7 @@ import type { Component } from 'vue'
 
 interface Props {
   title: string
-  value: string | number
+  value?: string | number
   description?: string
   icon?: Component
 }
@@ -16,11 +16,13 @@ defineProps<Props>()
     class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
   >
     <div class="flex items-start justify-between mb-2">
-      <div>
-        <h3 class="text-sm font-medium text-slate-500 uppercase tracking-wider">{{ title }}</h3>
-        <p class="text-2xl font-bold text-slate-900 mt-1">{{ value }}</p>
+      <div class="flex-1 min-w-0">
+        <h3 class="text-sm font-medium text-slate-500 uppercase tracking-wider truncate">{{ title }}</h3>
+        <slot>
+          <p v-if="value !== undefined" class="text-2xl font-bold text-slate-900 mt-1 truncate">{{ value }}</p>
+        </slot>
       </div>
-      <div v-if="icon" class="p-2 bg-slate-50 rounded-lg text-slate-600">
+      <div v-if="icon" class="p-2 bg-slate-50 rounded-lg text-slate-600 flex-shrink-0 ml-4">
         <component :is="icon" class="w-5 h-5" />
       </div>
     </div>

@@ -7,8 +7,14 @@ import './style.css'
 
 const app = createApp(App)
 
-app.use(createPinia())
+const pinia = createPinia()
+app.use(pinia)
 app.use(router)
 app.use(VueQueryPlugin)
 
-app.mount('#app')
+// Inicialização da Autenticação
+import { useAuthStore } from '@/core/auth/authStore'
+const authStore = useAuthStore()
+authStore.initialize().then(() => {
+  app.mount('#app')
+})

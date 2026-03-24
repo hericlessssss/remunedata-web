@@ -24,6 +24,7 @@ export function useRemunerationSearch() {
   const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ['remuneration', 'search', appliedFilters],
     queryFn: () => RemunerationService.search(appliedFilters.value),
+    staleTime: 1000 * 60 * 5, // 5 minutos de cache para navegação
     placeholderData: (previousData) => previousData,
   })
 

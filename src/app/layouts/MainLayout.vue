@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { LayoutDashboard, Search, Database, Menu, X } from 'lucide-vue-next'
+import { useRoute, useRouter } from 'vue-router'
+import { LayoutDashboard, Search, Database, Menu, X, LogOut, User } from 'lucide-vue-next'
+import { useAuthStore } from '@/core/auth/authStore'
 
 const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
 const isSidebarOpen = ref(false)
 
 // Fecha a sidebar ao mudar de rota no mobile
@@ -13,6 +16,11 @@ watch(() => route.path, () => {
 
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value
+}
+
+const handleLogout = async () => {
+  await authStore.signOut()
+  router.push({ name: 'login' })
 }
 </script>
 
@@ -32,12 +40,12 @@ const toggleSidebar = () => {
     >
       <div class="p-6 border-b border-slate-100 flex items-center justify-between gap-3">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 bg-slate-800 rounded-lg flex items-center justify-center text-white">
+          <div class="w-8 h-8 bg-slate-800 rounded-lg flex items-center justify-center text-white shadow-lg shadow-slate-900/20">
             <span class="font-bold text-lg">R</span>
           </div>
-          <h1 class="font-serif font-bold text-xl text-slate-800">RemuneData</h1>
+          <h1 class="font-serif font-bold text-xl text-slate-800 tracking-tight">RemuneData</h1>
         </div>
-        <button class="lg:hidden text-slate-400 hover:text-slate-600" @click="isSidebarOpen = false">
+        <button class="lg:hidden text-slate-400 hover:text-slate-600 p-1 rounded-md hover:bg-slate-50 transition-colors" @click="isSidebarOpen = false">
           <X class="w-5 h-5" />
         </button>
       </div>
@@ -45,36 +53,33 @@ const toggleSidebar = () => {
       <nav class="flex-1 p-4 flex flex-col gap-2">
         <RouterLink
           to="/dashboard"
-          class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors"
-          active-class="bg-slate-100! text-slate-900! font-semibold"
+          class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-all duration-200 group"
+          active-class="bg-slate-900! text-white! font-semibold shadow-lg shadow-slate-900/10"
         >
-          <LayoutDashboard class="w-5 h-5" />
+          <LayoutDashboard class="w-5 h-5 group-hover:scale-110 transition-transform" />
           Dashboard
         </RouterLink>
         <RouterLink
           to="/remuneration"
-          class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors"
-          active-class="bg-slate-100! text-slate-900! font-semibold"
+          class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-all duration-200 group"
+          active-class="bg-slate-900! text-white! font-semibold shadow-lg shadow-slate-900/10"
         >
-          <Search class="w-5 h-5" />
+          <Search class="w-5 h-5 group-hover:scale-110 transition-transform" />
           Consulta
         </RouterLink>
         <RouterLink
           to="/executions"
-          class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors"
-          active-class="bg-slate-100! text-slate-900! font-semibold"
+          class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-all duration-200 group"
+          active-class="bg-slate-900! text-white! font-semibold shadow-lg shadow-slate-900/10"
         >
-          <Database class="w-5 h-5" />
+          <Database class="w-5 h-5 group-hover:scale-110 transition-transform" />
           Execuções
         </RouterLink>
       </nav>
 
       <div class="p-4 border-t border-slate-100 mb-2">
-        <p class="text-[10px] text-slate-400 font-mono text-center uppercase tracking-widest">
+        <p class="text-[10px] text-slate-400 font-mono text-center uppercase tracking-widest font-medium">
           v0.1.0 - Alpha
-        </p>
-        <p class="text-[8px] text-slate-400/50 text-center mt-1 font-medium italic">
-          feito pelo macaquinho chico
         </p>
       </div>
     </aside>
@@ -83,22 +88,38 @@ const toggleSidebar = () => {
     <main class="flex-1 flex flex-col overflow-x-hidden transition-all duration-300 lg:ml-64">
       <!-- Navbar/Header -->
       <header
-        class="h-16 bg-white border-b border-slate-100 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm"
+        class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-xs"
       >
         <div class="flex items-center gap-4">
           <button
-            class="lg:hidden p-2 text-slate-500 hover:bg-slate-50 rounded-lg"
+            class="lg:hidden p-2 text-slate-500 hover:bg-slate-50 rounded-lg transition-colors"
             @click="toggleSidebar"
           >
             <Menu class="w-6 h-6" />
           </button>
-          <div class="hidden sm:block text-sm text-slate-500 font-medium">
+          <div class="hidden sm:block text-xs text-slate-400 font-semibold uppercase tracking-wider">
             DF / Portal da Transparência
           </div>
         </div>
 
         <div class="flex items-center gap-4">
-          <!-- Espaço reservado para futuras ações no header -->
+          <!-- User Info & Logout -->
+          <div v-if="authStore.user" class="flex items-center gap-3 pl-4 border-l border-slate-100">
+            <div class="hidden md:block text-right">
+              <p class="text-xs font-semibold text-slate-800 leading-none mb-1">{{ authStore.user.email?.split('@')[0] }}</p>
+              <p class="text-[10px] text-slate-400 leading-none">{{ authStore.user.email }}</p>
+            </div>
+            <div class="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 ring-4 ring-white shadow-sm overflow-hidden">
+              <User class="w-4 h-4" />
+            </div>
+            <button
+              class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200"
+              title="Sair"
+              @click="handleLogout"
+            >
+              <LogOut class="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </header>
 
