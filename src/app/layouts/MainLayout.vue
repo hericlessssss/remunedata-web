@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { LayoutDashboard, Search, Database, Menu, X, LogOut, User } from 'lucide-vue-next'
+import { LayoutDashboard, Search, Database, Menu, X, LogOut, User, Crown, Zap } from 'lucide-vue-next'
 import { useAuthStore } from '@/core/auth/authStore'
+import { useSubscriptionStore } from '@/modules/subscriptions/store/subscriptionStore'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const subStore = useSubscriptionStore()
 const isSidebarOpen = ref(false)
 
 // Fecha a sidebar ao mudar de rota no mobile
@@ -75,11 +77,38 @@ const handleLogout = async () => {
           <Database class="w-5 h-5 group-hover:scale-110 transition-transform" />
           Execuções
         </RouterLink>
+
+        <!-- Premium Upsell / Status in Sidebar -->
+        <div class="mt-4 px-4">
+          <RouterLink 
+            v-if="!subStore.isActive"
+            to="/subscriptions/plans"
+            class="flex flex-col gap-2 p-4 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-lg shadow-blue-500/20 hover:scale-[1.02] transition-all group"
+          >
+            <div class="flex items-center gap-2">
+              <Zap class="w-4 h-4 text-yellow-300 fill-current" />
+              <span class="text-xs font-black uppercase tracking-widest">Seja Premium</span>
+            </div>
+            <p class="text-[10px] leading-tight text-blue-100 font-medium opacity-90">Libere a consulta pública e filtros ilimitados agora.</p>
+          </RouterLink>
+          <div 
+            v-else
+            class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100"
+          >
+            <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
+              <Crown class="w-4 h-4 transition-transform hover:rotate-12" />
+            </div>
+            <div>
+              <p class="text-[10px] uppercase font-black text-slate-400 tracking-tighter">Plano Ativo</p>
+              <p class="text-xs font-bold text-slate-900 leading-none">{{ subStore.currentPlan }}</p>
+            </div>
+          </div>
+        </div>
       </nav>
 
       <div class="p-4 border-t border-slate-100 mb-2">
         <p class="text-[10px] text-slate-400 font-mono text-center uppercase tracking-widest font-medium">
-          v0.1.0 - Alpha
+          v0.3.0 - Beta
         </p>
       </div>
     </aside>
@@ -103,10 +132,23 @@ const handleLogout = async () => {
         </div>
 
         <div class="flex items-center gap-4">
+          <!-- Premium Badge Hook -->
+          <RouterLink 
+            v-if="!subStore.isActive"
+            to="/subscriptions/plans"
+            class="hidden md:flex items-center gap-2 text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors"
+          >
+            <Zap class="w-3 h-3 fill-current text-yellow-400" />
+            Fazer Upgrade
+          </RouterLink>
+
           <!-- User Info & Logout -->
           <div v-if="authStore.user" class="flex items-center gap-3 pl-4 border-l border-slate-100">
             <div class="hidden md:block text-right">
-              <p class="text-xs font-semibold text-slate-800 leading-none mb-1">{{ authStore.user.email?.split('@')[0] }}</p>
+              <p class="text-xs font-semibold text-slate-800 leading-none mb-1 flex items-center justify-end gap-1">
+                {{ authStore.user.email?.split('@')[0] }}
+                <Crown v-if="subStore.isActive" class="w-3 h-3 text-blue-500" />
+              </p>
               <p class="text-[10px] text-slate-400 leading-none">{{ authStore.user.email }}</p>
             </div>
             <div class="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 ring-4 ring-white shadow-sm overflow-hidden">

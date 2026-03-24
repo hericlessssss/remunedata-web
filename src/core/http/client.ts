@@ -30,11 +30,17 @@ httpClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 httpClient.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError) => {
-    // Tratamento de 401 para redirecionar ou limpar sessão se necessário
+    // Tratamento de 401 (Não Autorizado)
     if (error.response?.status === 401) {
       const authStore = useAuthStore()
       authStore.signOut()
     }
+
+    // Tratamento de 403 (Assinatura Necessária)
+    if (error.response?.status === 403) {
+      window.location.href = '/subscriptions/plans?redirect=forbidden'
+    }
+
     return Promise.reject(error)
   },
 )

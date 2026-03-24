@@ -18,19 +18,25 @@ const router = createRouter({
           path: 'remuneration',
           name: 'remuneration',
           component: () => import('@/modules/remuneration/views/RemunerationView.vue'),
-          meta: { requiresAuth: true },
+          meta: { requiresAuth: true, requiresSubscription: true },
         },
         {
           path: 'remuneration/:id',
           name: 'remuneration-detail',
           component: () => import('@/modules/remuneration/views/RemunerationDetailView.vue'),
-          meta: { requiresAuth: true },
+          meta: { requiresAuth: true, requiresSubscription: true },
         },
         {
           path: 'executions',
           name: 'executions',
           component: () => import('@/modules/executions/views/ExecutionsView.vue'),
           meta: { requiresAuth: true },
+        },
+        {
+          path: 'subscriptions/plans',
+          name: 'subscriptions-plans',
+          component: () => import('@/modules/subscriptions/views/PlansView.vue'),
+          meta: { requiresAuth: false }, // Aberto para atrair novos usuários
         },
       ],
     },
@@ -59,13 +65,25 @@ const router = createRouter({
 })
 
 import { useAuthStore } from '@/core/auth/authStore'
+import { useSubscriptionStore } from '@/modules/subscriptions/store/subscriptionStore'
 
 router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
+  const subStore = useSubscriptionStore()
 
   // Se a rota exige auth e o usuário não está logado
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    return next({ name: 'login' })
+    return next({ name: 'login', query: { redirect: to.fullPath } })
+  }
+
+  // Se o usuário está logado, garantimos que temos o status da assinatura
+  if (authStore.isAuthenticated && !subStore.status) {
+    await subStore.fetchStatus()
+  }
+
+  // Se a rota exige assinatura ativa
+  if (to.meta.requiresSubscription && !subStore.isActive) {
+    return next({ name: 'subscriptions-plans' })
   }
 
   // Se o usuário está logado e tenta acessar login/signup
