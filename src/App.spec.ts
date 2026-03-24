@@ -8,8 +8,8 @@ describe('App Smoke Test', () => {
     const router = createRouter({
       history: createWebHistory(),
       routes: [
-        { path: '/', component: { template: '<div>Home</div>' } },
-        { path: '/dashboard', component: { template: '<div>Dashboard</div>' } },
+        { path: '/', component: { template: '<div>RemuneData Home</div>' } },
+        { path: '/dashboard', component: { template: '<div>RemuneData Dashboard</div>' } },
         { path: '/remuneration', component: { template: '<div>Remuneration</div>' } },
         { path: '/executions', component: { template: '<div>Executions</div>' } },
       ],
