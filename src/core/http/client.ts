@@ -38,7 +38,9 @@ httpClient.interceptors.response.use(
 
     // Tratamento de 403 (Assinatura Necessária)
     if (error.response?.status === 403) {
-      window.location.href = '/subscriptions/plans?redirect=forbidden'
+      if (!window.location.pathname.includes('/subscriptions/plans')) {
+        window.location.href = '/subscriptions/plans?redirect=forbidden'
+      }
     }
 
     return Promise.reject(error)

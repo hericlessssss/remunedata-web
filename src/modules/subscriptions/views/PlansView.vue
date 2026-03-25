@@ -22,6 +22,7 @@ const error = ref('')
 // Controle de Sucesso Pós-Pagamento
 const isSuccess = computed(() => route.query.success === 'true')
 const isForbidden = computed(() => route.query.redirect === 'forbidden')
+const blockedFeature = computed(() => route.query.feature as string || 'Funcionalidade')
 
 // Auto-seleção de plano via URL (Útil após login)
 import { onMounted, watch } from 'vue'
@@ -89,7 +90,7 @@ const handleCheckoutSubmit = async (formData: { name: string, tax_id: string, ce
     <div class="max-w-4xl mx-auto text-center mb-16 px-4">
       <div v-if="isForbidden" class="mb-8 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 text-sm font-medium animate-in slide-in-from-top-2 duration-300 flex items-center gap-3 justify-center">
         <ShieldCheck class="w-5 h-5 text-slate-600" />
-        <span class="font-bold">Acesso Restrito:</span> Você precisa de uma assinatura ativa para visualizar os dados de remuneração.
+        <span class="font-bold">Acesso Restrito:</span> Você precisa de uma assinatura ativa para acessar a funcionalidade <span class="text-slate-900 font-black underline decoration-slate-300 decoration-2 underline-offset-4">{{ blockedFeature }}</span>.
       </div>
       
       <h1 class="text-4xl md:text-7xl font-black text-slate-900 font-serif tracking-tighter mb-6 leading-tight">

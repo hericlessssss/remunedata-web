@@ -23,19 +23,31 @@ const router = createRouter({
           path: '/remuneration',
           name: 'remuneration',
           component: () => import('@/modules/remuneration/views/RemunerationView.vue'),
-          meta: { requiresAuth: true, requiresSubscription: true },
+          meta: { 
+            requiresAuth: true, 
+            requiresSubscription: true,
+            feature: 'Consulta Pública'
+          },
         },
         {
           path: '/remuneration/:id',
           name: 'remuneration-detail',
           component: () => import('@/modules/remuneration/views/RemunerationDetailView.vue'),
-          meta: { requiresAuth: true, requiresSubscription: true },
+          meta: { 
+            requiresAuth: true, 
+            requiresSubscription: true,
+            feature: 'Detalhes da Remuneração'
+          },
         },
         {
           path: '/executions',
           name: 'executions',
           component: () => import('@/modules/executions/views/ExecutionsView.vue'),
-          meta: { requiresAuth: true, requiresSubscription: true },
+          meta: { 
+            requiresAuth: true, 
+            requiresSubscription: true,
+            feature: 'Nitro Engine'
+          },
         },
         {
           path: '/subscriptions/plans',
@@ -97,7 +109,10 @@ router.beforeEach(async (to, _from, next) => {
   if (to.meta.requiresSubscription && !subStore.isActive) {
     return next({ 
       name: 'subscriptions-plans',
-      query: { redirect: 'forbidden' }
+      query: { 
+        redirect: 'forbidden',
+        feature: to.meta.feature as string || 'Funcionalidade Restrita'
+      }
     })
   }
 
