@@ -62,6 +62,11 @@ onMounted(async () => {
       window.localStorage.removeItem('pending_checkout_data')
     }
   }
+
+  // Novo: Se for sucesso, força re-fetch do status para liberar o app
+  if (isSuccess.value) {
+    await subStore.fetchStatus()
+  }
 })
 
 watch(() => route.query.plan, checkUrlParams)
@@ -72,10 +77,12 @@ const handleCheckoutSubmit = async (formData: { name: string, tax_id: string, ce
   // Se o usuário não estiver logado, salvamos os dados e pedimos login/cadastro
   if (!authStore.isAuthenticated) {
     window.localStorage.setItem('pending_checkout_data', JSON.stringify(formData))
+    
+    // Evita duplicidade de parâmetros ao redirecionar
     router.push({
       name: 'signup',
       query: { 
-        redirect: `/subscriptions/plans?plan=${selectedPlan.value.slug}`,
+        redirect: '/subscriptions/plans',
         plan: selectedPlan.value.slug 
       }
     })

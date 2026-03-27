@@ -25,17 +25,17 @@ const accessDenied = ref(false)
 const menuItems = [
   { 
     name: 'Métricas', 
-    path: `/${ENV.ADMIN_PATH_PREFIX}/dashboard`, 
+    path: `/${ENV.ADMIN_PATH}/dashboard`, 
     icon: BarChart3 
   },
   { 
     name: 'Usuários', 
-    path: `/${ENV.ADMIN_PATH_PREFIX}/users`, 
+    path: `/${ENV.ADMIN_PATH}/users`, 
     icon: Users 
   },
   { 
     name: 'Suporte', 
-    path: `/${ENV.ADMIN_PATH_PREFIX}/support`, 
+    path: `/${ENV.ADMIN_PATH}/support`, 
     icon: MessageSquare 
   },
 ]
@@ -50,7 +50,7 @@ import httpClient from '@/core/http/client'
 httpClient.interceptors.response.use(
   res => res,
   err => {
-    if (err.response?.status === 403 && route.path.startsWith(`/${ENV.ADMIN_PATH_PREFIX}`)) {
+    if (err.response?.status === 403 && route.path.startsWith(`/${ENV.ADMIN_PATH}`)) {
       accessDenied.value = true
     }
     return Promise.reject(err)

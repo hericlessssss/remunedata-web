@@ -33,37 +33,37 @@ export interface SupportMessage {
   created_at: string
 }
 
-const prefix = ENV.ADMIN_PATH_PREFIX
+const prefix = ENV.ADMIN_PATH
 
 export const AdminService = {
   async getStats(): Promise<AdminStats> {
-    const { data } = await httpClient.get(`/api/v1/${prefix}/stats`)
+    const { data } = await httpClient.get(`${prefix}/stats`)
     return data
   },
 
   async getUsers(page = 1, limit = 10): Promise<{ items: AdminUser[], total: number }> {
-    const { data } = await httpClient.get(`/api/v1/${prefix}/users`, {
+    const { data } = await httpClient.get(`${prefix}/users`, {
       params: { page, limit }
     })
     return data
   },
 
   async resetPassword(userId: string): Promise<void> {
-    await httpClient.post(`/api/v1/${prefix}/users/${userId}/reset-password`)
+    await httpClient.post(`${prefix}/users/${userId}/reset-password`)
   },
 
   async getConversations(): Promise<SupportConversation[]> {
-    const { data } = await httpClient.get(`/api/v1/${prefix}/support`)
+    const { data } = await httpClient.get(`${prefix}/support`)
     return data
   },
 
   async getHistory(userId: string): Promise<SupportMessage[]> {
-    const { data } = await httpClient.get(`/api/v1/${prefix}/support/${userId}`)
+    const { data } = await httpClient.get(`${prefix}/support/${userId}`)
     return data
   },
 
   async reply(userId: string, content: string): Promise<SupportMessage> {
-    const { data } = await httpClient.post(`/api/v1/${prefix}/support/${userId}/reply`, {
+    const { data } = await httpClient.post(`${prefix}/support/${userId}/reply`, {
       content
     })
     return data

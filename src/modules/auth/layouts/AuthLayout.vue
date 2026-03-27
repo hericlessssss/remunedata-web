@@ -34,7 +34,7 @@
       
       <!-- Footer simplificado -->
       <p class="text-center mt-8 text-xs text-slate-400 font-medium uppercase tracking-widest">
-        Portal da Transparência DF • v0.1.0
+        Portal da Transparência DF • v0.3.7 - Premium Edition
       </p>
     </div>
   </div>

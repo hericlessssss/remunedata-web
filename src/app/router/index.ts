@@ -53,6 +53,7 @@ const router = createRouter({
         {
           path: '/subscriptions/plans',
           name: 'subscriptions-plans',
+          alias: '/checkout',
           component: () => import('@/modules/subscriptions/views/PlansView.vue'),
         },
       ],
@@ -79,9 +80,9 @@ const router = createRouter({
       ],
     },
     {
-      path: `/${ENV.ADMIN_PATH_PREFIX}`,
+      path: `/${ENV.ADMIN_PATH}`,
       component: () => import('@/modules/admin/layouts/AdminLayout.vue'),
-      redirect: `/${ENV.ADMIN_PATH_PREFIX}/dashboard`,
+      redirect: `/${ENV.ADMIN_PATH}/dashboard`,
       children: [
         {
           path: 'dashboard',
@@ -118,23 +119,7 @@ router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
   const subStore = useSubscriptionStore()
 
-  // 1. Se o usuário está logado, garantimos que temos o status da assinatura antes de prosseguir
-  if (authStore.isAuthenticated && !subStore.status) {
-    await subStore.fetchStatus()
-  }
-
-  // 2. Se a rota exige assinatura ativa e o usuário (logado ou não) não tem
-  if (to.meta.requiresSubscription && !subStore.isActive) {
-    return next({ 
-      name: 'subscriptions-plans',
-      query: { 
-        redirect: 'forbidden',
-        feature: to.meta.feature as string || 'Funcionalidade Restrita'
-      }
-    })
-  }
-
-  // 3. Se a rota exige auth e o usuário ainda não está logado
+  // 1. Prioridade: Se a rota exige autenticação e o usuário não está logado
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     return next({ 
       name: 'login', 
@@ -142,9 +127,28 @@ router.beforeEach(async (to, _from, next) => {
     })
   }
 
-  // Se o usuário está logado e tenta acessar login/signup ou a landing page
+  // 2. Se o usuário já está logado e tenta acessar rotas de autenticação (login/signup) ou landing page
   if (authStore.isAuthenticated && (to.path.startsWith('/auth') || to.path === '/')) {
     return next({ name: 'dashboard' })
+  }
+
+  // 3. Verificação de Assinatura para usuários autenticados
+  if (authStore.isAuthenticated) {
+    // Garante que o status da assinatura esteja carregado ou forçado via query de sucesso
+    if (!subStore.status || to.query.success === 'true') {
+      await subStore.fetchStatus()
+    }
+
+    // Se a rota exige assinatura ativa e o usuário logado não tem plano
+    if (to.meta.requiresSubscription && !subStore.isActive) {
+      return next({ 
+        name: 'subscriptions-plans',
+        query: { 
+          redirect: 'forbidden',
+          feature: to.meta.feature as string || 'Funcionalidade Restrita'
+        }
+      })
+    }
   }
 
   next()

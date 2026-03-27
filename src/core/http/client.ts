@@ -38,7 +38,7 @@ httpClient.interceptors.response.use(
 
     // Tratamento de 403 (Permissão ou Assinatura)
     if (error.status === 403 || error.response?.status === 403) {
-      const isAdminPath = window.location.pathname.startsWith(`/${ENV.ADMIN_PATH_PREFIX}`)
+      const isAdminPath = window.location.pathname.startsWith(`/${ENV.ADMIN_PATH}`)
       if (!isAdminPath && !window.location.pathname.includes('/subscriptions/plans')) {
         window.location.href = '/subscriptions/plans?redirect=forbidden'
       }

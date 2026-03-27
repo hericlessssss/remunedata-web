@@ -85,30 +85,40 @@ const handleLogout = async () => {
         </RouterLink>
 
         <!-- Premium Upsell / Status in Sidebar -->
-        <div class="mt-4 px-4">
-          <RouterLink 
-            v-if="!subStore.isActive"
-            to="/subscriptions/plans"
-            class="flex flex-col gap-2 p-4 rounded-2xl bg-slate-900 text-white shadow-xl shadow-slate-900/20 hover:scale-[1.02] transition-all group border border-slate-800"
+        <div class="mt-4 px-4 overflow-hidden">
+          <Transition
+            enter-active-class="transition duration-500 ease-out"
+            enter-from-class="transform -translate-y-4 opacity-0"
+            enter-to-class="transform translate-y-0 opacity-100"
+            leave-active-class="transition duration-300 ease-in"
+            leave-from-class="transform translate-y-0 opacity-100"
+            leave-to-class="transform -translate-y-4 opacity-0"
+            mode="out-in"
           >
-            <div class="flex items-center gap-2">
-              <Zap class="w-4 h-4 text-white fill-current" />
-              <span class="text-xs font-black uppercase tracking-widest">Seja Premium</span>
+            <RouterLink
+              v-if="!subStore.isActive"
+              to="/subscriptions/plans"
+              class="flex flex-col gap-2 p-4 rounded-2xl bg-slate-900 text-white shadow-xl shadow-slate-900/20 hover:scale-[1.02] transition-all group border border-slate-800"
+            >
+              <div class="flex items-center gap-2">
+                <Zap class="w-4 h-4 text-white fill-current" />
+                <span class="text-xs font-black uppercase tracking-widest">Seja Premium</span>
+              </div>
+              <p class="text-[10px] leading-tight text-slate-400 font-medium opacity-90">Libere a consulta pública e filtros ilimitados agora.</p>
+            </RouterLink>
+            <div 
+              v-else
+              class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100"
+            >
+              <div class="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center">
+                <Crown class="w-4 h-4 transition-transform hover:rotate-12" />
+              </div>
+              <div>
+                <p class="text-[10px] uppercase font-black text-slate-400 tracking-tighter">Plano Ativo</p>
+                <p class="text-xs font-bold text-slate-900 leading-none">{{ subStore.currentPlan }}</p>
+              </div>
             </div>
-            <p class="text-[10px] leading-tight text-slate-400 font-medium opacity-90">Libere a consulta pública e filtros ilimitados agora.</p>
-          </RouterLink>
-          <div 
-            v-else
-            class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100"
-          >
-            <div class="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center">
-              <Crown class="w-4 h-4 transition-transform hover:rotate-12" />
-            </div>
-            <div>
-              <p class="text-[10px] uppercase font-black text-slate-400 tracking-tighter">Plano Ativo</p>
-              <p class="text-xs font-bold text-slate-900 leading-none">{{ subStore.currentPlan }}</p>
-            </div>
-          </div>
+          </Transition>
         </div>
       </nav>
 
@@ -139,17 +149,26 @@ const handleLogout = async () => {
 
         <div class="flex items-center gap-4">
           <!-- Premium Badge Hook -->
-          <RouterLink 
-            v-if="!subStore.isActive"
-            to="/subscriptions/plans"
-            class="hidden md:flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-900 hover:opacity-70 transition-all bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100"
+          <Transition
+            enter-active-class="transition duration-300 ease-out"
+            enter-from-class="transform scale-95 opacity-0"
+            enter-to-class="transform scale-100 opacity-100"
+            leave-active-class="transition duration-200 ease-in"
+            leave-from-class="transform scale-100 opacity-100"
+            leave-to-class="transform scale-95 opacity-0"
           >
-            <Zap class="w-3 h-3 fill-current" />
-            Fazer Upgrade
-          </RouterLink>
+            <RouterLink 
+              v-if="!subStore.isActive"
+              to="/subscriptions/plans"
+              class="hidden md:flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-900 hover:opacity-70 transition-all bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100"
+            >
+              <Zap class="w-3 h-3 fill-current" />
+              Fazer Upgrade
+            </RouterLink>
+          </Transition>
           
           <!-- User Info & Logout -->
-          <div v-if="authStore.user" class="flex items-center gap-3 pl-4 border-l border-slate-100">
+          <div v-if="!authStore.loading && authStore.user" class="flex items-center gap-3 pl-4 border-l border-slate-100">
             <div class="hidden md:block text-right">
               <p class="text-xs font-bold text-slate-900 leading-none mb-1 flex items-center justify-end gap-1">
                 {{ authStore.user.email?.split('@')[0] }}

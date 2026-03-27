@@ -111,30 +111,39 @@ const chartOptions = computed(() => {
     </div>
 
     <!-- Upgrade CTA Banner -->
-    <div 
-      v-if="!subStore.isActive"
-      class="relative overflow-hidden bg-slate-900 rounded-3xl p-8 text-white shadow-2xl animate-in fade-in slide-in-from-top-4 duration-700"
+    <Transition
+      enter-active-class="transition duration-700 ease-out"
+      enter-from-class="transform -translate-y-8 opacity-0"
+      enter-to-class="transform translate-y-0 opacity-100"
+      leave-active-class="transition duration-500 ease-in"
+      leave-from-class="transform translate-y-0 opacity-100"
+      leave-to-class="transform -translate-y-8 opacity-0"
     >
-      <div class="absolute top-0 right-0 w-64 h-64 bg-slate-800 rounded-full -mr-20 -mt-20 blur-3xl opacity-50"></div>
-      <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-        <div class="space-y-2 text-center md:text-left">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 text-[10px] font-black uppercase tracking-widest border border-slate-700">
-            <Zap class="w-3 h-3 text-white fill-current" />
-            Acesso Gratuito
+      <div 
+        v-if="!subStore.isActive"
+        class="relative overflow-hidden bg-slate-900 rounded-3xl p-8 text-white shadow-2xl animate-in fade-in slide-in-from-top-4 duration-700"
+      >
+        <div class="absolute top-0 right-0 w-64 h-64 bg-slate-800 rounded-full -mr-20 -mt-20 blur-3xl opacity-50"></div>
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div class="space-y-2 text-center md:text-left">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 text-[10px] font-black uppercase tracking-widest border border-slate-700">
+              <Zap class="w-3 h-3 text-white fill-current" />
+              Acesso Gratuito
+            </div>
+            <h3 class="text-2xl font-bold font-serif tracking-tight">Libere o poder total do RemuneData</h3>
+            <p class="text-slate-400 max-w-lg text-sm font-medium">
+              Você está vendo o dashboard resumido. Assine um plano para desbloquear a consulta pública, filtros por cargo/órgão e detalhes de servidores.
+            </p>
           </div>
-          <h3 class="text-2xl font-bold font-serif tracking-tight">Libere o poder total do RemuneData</h3>
-          <p class="text-slate-400 max-w-lg text-sm font-medium">
-            Você está vendo o dashboard resumido. Assine um plano para desbloquear a consulta pública, filtros por cargo/órgão e detalhes de servidores.
-          </p>
+          <RouterLink to="/subscriptions/plans">
+            <BaseButton class="bg-white text-slate-900 border-none px-8 py-3 rounded-2xl font-bold hover:scale-105 transition-transform flex items-center gap-2">
+              Ver Planos Disponíveis
+              <ArrowRight class="w-4 h-4" />
+            </BaseButton>
+          </RouterLink>
         </div>
-        <RouterLink to="/subscriptions/plans">
-          <BaseButton class="bg-white text-slate-900 border-none px-8 py-3 rounded-2xl font-bold hover:scale-105 transition-transform flex items-center gap-2">
-            Ver Planos Disponíveis
-            <ArrowRight class="w-4 h-4" />
-          </BaseButton>
-        </RouterLink>
       </div>
-    </div>
+    </Transition>
 
     <!-- KPI Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
