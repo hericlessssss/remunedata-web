@@ -58,7 +58,7 @@ onMounted(async () => {
         handleCheckoutSubmit(parsed)
       }
       window.localStorage.removeItem('pending_checkout_data')
-    } catch (e) {
+    } catch {
       window.localStorage.removeItem('pending_checkout_data')
     }
   }

@@ -36,9 +36,10 @@ httpClient.interceptors.response.use(
       authStore.signOut()
     }
 
-    // Tratamento de 403 (Assinatura Necessária)
-    if (error.response?.status === 403) {
-      if (!window.location.pathname.includes('/subscriptions/plans')) {
+    // Tratamento de 403 (Permissão ou Assinatura)
+    if (error.status === 403 || error.response?.status === 403) {
+      const isAdminPath = window.location.pathname.startsWith(`/${ENV.ADMIN_PATH_PREFIX}`)
+      if (!isAdminPath && !window.location.pathname.includes('/subscriptions/plans')) {
         window.location.href = '/subscriptions/plans?redirect=forbidden'
       }
     }

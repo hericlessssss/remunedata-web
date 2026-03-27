@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { ENV } from '@/core/config/env'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -74,6 +75,31 @@ const router = createRouter({
           path: 'recovery',
           name: 'recovery',
           component: () => import('@/modules/auth/views/RecoveryView.vue'),
+        },
+      ],
+    },
+    {
+      path: `/${ENV.ADMIN_PATH_PREFIX}`,
+      component: () => import('@/modules/admin/layouts/AdminLayout.vue'),
+      redirect: `/${ENV.ADMIN_PATH_PREFIX}/dashboard`,
+      children: [
+        {
+          path: 'dashboard',
+          name: 'admin-dashboard',
+          component: () => import('@/modules/admin/views/AdminDashboardView.vue'),
+          meta: { requiresAuth: true, isAdmin: true },
+        },
+        {
+          path: 'users',
+          name: 'admin-users',
+          component: () => import('@/modules/admin/views/AdminUsersView.vue'),
+          meta: { requiresAuth: true, isAdmin: true },
+        },
+        {
+          path: 'support',
+          name: 'admin-support',
+          component: () => import('@/modules/admin/views/AdminSupportView.vue'),
+          meta: { requiresAuth: true, isAdmin: true },
         },
       ],
     },
