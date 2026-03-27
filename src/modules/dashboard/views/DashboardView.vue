@@ -120,7 +120,7 @@ const chartOptions = computed(() => {
       leave-to-class="transform -translate-y-8 opacity-0"
     >
       <div 
-        v-if="!subStore.isActive"
+        v-if="!subStore.isPremium"
         class="relative overflow-hidden bg-slate-900 rounded-3xl p-8 text-white shadow-2xl animate-in fade-in slide-in-from-top-4 duration-700"
       >
         <div class="absolute top-0 right-0 w-64 h-64 bg-slate-800 rounded-full -mr-20 -mt-20 blur-3xl opacity-50"></div>

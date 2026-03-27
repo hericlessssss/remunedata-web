@@ -70,7 +70,7 @@ const handleLogout = async () => {
             <Search class="w-5 h-5 group-hover:scale-110 transition-transform" />
             Consulta
           </div>
-          <Lock v-if="!subStore.isActive" class="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-900 transition-colors" />
+          <Lock v-if="!subStore.isPremium" class="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-900 transition-colors" />
         </RouterLink>
         <RouterLink
           to="/executions"
@@ -81,7 +81,7 @@ const handleLogout = async () => {
             <Database class="w-5 h-5 group-hover:scale-110 transition-transform" />
             Execuções
           </div>
-          <Lock v-if="!subStore.isActive" class="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-900 transition-colors" />
+          <Lock v-if="!subStore.isPremium" class="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-900 transition-colors" />
         </RouterLink>
 
         <!-- Premium Upsell / Status in Sidebar -->
@@ -96,7 +96,7 @@ const handleLogout = async () => {
             mode="out-in"
           >
             <RouterLink
-              v-if="!subStore.isActive"
+              v-if="!subStore.isPremium"
               to="/subscriptions/plans"
               class="flex flex-col gap-2 p-4 rounded-2xl bg-slate-900 text-white shadow-xl shadow-slate-900/20 hover:scale-[1.02] transition-all group border border-slate-800"
             >
@@ -114,8 +114,12 @@ const handleLogout = async () => {
                 <Crown class="w-4 h-4 transition-transform hover:rotate-12" />
               </div>
               <div>
-                <p class="text-[10px] uppercase font-black text-slate-400 tracking-tighter">Plano Ativo</p>
-                <p class="text-xs font-bold text-slate-900 leading-none">{{ subStore.currentPlan }}</p>
+                <p class="text-[10px] uppercase font-black text-slate-400 tracking-tighter">
+                  {{ subStore.isAdmin ? 'Acesso Admin' : 'Plano Ativo' }}
+                </p>
+                <p class="text-xs font-bold text-slate-900 leading-none">
+                  {{ subStore.isAdmin ? 'Full Premium' : subStore.currentPlan }}
+                </p>
               </div>
             </div>
           </Transition>
@@ -158,7 +162,7 @@ const handleLogout = async () => {
             leave-to-class="transform scale-95 opacity-0"
           >
             <RouterLink 
-              v-if="!subStore.isActive"
+              v-if="!subStore.isPremium"
               to="/subscriptions/plans"
               class="hidden md:flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-900 hover:opacity-70 transition-all bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100"
             >
@@ -172,7 +176,7 @@ const handleLogout = async () => {
             <div class="hidden md:block text-right">
               <p class="text-xs font-bold text-slate-900 leading-none mb-1 flex items-center justify-end gap-1">
                 {{ authStore.user.email?.split('@')[0] }}
-                <Crown v-if="subStore.isActive" class="w-3 h-3 text-slate-900" />
+                <Crown v-if="subStore.isPremium" class="w-3 h-3 text-slate-900" />
               </p>
               <p class="text-[10px] text-slate-400 font-medium leading-none">{{ authStore.user.email }}</p>
             </div>

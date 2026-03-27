@@ -139,8 +139,8 @@ router.beforeEach(async (to, _from, next) => {
       await subStore.fetchStatus()
     }
 
-    // Se a rota exige assinatura ativa e o usuário logado não tem plano
-    if (to.meta.requiresSubscription && !subStore.isActive) {
+    // Se a rota exige assinatura ativa e o usuário logado não tem plano (ou não é admin)
+    if (to.meta.requiresSubscription && !subStore.isPremium) {
       return next({ 
         name: 'subscriptions-plans',
         query: { 
