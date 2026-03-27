@@ -92,20 +92,12 @@ router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
   const subStore = useSubscriptionStore()
 
-  // Se a rota exige auth e o usuário não está logado
-  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    return next({ 
-      name: 'login', 
-      query: { redirect: to.fullPath } 
-    })
-  }
-
-  // Se o usuário está logado, garantimos que temos o status da assinatura
+  // 1. Se o usuário está logado, garantimos que temos o status da assinatura antes de prosseguir
   if (authStore.isAuthenticated && !subStore.status) {
     await subStore.fetchStatus()
   }
 
-  // Se a rota exige assinatura ativa e usuário não tem
+  // 2. Se a rota exige assinatura ativa e o usuário (logado ou não) não tem
   if (to.meta.requiresSubscription && !subStore.isActive) {
     return next({ 
       name: 'subscriptions-plans',
@@ -113,6 +105,14 @@ router.beforeEach(async (to, _from, next) => {
         redirect: 'forbidden',
         feature: to.meta.feature as string || 'Funcionalidade Restrita'
       }
+    })
+  }
+
+  // 3. Se a rota exige auth e o usuário ainda não está logado
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    return next({ 
+      name: 'login', 
+      query: { redirect: to.fullPath } 
     })
   }
 

@@ -28,17 +28,7 @@ const blockedFeature = computed(() => route.query.feature as string || 'Funciona
 import { onMounted, watch } from 'vue'
 
 const handlePlanSelect = (plan: Plan) => {
-  if (!authStore.isAuthenticated) {
-    // Redireciona para login preservando o plano escolhido
-    router.push({ 
-      name: 'login', 
-      query: { 
-        redirect: `/subscriptions/plans?plan=${plan.slug}`,
-        plan: plan.slug 
-      } 
-    })
-    return
-  }
+  // Agora permitimos a seleção e preenchimento mesmo para visitantes
   selectedPlan.value = plan
 }
 
@@ -56,11 +46,41 @@ const checkUrlParams = async () => {
   }
 }
 
-onMounted(checkUrlParams)
+onMounted(async () => {
+  await checkUrlParams()
+  
+  // Recupera dados salvos de checkout se houver (fluxo pós-login)
+  const savedData = window.localStorage.getItem('pending_checkout_data')
+  if (savedData && authStore.isAuthenticated) {
+    try {
+      const parsed = JSON.parse(savedData)
+      if (selectedPlan.value) {
+        handleCheckoutSubmit(parsed)
+      }
+      window.localStorage.removeItem('pending_checkout_data')
+    } catch (e) {
+      window.localStorage.removeItem('pending_checkout_data')
+    }
+  }
+})
+
 watch(() => route.query.plan, checkUrlParams)
 
 const handleCheckoutSubmit = async (formData: { name: string, tax_id: string, cellphone: string }) => {
-  if (!selectedPlan.value || !authStore.user) return
+  if (!selectedPlan.value) return
+
+  // Se o usuário não estiver logado, salvamos os dados e pedimos login/cadastro
+  if (!authStore.isAuthenticated) {
+    window.localStorage.setItem('pending_checkout_data', JSON.stringify(formData))
+    router.push({
+      name: 'signup',
+      query: { 
+        redirect: `/subscriptions/plans?plan=${selectedPlan.value.slug}`,
+        plan: selectedPlan.value.slug 
+      }
+    })
+    return
+  }
 
   isCheckingOut.value = true
   error.value = ''
@@ -69,7 +89,7 @@ const handleCheckoutSubmit = async (formData: { name: string, tax_id: string, ce
     const { checkout_url } = await SubscriptionService.createCheckout({
       plan_slug: selectedPlan.value.slug,
       name: formData.name,
-      email: authStore.user.email || '',
+      email: authStore.user?.email || '',
       cellphone: formData.cellphone.replace(/\D/g, ''),
       tax_id: formData.tax_id.replace(/\D/g, ''),
     })
@@ -85,7 +105,9 @@ const handleCheckoutSubmit = async (formData: { name: string, tax_id: string, ce
 </script>
 
 <template>
-  <div class="min-h-screen bg-white pt-12 pb-24 px-4 overflow-hidden relative">
+  <div class="min-h-screen bg-slate-50 pt-12 pb-24 px-4 overflow-hidden relative">
+    <!-- Background Blob for Glassmorphism Contrast -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-b from-blue-50/50 to-transparent rounded-full blur-3xl -z-10"></div>
     <!-- Cabeçalho -->
     <div class="max-w-4xl mx-auto text-center mb-16 px-4">
       <div v-if="isForbidden" class="mb-8 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 text-sm font-medium animate-in slide-in-from-top-2 duration-300 flex items-center gap-3 justify-center">

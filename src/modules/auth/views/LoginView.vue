@@ -2,12 +2,15 @@
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { supabase } from '@/core/auth/supabase'
+import { useAuthStore } from '@/core/auth/authStore'
 import { LogIn, Mail, Lock, Loader2, AlertCircle } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
-const email = ref('')
+const authStore = useAuthStore()
+const email = ref(authStore.rememberMe ? authStore.savedEmail : '')
 const password = ref('')
+const rememberMe = ref(authStore.rememberMe)
 const loading = ref(false)
 const error = ref<string | null>(null)
 
@@ -22,6 +25,9 @@ async function handleLogin() {
     })
 
     if (signInError) throw signInError
+
+    // Persiste preferências de 'Lembrar-me'
+    authStore.setRememberMe(rememberMe.value, email.value)
 
     let redirectPath = route.query.redirect as string
     
@@ -87,6 +93,24 @@ async function handleLogin() {
             class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-slate-900/5 focus:border-slate-900 transition-all outline-hidden font-medium"
           />
         </div>
+      </div>
+
+      <!-- Lembrar-me -->
+      <div class="flex items-center justify-between px-1">
+        <label class="flex items-center gap-2 cursor-pointer group">
+          <div class="relative flex items-center">
+            <input
+              v-model="rememberMe"
+              type="checkbox"
+              class="peer sr-only"
+            />
+            <div class="w-5 h-5 border-2 border-slate-200 rounded-lg bg-slate-50 peer-checked:bg-slate-900 peer-checked:border-slate-900 transition-all group-hover:border-slate-400"></div>
+            <svg class="absolute w-3.5 h-3.5 text-white scale-0 peer-checked:scale-100 transition-transform left-0.75 top-0.75" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-widest group-hover:text-slate-900 transition-colors select-none">Lembrar-me</span>
+        </label>
       </div>
 
       <div class="pt-2">

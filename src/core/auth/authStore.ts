@@ -7,6 +7,8 @@ export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
   const session = ref<Session | null>(null)
   const loading = ref(true)
+  const rememberMe = ref(window.localStorage.getItem('auth_remember_me') === 'true')
+  const savedEmail = ref(window.localStorage.getItem('auth_saved_email') || '')
 
   const isAuthenticated = computed(() => !!user.value)
   const accessToken = computed(() => session.value?.access_token || null)
@@ -36,6 +38,18 @@ export const useAuthStore = defineStore('auth', () => {
     subStore.clearStatus()
   }
 
+  function setRememberMe(value: boolean, email?: string) {
+    rememberMe.value = value
+    window.localStorage.setItem('auth_remember_me', String(value))
+    if (value && email) {
+      savedEmail.value = email
+      window.localStorage.setItem('auth_saved_email', email)
+    } else if (!value) {
+      savedEmail.value = ''
+      window.localStorage.removeItem('auth_saved_email')
+    }
+  }
+
   return {
     user,
     session,
@@ -44,5 +58,8 @@ export const useAuthStore = defineStore('auth', () => {
     accessToken,
     initialize,
     signOut,
+    rememberMe,
+    savedEmail,
+    setRememberMe,
   }
 })
